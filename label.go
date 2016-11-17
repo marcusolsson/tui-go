@@ -2,6 +2,7 @@ package tui
 
 import (
 	"image"
+	"strings"
 
 	termbox "github.com/nsf/termbox-go"
 )
@@ -22,7 +23,10 @@ func NewLabel(text string) *Label {
 
 // Draw draws the label.
 func (l *Label) Draw(p *Painter) {
-	p.DrawText(0, 0, l.text)
+	lines := strings.Split(l.text, "\n")
+	for i, line := range lines {
+		p.DrawText(0, i, line)
+	}
 }
 
 // Size returns the size of the label.
@@ -32,7 +36,18 @@ func (l *Label) Size() image.Point {
 
 // SizeHint returns the recommended size for the label.
 func (l *Label) SizeHint() image.Point {
-	return image.Point{len(l.text), 1}
+	var size image.Point
+
+	lines := strings.Split(l.text, "\n")
+
+	for _, line := range lines {
+		if len(line) > size.X {
+			size.X = len(line)
+		}
+	}
+	size.Y = len(lines)
+
+	return size
 }
 
 // SizePolicy returns the default layout behavior.
@@ -50,4 +65,8 @@ func (l *Label) OnEvent(_ termbox.Event) {
 
 func (l *Label) IsVisible() bool {
 	return true
+}
+
+func (l *Label) SetText(text string) {
+	l.text = text
 }

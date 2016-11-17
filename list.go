@@ -17,6 +17,9 @@ type List struct {
 
 	onItemActivated    func(*List)
 	onSelectionChanged func(*List)
+
+	sizePolicyX SizePolicy
+	sizePolicyY SizePolicy
 }
 
 // NewList returns a new List with no selection and a default number of rows.
@@ -38,7 +41,7 @@ func (l *List) Draw(p *Painter) {
 		tsel := l.selected - l.pos
 		if i == tsel {
 			p.SetBrush(termbox.ColorBlack, termbox.ColorWhite)
-			p.FillRect(0, tsel, sz.X, 1)
+			p.FillRect(0, tsel, sz.X-2, 1)
 		}
 		p.DrawText(0, i, item)
 		if i == tsel {
@@ -76,12 +79,26 @@ func (l *List) SizeHint() image.Point {
 
 // SizePolicy returns the default layout behavior.
 func (l *List) SizePolicy() (SizePolicy, SizePolicy) {
-	return Minimum, Minimum
+	return l.sizePolicyX, l.sizePolicyY
 }
 
 // Resize updates the size of the list.
-func (l *List) Resize(contentSize image.Point) {
-	l.size = l.SizeHint()
+func (l *List) Resize(size image.Point) {
+	hpol, vpol := l.SizePolicy()
+
+	switch hpol {
+	case Minimum:
+		l.size.X = l.SizeHint().X
+	case Expanding:
+		l.size.X = size.X
+	}
+
+	switch vpol {
+	case Minimum:
+		l.size.Y = l.SizeHint().Y
+	case Expanding:
+		l.size.Y = size.Y
+	}
 }
 
 func (l *List) OnEvent(ev termbox.Event) {
@@ -133,12 +150,21 @@ func (l *List) IsVisible() bool {
 	return true
 }
 
+func (l *List) SetSizePolicy(h, v SizePolicy) {
+	l.sizePolicyX = h
+	l.sizePolicyY = v
+}
+
 func (l *List) AddItems(items ...string) {
 	l.items = append(l.items, items...)
 }
 
 func (l *List) SetSelected(i int) {
 	l.selected = i
+}
+
+func (l *List) Selected() int {
+	return l.selected
 }
 
 func (l *List) SetRows(n int) {
