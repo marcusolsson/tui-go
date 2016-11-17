@@ -92,9 +92,14 @@ func (p *Painter) Repaint(w Widget) {
 // DrawText paints a string starting at the given coordinate.
 func (p *Painter) DrawText(x, y int, text string) {
 	for i, r := range text {
-		wp := p.mapLocalToWorld(image.Point{i + x, y})
-		p.surface.SetCell(wp.X, wp.Y, r, p.fg, p.bg)
+		p.DrawRune(i+x, y, r)
 	}
+}
+
+// DrawRune paints a rune at the given coordinate.
+func (p *Painter) DrawRune(x, y int, r rune) {
+	wp := p.mapLocalToWorld(image.Point{x, y})
+	p.surface.SetCell(wp.X, wp.Y, r, p.fg, p.bg)
 }
 
 func (p *Painter) DrawHorizontalLine(x1, x2, y int) {

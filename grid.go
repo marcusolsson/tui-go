@@ -41,8 +41,8 @@ func (g *Grid) Draw(p *Painter) {
 	for i := 0; i < g.cols-1; i++ {
 		x := g.colWidths[i] + coloff + border
 		p.DrawVerticalLine(x, 0, s.Y-1)
-		p.DrawText(x, 0, "┬")
-		p.DrawText(x, s.Y-1, "┴")
+		p.DrawRune(x, 0, '┬')
+		p.DrawRune(x, s.Y-1, '┴')
 		coloff = x
 	}
 
@@ -51,8 +51,8 @@ func (g *Grid) Draw(p *Painter) {
 	for j := 0; j < g.rows-1; j++ {
 		y := g.rowHeights[j] + rowoff + border
 		p.DrawHorizontalLine(0, s.X-1, y)
-		p.DrawText(0, y, "├")
-		p.DrawText(s.X-1, y, "┤")
+		p.DrawRune(0, y, '├')
+		p.DrawRune(s.X-1, y, '┤')
 		rowoff = y
 	}
 
@@ -63,7 +63,7 @@ func (g *Grid) Draw(p *Painter) {
 		coloff = 0
 		for i := 0; i < g.cols-1; i++ {
 			x := g.colWidths[i] + coloff + border
-			p.DrawText(x, y, "┼")
+			p.DrawRune(x, y, '┼')
 			coloff = x
 		}
 		rowoff = y

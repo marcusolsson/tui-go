@@ -20,7 +20,7 @@ type Widget interface {
 	Size() image.Point
 	SizeHint() image.Point
 	SizePolicy() (SizePolicy, SizePolicy)
-	Resize(contentSize image.Point)
+	Resize(size image.Point)
 
 	OnEvent(ev termbox.Event)
 	IsVisible() bool
