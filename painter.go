@@ -97,6 +97,20 @@ func (p *Painter) DrawText(x, y int, text string) {
 	}
 }
 
+func (p *Painter) DrawHorizontalLine(x1, x2, y int) {
+	for x := x1; x < x2; x++ {
+		wp := p.mapLocalToWorld(image.Point{x, y})
+		p.surface.SetCell(wp.X, wp.Y, '─', p.fg, p.bg)
+	}
+}
+
+func (p *Painter) DrawVerticalLine(x, y1, y2 int) {
+	for y := y1; y < y2; y++ {
+		wp := p.mapLocalToWorld(image.Point{x, y})
+		p.surface.SetCell(wp.X, wp.Y, '│', p.fg, p.bg)
+	}
+}
+
 // DrawRect paints a rectangle.
 func (p *Painter) DrawRect(x, y, w, h int) {
 	for j := 0; j < h; j++ {
