@@ -184,7 +184,7 @@ func (b *Grid) columnWidth(i int) int {
 	return result
 }
 
-func (g *Grid) HandleEvent(_ termbox.Event) {
+func (g *Grid) OnEvent(_ termbox.Event) {
 }
 
 func (g *Grid) IsVisible() bool {

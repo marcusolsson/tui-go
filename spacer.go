@@ -40,7 +40,7 @@ func (s *Spacer) Resize(size image.Point) {
 	s.size = size
 }
 
-func (s *Spacer) HandleEvent(_ termbox.Event) {
+func (s *Spacer) OnEvent(_ termbox.Event) {
 }
 
 func (s *Spacer) IsVisible() bool {

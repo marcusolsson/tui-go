@@ -84,7 +84,7 @@ func (l *List) Resize(contentSize image.Point) {
 	l.size = l.SizeHint()
 }
 
-func (l *List) HandleEvent(ev termbox.Event) {
+func (l *List) OnEvent(ev termbox.Event) {
 	switch ev.Key {
 	case termbox.KeyArrowUp:
 		l.moveUp()

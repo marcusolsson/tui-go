@@ -203,9 +203,9 @@ func (b *VerticalBox) SizePolicy() (SizePolicy, SizePolicy) {
 	return b.horizontalSizePolicy, b.verticalSizePolicy
 }
 
-func (b *VerticalBox) HandleEvent(ev termbox.Event) {
+func (b *VerticalBox) OnEvent(ev termbox.Event) {
 	for _, child := range b.children {
-		child.HandleEvent(ev)
+		child.OnEvent(ev)
 	}
 }
 
@@ -392,9 +392,9 @@ func (b *HorizontalBox) SizePolicy() (SizePolicy, SizePolicy) {
 	return b.horizontalSizePolicy, b.verticalSizePolicy
 }
 
-func (b *HorizontalBox) HandleEvent(ev termbox.Event) {
+func (b *HorizontalBox) OnEvent(ev termbox.Event) {
 	for _, child := range b.children {
-		child.HandleEvent(ev)
+		child.OnEvent(ev)
 	}
 }
 

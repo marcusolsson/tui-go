@@ -45,7 +45,7 @@ func (l *Label) Resize(_ image.Point) {
 	l.size = l.SizeHint()
 }
 
-func (l *Label) HandleEvent(_ termbox.Event) {
+func (l *Label) OnEvent(_ termbox.Event) {
 }
 
 func (l *Label) IsVisible() bool {

@@ -48,15 +48,18 @@ func (e *Entry) Resize(contentSize image.Point) {
 	e.size = e.SizeHint()
 }
 
-func (e *Entry) HandleEvent(ev termbox.Event) {
-	if ev.Key == termbox.KeyEnter {
-		e.onSubmit(e)
-		return
-	}
+func (e *Entry) OnEvent(ev termbox.Event) {
+	switch ev.Type {
+	case termbox.EventKey:
+		if ev.Key == termbox.KeyEnter {
+			e.onSubmit(e)
+			return
+		}
 
-	e.text = e.text + string(ev.Ch)
-	if e.onChange != nil {
-		e.onChange(e)
+		e.text = e.text + string(ev.Ch)
+		if e.onChange != nil {
+			e.onChange(e)
+		}
 	}
 }
 

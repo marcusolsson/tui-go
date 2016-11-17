@@ -47,19 +47,18 @@ func (ui *UI) Run() error {
 			case 'q':
 				return nil
 			}
-			ui.HandleEvent(ev)
+			ui.onEvent(ev)
 		case termbox.EventError:
 			return ev.Err
-
 		}
 
 		ui.Painter.Repaint(ui.Root)
 	}
 }
 
-func (ui *UI) HandleEvent(ev termbox.Event) {
+func (ui *UI) onEvent(ev termbox.Event) {
 	if fn, ok := ui.shortcuts[ev.Ch]; ok {
 		fn()
 	}
-	ui.Root.HandleEvent(ev)
+	ui.Root.OnEvent(ev)
 }
