@@ -1,18 +1,22 @@
 package main
 
-import "github.com/marcusolsson/tui-go"
+import (
+	"image"
+
+	"github.com/marcusolsson/tui-go"
+)
 
 func main() {
-	channels := tui.NewVerticalBox(
+	channels := tui.NewVBox(
 		tui.NewLabel("general"),
 		tui.NewLabel("random"),
 	)
 
-	messages := tui.NewVerticalBox(
+	messages := tui.NewVBox(
 		tui.NewLabel("slackbot"),
 	)
 
-	sidebar := tui.NewVerticalBox(
+	sidebar := tui.NewVBox(
 		tui.NewLabel("CHANNELS"),
 		channels,
 		tui.NewLabel(""),
@@ -22,39 +26,38 @@ func main() {
 	sidebar.SetBorder(true)
 	sidebar.SetSizePolicy(tui.Minimum, tui.Expanding)
 
-	history := tui.NewVerticalBox()
+	history := tui.NewVBox()
 	history.SetBorder(true)
 	history.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	for _, m := range []string{"hi, what's up?", "not much"} {
-		b := tui.NewHorizontalBox(
+		b := tui.NewHBox(
 			tui.NewLabel("john:"), tui.NewLabel(m),
 		)
-		b.SetPadding(1)
 
 		history.Append(b)
 	}
 
 	input := tui.NewEntry()
-	inputBox := tui.NewHorizontalBox(input)
+	inputBox := tui.NewHBox(input)
 	inputBox.SetBorder(true)
 	inputBox.SetSizePolicy(tui.Expanding, tui.Minimum)
 
-	chat := tui.NewVerticalBox(history, inputBox)
+	chat := tui.NewVBox(history, inputBox)
 	chat.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	input.OnSubmit(func(e *tui.Entry) {
-		b := tui.NewHorizontalBox(
-			tui.NewLabel("john:"), tui.NewLabel(e.Text()),
+		b := tui.NewHBox(
+			tui.NewLabel("john:"),
+			tui.NewPadder(tui.NewLabel(e.Text()), image.Point{1, 0}),
 		)
-		b.SetPadding(1)
 
 		history.Append(b)
 
 		input.SetText("")
 	})
 
-	root := tui.NewHorizontalBox(sidebar, chat)
+	root := tui.NewHBox(sidebar, chat)
 	root.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	if err := tui.New(root).Run(); err != nil {

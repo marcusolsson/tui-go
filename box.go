@@ -6,73 +6,58 @@ import (
 	termbox "github.com/nsf/termbox-go"
 )
 
-// VerticalBox is a layout for placing widgets vertically.
-type VerticalBox struct {
+// VBox is a layout for placing widgets vertically.
+type VBox struct {
 	children []Widget
 
 	horizontalSizePolicy SizePolicy
 	verticalSizePolicy   SizePolicy
 
-	border  bool
-	padding int
-	margin  int
+	border bool
 
 	hidden bool
 
 	size image.Point
 }
 
-// NewVerticalBox returns a new VerticalBox.
-func NewVerticalBox(c ...Widget) *VerticalBox {
-	return &VerticalBox{
+// NewVBox returns a new VBox.
+func NewVBox(c ...Widget) *VBox {
+	return &VBox{
 		children: c,
 	}
 }
 
-func (b *VerticalBox) Append(w Widget) {
+func (b *VBox) Append(w Widget) {
 	b.children = append(b.children, w)
 }
 
-func (b *VerticalBox) Show() {
+func (b *VBox) Show() {
 	b.hidden = false
 }
 
-func (b *VerticalBox) Hide() {
+func (b *VBox) Hide() {
 	b.hidden = true
 }
 
-func (b *VerticalBox) SetSizePolicy(horizontal, vertical SizePolicy) {
+func (b *VBox) SetSizePolicy(horizontal, vertical SizePolicy) {
 	b.horizontalSizePolicy = horizontal
 	b.verticalSizePolicy = vertical
 }
 
-func (b *VerticalBox) SetBorder(enabled bool) {
+func (b *VBox) SetBorder(enabled bool) {
 	b.border = enabled
 }
 
-func (b *VerticalBox) SetPadding(pad int) {
-	b.padding = pad
-}
-
-func (b *VerticalBox) SetMargin(margin int) {
-	b.margin = margin
-}
-
 // Draw recursively draws the children it contains.
-func (b *VerticalBox) Draw(p *Painter) {
+func (b *VBox) Draw(p *Painter) {
 	if b.hidden {
 		return
 	}
 
 	sz := b.Size()
 
-	if b.margin > 0 {
-		p.Translate(b.margin, b.margin)
-		defer p.Restore()
-	}
-
 	if b.border {
-		p.DrawRect(0, 0, sz.X-b.margin*2, sz.Y-b.margin*2)
+		p.DrawRect(0, 0, sz.X, sz.Y)
 		p.Translate(1, 1)
 		defer p.Restore()
 	}
@@ -88,12 +73,12 @@ func (b *VerticalBox) Draw(p *Painter) {
 		p.Restore()
 
 		sz := child.Size()
-		off += sz.Y + b.padding
+		off += sz.Y
 	}
 }
 
 // SizeHint returns the recommended size for the layout.
-func (b *VerticalBox) SizeHint() image.Point {
+func (b *VBox) SizeHint() image.Point {
 	var width, height int
 
 	for _, child := range b.children {
@@ -108,26 +93,18 @@ func (b *VerticalBox) SizeHint() image.Point {
 		width += 2
 		height += 2
 	}
-	if b.padding > 0 {
-		height += b.padding * (len(b.children) - 1)
-	}
-	if b.margin > 0 {
-		margin := b.margin * 2
-		width += margin
-		height += margin
-	}
 
 	return image.Point{width, height}
 }
 
 // Size returns the size of the layout.
-func (b *VerticalBox) Size() image.Point {
+func (b *VBox) Size() image.Point {
 	return b.size
 }
 
 // Resize updates the size of the layout. This will recursively resize the
 // all the children in the layout.
-func (b *VerticalBox) Resize(size image.Point) {
+func (b *VBox) Resize(size image.Point) {
 	switch b.horizontalSizePolicy {
 	case Minimum:
 		b.size.X = b.SizeHint().X
@@ -142,10 +119,17 @@ func (b *VerticalBox) Resize(size image.Point) {
 		b.size.Y = size.Y
 	}
 
-	b.layoutChildren(b.size)
+	inner := b.size
+
+	if b.border {
+		inner.X = b.size.X - 2
+		inner.Y = b.size.Y - 2
+	}
+
+	b.layoutChildren(inner)
 }
 
-func (b *VerticalBox) layoutChildren(size image.Point) {
+func (b *VBox) layoutChildren(size image.Point) {
 	space := b.distributeSpace(size)
 
 	for _, child := range b.children {
@@ -153,7 +137,7 @@ func (b *VerticalBox) layoutChildren(size image.Point) {
 	}
 }
 
-func (b *VerticalBox) distributeSpace(available image.Point) map[Widget]image.Point {
+func (b *VBox) distributeSpace(available image.Point) map[Widget]image.Point {
 	widgets := make(map[Widget]image.Point)
 
 	// Distribute minimum space.
@@ -166,19 +150,22 @@ func (b *VerticalBox) distributeSpace(available image.Point) map[Widget]image.Po
 		used.Y += space.Y
 	}
 
-	// Distribute remaining space.
+	// Expand children horizontally.
+	for child, space := range widgets {
+		hpol, _ := child.SizePolicy()
+		if hpol == Expanding {
+			space.X = available.X
+			widgets[child] = space
+		}
+	}
+
+	// Distribute remaining vertical space (if any).
 	extra := available.Y - used.Y
 L:
 	for extra > 0 {
 		starting := extra
 		for child, space := range widgets {
-			hpol, vpol := child.SizePolicy()
-
-			if hpol == Expanding {
-				space.X = available.X
-				widgets[child] = space
-			}
-
+			_, vpol := child.SizePolicy()
 			if vpol == Expanding {
 				space.Y++
 				widgets[child] = space
@@ -199,69 +186,58 @@ L:
 }
 
 // SizePolicy returns the default layout behavior.
-func (b *VerticalBox) SizePolicy() (SizePolicy, SizePolicy) {
+func (b *VBox) SizePolicy() (SizePolicy, SizePolicy) {
 	return b.horizontalSizePolicy, b.verticalSizePolicy
 }
 
-func (b *VerticalBox) OnEvent(ev termbox.Event) {
+func (b *VBox) OnEvent(ev termbox.Event) {
 	for _, child := range b.children {
 		child.OnEvent(ev)
 	}
 }
 
-func (b *VerticalBox) IsVisible() bool {
+func (b *VBox) IsVisible() bool {
 	return !b.hidden
 }
 
-// HorizontalBox is a layout for placing widgets horizontally.
-type HorizontalBox struct {
+// HBox is a layout for placing widgets horizontally.
+type HBox struct {
 	children []Widget
 
 	horizontalSizePolicy SizePolicy
 	verticalSizePolicy   SizePolicy
 
-	border  bool
-	padding int
-	margin  int
+	border bool
 
 	hidden bool
 
 	size image.Point
 }
 
-// NewHorizontalBox returns a new HorizontalBox.
-func NewHorizontalBox(c ...Widget) *HorizontalBox {
-	return &HorizontalBox{
+// NewHBox returns a new HBox.
+func NewHBox(c ...Widget) *HBox {
+	return &HBox{
 		children: c,
 	}
 }
 
 // SetSizePolicy updates the size policy for the layout. This will not visible
 // until next resize.
-func (b *HorizontalBox) SetSizePolicy(horizontal, vertical SizePolicy) {
+func (b *HBox) SetSizePolicy(horizontal, vertical SizePolicy) {
 	b.horizontalSizePolicy = horizontal
 	b.verticalSizePolicy = vertical
 }
 
-func (b *HorizontalBox) SetBorder(border bool) {
+func (b *HBox) SetBorder(border bool) {
 	b.border = border
 }
 
-func (b *HorizontalBox) SetPadding(pad int) {
-	b.padding = pad
-}
-
 // Draw recursively draws the children it contains.
-func (b *HorizontalBox) Draw(p *Painter) {
+func (b *HBox) Draw(p *Painter) {
 	sz := b.Size()
 
-	if b.margin > 0 {
-		p.Translate(b.margin, b.margin)
-		defer p.Restore()
-	}
-
 	if b.border {
-		p.DrawRect(0, 0, sz.X-b.margin*2, sz.Y-b.margin*2)
+		p.DrawRect(0, 0, sz.X, sz.Y)
 		p.Translate(1, 1)
 		defer p.Restore()
 	}
@@ -277,12 +253,12 @@ func (b *HorizontalBox) Draw(p *Painter) {
 		p.Restore()
 
 		sz := child.Size()
-		off += sz.X + b.padding
+		off += sz.X
 	}
 }
 
 // SizeHint returns the recommended size for the layout.
-func (b *HorizontalBox) SizeHint() image.Point {
+func (b *HBox) SizeHint() image.Point {
 	var width, height int
 	for _, child := range b.children {
 		size := child.SizeHint()
@@ -296,27 +272,18 @@ func (b *HorizontalBox) SizeHint() image.Point {
 		width += 2
 		height += 2
 	}
-	if b.padding > 0 {
-		pad := b.padding * (len(b.children) - 1)
-		width += pad
-	}
-	if b.margin > 0 {
-		margin := b.margin * 2
-		width += margin
-		height += margin
-	}
 
 	return image.Point{width, height}
 }
 
 // Size returns the size of the layout.
-func (b *HorizontalBox) Size() image.Point {
+func (b *HBox) Size() image.Point {
 	return b.size
 }
 
 // Resize updates the size of the layout. This will recursively resize the
 // all the children in the layout.
-func (b *HorizontalBox) Resize(size image.Point) {
+func (b *HBox) Resize(size image.Point) {
 	switch b.horizontalSizePolicy {
 	case Minimum:
 		b.size.X = b.SizeHint().X
@@ -331,10 +298,17 @@ func (b *HorizontalBox) Resize(size image.Point) {
 		b.size.Y = size.Y
 	}
 
-	b.layoutChildren(size)
+	inner := b.size
+
+	if b.border {
+		inner.X = b.size.X - 2
+		inner.Y = b.size.Y - 2
+	}
+
+	b.layoutChildren(inner)
 }
 
-func (b *HorizontalBox) layoutChildren(size image.Point) {
+func (b *HBox) layoutChildren(size image.Point) {
 	space := b.distributeSpace(size)
 
 	for _, child := range b.children {
@@ -342,7 +316,7 @@ func (b *HorizontalBox) layoutChildren(size image.Point) {
 	}
 }
 
-func (b *HorizontalBox) distributeSpace(available image.Point) map[Widget]image.Point {
+func (b *HBox) distributeSpace(available image.Point) map[Widget]image.Point {
 	widgets := make(map[Widget]image.Point)
 
 	// Distribute minimum space.
@@ -355,19 +329,22 @@ func (b *HorizontalBox) distributeSpace(available image.Point) map[Widget]image.
 		used.X += space.X
 	}
 
-	// Distribute remaining space.
+	// Expand children vertically.
+	for child, space := range widgets {
+		_, vpol := child.SizePolicy()
+		if vpol == Expanding {
+			space.Y = available.Y
+			widgets[child] = space
+		}
+	}
+
+	// Distribute remaining horizontal space (if any).
 	extra := available.X - used.X
 L:
 	for extra > 0 {
 		starting := extra
 		for child, space := range widgets {
-			hpol, vpol := child.SizePolicy()
-
-			if vpol == Expanding {
-				space.Y = available.Y
-				widgets[child] = space
-			}
-
+			hpol, _ := child.SizePolicy()
 			if hpol == Expanding {
 				space.X++
 				widgets[child] = space
@@ -388,24 +365,24 @@ L:
 }
 
 // SizePolicy returns the default layout behavior.
-func (b *HorizontalBox) SizePolicy() (SizePolicy, SizePolicy) {
+func (b *HBox) SizePolicy() (SizePolicy, SizePolicy) {
 	return b.horizontalSizePolicy, b.verticalSizePolicy
 }
 
-func (b *HorizontalBox) OnEvent(ev termbox.Event) {
+func (b *HBox) OnEvent(ev termbox.Event) {
 	for _, child := range b.children {
 		child.OnEvent(ev)
 	}
 }
 
-func (b *HorizontalBox) IsVisible() bool {
+func (b *HBox) IsVisible() bool {
 	return !b.hidden
 }
 
-func (b *HorizontalBox) Show() {
+func (b *HBox) Show() {
 	b.hidden = false
 }
 
-func (b *HorizontalBox) Hide() {
+func (b *HBox) Hide() {
 	b.hidden = true
 }

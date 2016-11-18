@@ -31,7 +31,7 @@ Cheers,
 John`,
 	},
 	{
-		from:    "Jane Doe <john@doe.com>",
+		from:    "Jane Doe <jane@doe.com>",
 		subject: "Meeting notes",
 		date:    "Yesterday",
 		body: `
@@ -50,41 +50,41 @@ func main() {
 	)
 
 	mailHeaders := tui.NewGrid(0, 0)
+	mailHeaders.SetBorder(true)
+	mailHeaders.SetSizePolicy(tui.Expanding, tui.Minimum)
 	mailHeaders.AppendRow(tui.NewLabel("From:"), fromLabel)
 	mailHeaders.AppendRow(tui.NewLabel("Subject:"), subjLabel)
 	mailHeaders.AppendRow(tui.NewLabel("Date:"), dateLabel)
 
 	// Panel for reading the mail contents.
-	mailView := tui.NewVerticalBox(
+	mailView := tui.NewVBox(
 		mailHeaders,
 		bodyLabel,
 	)
-	mailView.SetBorder(true)
 	mailView.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	// List with all the mail items.
-	mailList := tui.NewList()
+	mailList := tui.NewTable(0, 0)
+	mailList.SetSizePolicy(tui.Expanding, tui.Minimum)
+	mailList.SetBorder(true)
 	for _, m := range mails {
-		mailList.AddItems(m.String())
+		mailList.AppendRow(
+			tui.NewLabel(m.subject),
+			tui.NewLabel(m.from),
+			tui.NewLabel(m.date),
+		)
 	}
-	mailList.SetSizePolicy(tui.Expanding, tui.Expanding)
-	mailList.SetRows(10)
-	mailList.SetSelected(0)
-	mailList.OnSelectionChanged(func(l *tui.List) {
-		m := mails[l.Selected()]
+	//mailList.SetSizePolicy(tui.Expanding, tui.Expanding)
+	mailList.OnSelectionChanged(func(t *tui.Table) {
+		m := mails[t.Selected()]
 		fromLabel.SetText(m.from)
 		subjLabel.SetText(m.subject)
 		dateLabel.SetText(m.date)
 		bodyLabel.SetText(m.body)
 	})
 
-	// Panel containing all the mails.
-	inboxView := tui.NewVerticalBox(mailList)
-	inboxView.SetBorder(true)
-	inboxView.SetSizePolicy(tui.Expanding, tui.Expanding)
-
 	// Main layout for the application.
-	root := tui.NewVerticalBox(inboxView, mailView)
+	root := tui.NewVBox(mailList, mailView)
 	root.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	// Start the application.

@@ -11,7 +11,7 @@ tui-go provides a higher-level programming model for building rich terminal
 applications. It lets you build layout-based user interfaces that (should)
 gracefully handle resizing for you.
 
-![Example](example.png)
+![Example](docs/example.png)
 
 ## Status
 

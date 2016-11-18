@@ -6,8 +6,8 @@ import (
 	termbox "github.com/nsf/termbox-go"
 )
 
-// Grid is a widget that lays out widgets in a grid.
-type Grid struct {
+// Table is a widget that lays out widgets in a table.
+type Table struct {
 	size image.Point
 
 	rows, cols int
@@ -16,6 +16,10 @@ type Grid struct {
 	colWidths  []int
 
 	hasBorder bool
+	selected  int
+
+	onItemActivated    func(*Table)
+	onSelectionChanged func(*Table)
 
 	cells map[image.Point]Widget
 
@@ -23,17 +27,17 @@ type Grid struct {
 	sizePolicyY SizePolicy
 }
 
-// NewGrid returns a new Grid.
-func NewGrid(cols, rows int) *Grid {
-	return &Grid{
+// Table returns a new Table.
+func NewTable(cols, rows int) *Table {
+	return &Table{
 		cols:  cols,
 		rows:  rows,
 		cells: make(map[image.Point]Widget),
 	}
 }
 
-// Draw draws the grid.
-func (g *Grid) Draw(p *Painter) {
+// Draw draws the table.
+func (g *Table) Draw(p *Painter) {
 	s := g.Size()
 
 	if g.hasBorder {
@@ -79,6 +83,12 @@ func (g *Grid) Draw(p *Painter) {
 	// Draw cell content.
 	for i := 0; i < g.cols; i++ {
 		for j := 0; j < g.rows; j++ {
+			if j == g.selected {
+				wp := g.mapCellToLocal(image.Point{i, j})
+				w := g.colWidths[i]
+				p.SetBrush(termbox.ColorBlack, termbox.ColorWhite)
+				p.FillRect(wp.X, wp.Y, w, 1)
+			}
 			pos := image.Point{i, j}
 			if w, ok := g.cells[pos]; ok {
 				wp := g.mapCellToLocal(image.Point{i, j})
@@ -86,21 +96,20 @@ func (g *Grid) Draw(p *Painter) {
 				w.Draw(p)
 				p.Restore()
 			}
+			if j == g.selected {
+				p.SetBrush(termbox.ColorDefault, termbox.ColorDefault)
+			}
 		}
 	}
 }
 
-// Size returns the size of the grid.
-func (g *Grid) Size() image.Point {
+// Size returns the size of the table.
+func (g *Table) Size() image.Point {
 	return g.size
 }
 
-// SizeHint returns the recommended size for the grid.
-func (g *Grid) SizeHint() image.Point {
-	if g.cols == 0 || g.rows == 0 {
-		return image.Point{}
-	}
-
+// SizeHint returns the recommended size for the table.
+func (g *Table) SizeHint() image.Point {
 	var width int
 	for i := 0; i < g.cols; i++ {
 		width += g.columnWidth(i)
@@ -120,12 +129,12 @@ func (g *Grid) SizeHint() image.Point {
 }
 
 // SizePolicy returns the default layout behavior.
-func (g *Grid) SizePolicy() (SizePolicy, SizePolicy) {
+func (g *Table) SizePolicy() (SizePolicy, SizePolicy) {
 	return g.sizePolicyX, g.sizePolicyY
 }
 
-// Resize updates the size of the grid.
-func (g *Grid) Resize(size image.Point) {
+// Resize updates the size of the table.
+func (g *Table) Resize(size image.Point) {
 	hpol, vpol := g.SizePolicy()
 
 	switch hpol {
@@ -152,17 +161,15 @@ func (g *Grid) Resize(size image.Point) {
 	}
 
 	// Expand the last column.
-	if len(g.colWidths) > 0 {
-		var colsum int
-		for _, w := range g.colWidths[:len(g.colWidths)] {
-			colsum += w
-		}
-		remaining := g.size.X - colsum
-		if g.hasBorder {
-			remaining -= g.cols + 1
-		}
-		g.colWidths[len(g.colWidths)-1] = g.colWidths[len(g.colWidths)-1] + remaining
+	var colsum int
+	for _, w := range g.colWidths[:len(g.colWidths)] {
+		colsum += w
 	}
+	remaining := g.size.X - colsum
+	if g.hasBorder {
+		remaining -= g.cols + 1
+	}
+	g.colWidths[len(g.colWidths)-1] = g.colWidths[len(g.colWidths)-1] + remaining
 
 	// Resize children.
 	for pos, w := range g.cells {
@@ -170,7 +177,7 @@ func (g *Grid) Resize(size image.Point) {
 	}
 }
 
-func (g *Grid) mapCellToLocal(p image.Point) image.Point {
+func (g *Table) mapCellToLocal(p image.Point) image.Point {
 	var lx, ly int
 
 	for x := 0; x < p.X; x++ {
@@ -188,8 +195,8 @@ func (g *Grid) mapCellToLocal(p image.Point) image.Point {
 	return image.Point{lx, ly}
 }
 
-func (b *Grid) rowHeight(i int) int {
-	result := 0
+func (b *Table) rowHeight(i int) int {
+	result := 1
 	for pos, w := range b.cells {
 		if pos.Y != i {
 			continue
@@ -203,8 +210,8 @@ func (b *Grid) rowHeight(i int) int {
 	return result
 }
 
-func (b *Grid) columnWidth(i int) int {
-	result := 0
+func (b *Table) columnWidth(i int) int {
+	result := 1
 	for pos, w := range b.cells {
 		if pos.X != i {
 			continue
@@ -217,27 +224,62 @@ func (b *Grid) columnWidth(i int) int {
 	return result
 }
 
-func (g *Grid) OnEvent(_ termbox.Event) {
+func (t *Table) OnEvent(ev termbox.Event) {
+	switch ev.Key {
+	case termbox.KeyArrowUp:
+		t.moveUp()
+	case termbox.KeyArrowDown:
+		t.moveDown()
+	case termbox.KeyEnter:
+		if t.onItemActivated != nil {
+			t.onItemActivated(t)
+		}
+	}
+
+	switch ev.Ch {
+	case 'k':
+		t.moveUp()
+	case 'j':
+		t.moveDown()
+	}
 }
 
-func (g *Grid) IsVisible() bool {
+func (t *Table) moveUp() {
+	if t.selected > 0 {
+		t.selected--
+	}
+	if t.onSelectionChanged != nil {
+		t.onSelectionChanged(t)
+	}
+}
+
+func (t *Table) moveDown() {
+	if t.selected < t.rows-1 {
+		t.selected++
+	}
+	if t.onSelectionChanged != nil {
+		t.onSelectionChanged(t)
+	}
+}
+
+func (g *Table) IsVisible() bool {
 	return true
 }
 
-func (g *Grid) SetCell(pos image.Point, w Widget) {
+func (g *Table) SetCell(pos image.Point, w Widget) {
 	g.cells[pos] = w
 }
 
-func (g *Grid) SetBorder(enabled bool) {
+func (g *Table) SetBorder(enabled bool) {
 	g.hasBorder = enabled
 }
 
-func (g *Grid) SetSizePolicy(horizontal, vertical SizePolicy) {
-	g.sizePolicyX = horizontal
-	g.sizePolicyY = vertical
+func (t *Table) SetSizePolicy(horizontal, vertical SizePolicy) {
+	t.sizePolicyX = horizontal
+	t.sizePolicyY = vertical
 }
 
-func (g *Grid) AppendRow(row ...Widget) {
+func (g *Table) AppendRow(row ...Widget) {
 	g.rows++
 
 	if len(row) > g.cols {
@@ -248,4 +290,20 @@ func (g *Grid) AppendRow(row ...Widget) {
 		pos := image.Point{i, g.rows - 1}
 		g.SetCell(pos, cell)
 	}
+}
+
+func (t *Table) SetSelected(i int) {
+	t.selected = i
+}
+
+func (t *Table) Selected() int {
+	return t.selected
+}
+
+func (t *Table) OnItemActivated(fn func(*Table)) {
+	t.onItemActivated = fn
+}
+
+func (t *Table) OnSelectionChanged(fn func(*Table)) {
+	t.onSelectionChanged = fn
 }
