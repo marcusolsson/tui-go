@@ -39,6 +39,8 @@ func main() {
 	}
 
 	input := tui.NewEntry()
+	input.SetSizePolicy(tui.Expanding, tui.Minimum)
+
 	inputBox := tui.NewHBox(input)
 	inputBox.SetBorder(true)
 	inputBox.SetSizePolicy(tui.Expanding, tui.Minimum)

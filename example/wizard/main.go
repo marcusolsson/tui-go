@@ -15,10 +15,17 @@ var logo = `     _____ __ ____  ___   ______________
 func main() {
 
 	userpassBox := tui.NewGrid(0, 0)
-	userpassBox.SetBorder(true)
 	userpassBox.SetSizePolicy(tui.Expanding, tui.Minimum)
-	userpassBox.AppendRow(tui.NewLabel("User"), tui.NewLabel("Password"))
-	userpassBox.AppendRow(tui.NewEntry(), tui.NewEntry())
+
+	userpassBox.AppendRow(
+		tui.NewPadder(tui.NewLabel("User"), image.Point{1, 0}),
+		tui.NewPadder(tui.NewLabel("Password"), image.Point{1, 0}),
+	)
+
+	userpassBox.AppendRow(
+		tui.NewPadder(tui.NewEntry(), image.Point{1, 0}),
+		tui.NewPadder(tui.NewEntry(), image.Point{1, 0}),
+	)
 
 	loginBtn := tui.NewButton("[Login]")
 	loginBtn.SetFocused(true)
@@ -34,7 +41,7 @@ func main() {
 	loginBox := tui.NewVBox(
 		tui.NewPadder(tui.NewLabel(logo), image.Point{10, 1}),
 		tui.NewPadder(tui.NewLabel("Welcome to Skynet! Login or register."), image.Point{12, 0}),
-		userpassBox,
+		tui.NewPadder(userpassBox, image.Point{1, 1}),
 		btnGroup,
 	)
 	loginBox.SetBorder(true)

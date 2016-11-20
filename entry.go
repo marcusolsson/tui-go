@@ -16,6 +16,9 @@ type Entry struct {
 
 	onChange func(*Entry)
 	onSubmit func(*Entry)
+
+	sizePolicyX SizePolicy
+	sizePolicyY SizePolicy
 }
 
 // NewEntry returns a new Entry.
@@ -25,7 +28,11 @@ func NewEntry() *Entry {
 
 // Draw draws the entry.
 func (e *Entry) Draw(p *Painter) {
-	p.DrawText(0, 0, e.text)
+	s := e.Size()
+	withBrush(p, termbox.ColorBlack, termbox.ColorWhite, func(p *Painter) {
+		p.FillRect(0, 0, s.X, 1)
+		p.DrawText(0, 0, e.text)
+	})
 }
 
 // Size returns the size of the entry.
@@ -40,12 +47,26 @@ func (e *Entry) SizeHint() image.Point {
 
 // SizePolicy returns the default layout behavior.
 func (e *Entry) SizePolicy() (SizePolicy, SizePolicy) {
-	return Minimum, Minimum
+	return e.sizePolicyX, e.sizePolicyY
 }
 
 // Resize updates the size of the entry.
-func (e *Entry) Resize(contentSize image.Point) {
-	e.size = e.SizeHint()
+func (e *Entry) Resize(size image.Point) {
+	hpol, vpol := e.SizePolicy()
+
+	switch hpol {
+	case Minimum:
+		e.size.X = e.SizeHint().X
+	case Expanding:
+		e.size.X = size.X
+	}
+
+	switch vpol {
+	case Minimum:
+		e.size.Y = e.SizeHint().Y
+	case Expanding:
+		e.size.Y = size.Y
+	}
 }
 
 func (e *Entry) OnEvent(ev termbox.Event) {
@@ -89,4 +110,9 @@ func (e *Entry) SetText(text string) {
 
 func (e *Entry) Text() string {
 	return e.text
+}
+
+func (e *Entry) SetSizePolicy(horizontal, vertical SizePolicy) {
+	e.sizePolicyX = horizontal
+	e.sizePolicyY = vertical
 }
