@@ -66,6 +66,10 @@ func (b *StatusBar) SetBrush(fg, bg termbox.Attribute) {
 	b.bg = bg
 }
 
+func (b *StatusBar) SetText(text string) {
+	b.text = text
+}
+
 func (b *StatusBar) SetPermanentText(text string) {
 	b.permText = text
 }

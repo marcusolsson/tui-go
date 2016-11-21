@@ -13,6 +13,8 @@ type Button struct {
 
 	focused bool
 	size    image.Point
+
+	onActivated func(*Button)
 }
 
 // NewButton returns a new Button.
@@ -79,7 +81,21 @@ func (b *Button) Resize(size image.Point) {
 	b.size = b.SizeHint()
 }
 
-func (b *Button) OnEvent(_ termbox.Event) {
+func (b *Button) OnEvent(ev termbox.Event) {
+	if !b.focused {
+		return
+	}
+
+	switch ev.Key {
+	case termbox.KeyEnter:
+		if b.onActivated != nil {
+			b.onActivated(b)
+		}
+	}
+}
+
+func (b *Button) OnActivated(fn func(b *Button)) {
+	b.onActivated = fn
 }
 
 func (b *Button) IsVisible() bool {

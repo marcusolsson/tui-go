@@ -59,11 +59,19 @@ func main() {
 	)
 	wrapper.SetSizePolicy(tui.Minimum, tui.Expanding)
 
-	root := tui.NewHBox(
+	status := tui.NewStatusBar("Ready.")
+	loginBtn.OnActivated(func(b *tui.Button) {
+		status.SetText("Logged in.")
+	})
+
+	content := tui.NewHBox(
 		tui.NewSpacer(),
 		wrapper,
 		tui.NewSpacer(),
 	)
+	content.SetSizePolicy(tui.Expanding, tui.Expanding)
+
+	root := tui.NewVBox(content, status)
 	root.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	// Start the application.
