@@ -22,3 +22,15 @@ This project is highly experimental and will change a lot. Use at your own risk.
 ```
 go get github.com/marcusolsson/tui-go
 ```
+
+## Documentation
+
+The documentation is rather bare at the moment due to me changing the API
+pretty frequently. You can however explore the API in its current form at
+[godoc.org](https://godoc.org/github.com/marcusolsson/tui-go).
+
+## Contributing
+
+I'm currently not accepting contributions or bug reports due to the project
+being pretty volatile at the moment. That being said, feel free to create an
+GitHub issue to suggest features you'd like to see.
