@@ -1,10 +1,23 @@
 package main
 
 import (
+	"fmt"
 	"image"
+	"time"
 
 	"github.com/marcusolsson/tui-go"
 )
+
+type post struct {
+	username string
+	message  string
+	time     string
+}
+
+var posts = []post{
+	{username: "john", message: "hi, what's up?", time: "14:41"},
+	{username: "jane", message: "not much", time: "14:43"},
+}
 
 func main() {
 	channels := tui.NewVBox(
@@ -30,9 +43,11 @@ func main() {
 	history.SetBorder(true)
 	history.SetSizePolicy(tui.Expanding, tui.Expanding)
 
-	for _, m := range []string{"hi, what's up?", "not much"} {
+	for _, m := range posts {
 		b := tui.NewHBox(
-			tui.NewLabel("john: "), tui.NewLabel(m),
+			tui.NewLabel(m.time),
+			tui.NewPadder(tui.NewLabel(fmt.Sprintf("<%s>", m.username)), image.Point{1, 0}),
+			tui.NewLabel(m.message),
 		)
 
 		history.Append(b)
@@ -51,8 +66,9 @@ func main() {
 
 	input.OnSubmit(func(e *tui.Entry) {
 		b := tui.NewHBox(
-			tui.NewLabel("john:"),
-			tui.NewPadder(tui.NewLabel(e.Text()), image.Point{1, 0}),
+			tui.NewLabel(time.Now().Format("15:04")),
+			tui.NewPadder(tui.NewLabel(fmt.Sprintf("<%s>", "john")), image.Point{1, 0}),
+			tui.NewLabel(e.Text()),
 		)
 
 		history.Append(b)
