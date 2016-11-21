@@ -217,7 +217,10 @@ func (b *Grid) columnWidth(i int) int {
 	return result
 }
 
-func (g *Grid) OnEvent(_ termbox.Event) {
+func (g *Grid) OnEvent(ev termbox.Event) {
+	for _, w := range g.cells {
+		w.OnEvent(ev)
+	}
 }
 
 func (g *Grid) IsVisible() bool {

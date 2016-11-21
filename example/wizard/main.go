@@ -22,13 +22,19 @@ func main() {
 		tui.NewPadder(tui.NewLabel("Password"), image.Point{1, 0}),
 	)
 
+	userEntry := tui.NewEntry()
+	userEntry.SetFocused(true)
+
+	passEntry := tui.NewEntry()
+
 	userpassBox.AppendRow(
-		tui.NewPadder(tui.NewEntry(), image.Point{1, 0}),
-		tui.NewPadder(tui.NewEntry(), image.Point{1, 0}),
+		tui.NewPadder(userEntry, image.Point{1, 0}),
+		tui.NewPadder(passEntry, image.Point{1, 0}),
 	)
 
 	loginBtn := tui.NewButton("[Login]")
 	loginBtn.SetFocused(true)
+
 	registerBtn := tui.NewButton("[Register]")
 
 	btnGroup := tui.NewHBox(

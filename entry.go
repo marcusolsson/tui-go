@@ -12,7 +12,8 @@ type Entry struct {
 
 	size image.Point
 
-	hidden bool
+	hidden  bool
+	focused bool
 
 	onChange func(*Entry)
 	onSubmit func(*Entry)
@@ -29,10 +30,13 @@ func NewEntry() *Entry {
 // Draw draws the entry.
 func (e *Entry) Draw(p *Painter) {
 	s := e.Size()
-	withBrush(p, termbox.ColorBlack, termbox.ColorWhite, func(p *Painter) {
-		p.FillRect(0, 0, s.X, 1)
-		p.DrawText(0, 0, e.text)
-	})
+
+	p.FillRect(0, 0, s.X, 1)
+	p.DrawText(0, 0, e.text)
+
+	if e.focused {
+		p.DrawCursor(len(e.text), 0)
+	}
 }
 
 // Size returns the size of the entry.
@@ -70,10 +74,25 @@ func (e *Entry) Resize(size image.Point) {
 }
 
 func (e *Entry) OnEvent(ev termbox.Event) {
+	if !e.focused {
+		return
+	}
+
 	switch ev.Type {
 	case termbox.EventKey:
-		if ev.Key == termbox.KeyEnter {
-			e.onSubmit(e)
+		switch ev.Key {
+		case termbox.KeyEnter:
+			if e.onSubmit != nil {
+				e.onSubmit(e)
+			}
+			return
+		case termbox.KeyBackspace2:
+			if len(e.text) > 0 {
+				e.text = e.text[:len(e.text)-1]
+				if e.onChange != nil {
+					e.onChange(e)
+				}
+			}
 			return
 		}
 
@@ -115,4 +134,8 @@ func (e *Entry) Text() string {
 func (e *Entry) SetSizePolicy(horizontal, vertical SizePolicy) {
 	e.sizePolicyX = horizontal
 	e.sizePolicyY = vertical
+}
+
+func (e *Entry) SetFocused(f bool) {
+	e.focused = f
 }

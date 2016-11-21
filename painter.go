@@ -9,6 +9,7 @@ import (
 // Surface defines a surface that can be painted on.
 type Surface interface {
 	SetCell(x, y int, ch rune, fg, bg termbox.Attribute)
+	SetCursor(x, y int)
 	Begin()
 	End()
 	Size() image.Point
@@ -23,6 +24,10 @@ func NewTermboxSurface() Surface {
 
 func (s termboxSurface) SetCell(x, y int, ch rune, fg, bg termbox.Attribute) {
 	termbox.SetCell(x, y, ch, fg, bg)
+}
+
+func (s termboxSurface) SetCursor(x, y int) {
+	termbox.SetCursor(x, y)
 }
 
 func (s termboxSurface) Begin() {
@@ -146,6 +151,11 @@ func (p *Painter) FillRect(x, y, w, h int) {
 			p.surface.SetCell(wp.X, wp.Y, ' ', p.fg, p.bg)
 		}
 	}
+}
+
+func (p *Painter) DrawCursor(x, y int) {
+	wp := p.mapLocalToWorld(image.Point{x, y})
+	p.surface.SetCursor(wp.X, wp.Y)
 }
 
 func (p *Painter) SetBrush(fg, bg termbox.Attribute) {

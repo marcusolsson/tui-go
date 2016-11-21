@@ -32,13 +32,14 @@ func main() {
 
 	for _, m := range []string{"hi, what's up?", "not much"} {
 		b := tui.NewHBox(
-			tui.NewLabel("john:"), tui.NewLabel(m),
+			tui.NewLabel("john: "), tui.NewLabel(m),
 		)
 
 		history.Append(b)
 	}
 
 	input := tui.NewEntry()
+	input.SetFocused(true)
 	input.SetSizePolicy(tui.Expanding, tui.Minimum)
 
 	inputBox := tui.NewHBox(input)
