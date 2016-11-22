@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"image"
 	"time"
 
 	"github.com/marcusolsson/tui-go"
@@ -46,7 +45,7 @@ func main() {
 	for _, m := range posts {
 		b := tui.NewHBox(
 			tui.NewLabel(m.time),
-			tui.NewPadder(tui.NewLabel(fmt.Sprintf("<%s>", m.username)), image.Point{1, 0}),
+			tui.NewPadder(1, 0, tui.NewLabel(fmt.Sprintf("<%s>", m.username))),
 			tui.NewLabel(m.message),
 		)
 
@@ -67,7 +66,7 @@ func main() {
 	input.OnSubmit(func(e *tui.Entry) {
 		b := tui.NewHBox(
 			tui.NewLabel(time.Now().Format("15:04")),
-			tui.NewPadder(tui.NewLabel(fmt.Sprintf("<%s>", "john")), image.Point{1, 0}),
+			tui.NewPadder(1, 0, tui.NewLabel(fmt.Sprintf("<%s>", "john"))),
 			tui.NewLabel(e.Text()),
 		)
 

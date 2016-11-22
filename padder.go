@@ -14,10 +14,10 @@ type Padder struct {
 }
 
 // Padder returns a new Padder.
-func NewPadder(w Widget, padding image.Point) *Padder {
+func NewPadder(x, y int, w Widget) *Padder {
 	return &Padder{
 		widget:  w,
-		padding: padding,
+		padding: image.Point{x, y},
 	}
 }
 

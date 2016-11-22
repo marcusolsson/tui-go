@@ -1,10 +1,6 @@
 package main
 
-import (
-	"image"
-
-	"github.com/marcusolsson/tui-go"
-)
+import "github.com/marcusolsson/tui-go"
 
 var logo = `     _____ __ ____  ___   ______________  
     / ___// //_/\ \/ / | / / ____/_  __/  
@@ -31,15 +27,15 @@ func main() {
 
 	buttons := tui.NewHBox(
 		tui.NewSpacer(),
-		tui.NewPadder(login, image.Point{1, 0}),
-		tui.NewPadder(register, image.Point{1, 0}),
+		tui.NewPadder(1, 0, login),
+		tui.NewPadder(1, 0, register),
 	)
 	buttons.SetSizePolicy(tui.Expanding, tui.Minimum)
 
 	window := tui.NewVBox(
-		tui.NewPadder(tui.NewLabel(logo), image.Point{10, 1}),
-		tui.NewPadder(tui.NewLabel("Welcome to Skynet! Login or register."), image.Point{12, 0}),
-		tui.NewPadder(form, image.Point{1, 1}),
+		tui.NewPadder(10, 1, tui.NewLabel(logo)),
+		tui.NewPadder(12, 0, tui.NewLabel("Welcome to Skynet! Login or register.")),
+		tui.NewPadder(1, 1, form),
 		buttons,
 	)
 	window.SetBorder(true)
