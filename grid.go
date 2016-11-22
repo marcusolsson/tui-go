@@ -29,9 +29,11 @@ type Grid struct {
 // NewGrid returns a new Grid.
 func NewGrid(cols, rows int) *Grid {
 	return &Grid{
-		cols:  cols,
-		rows:  rows,
-		cells: make(map[image.Point]Widget),
+		cols:          cols,
+		rows:          rows,
+		cells:         make(map[image.Point]Widget),
+		columnStretch: make(map[int]int),
+		rowStretch:    make(map[int]int),
 	}
 }
 
