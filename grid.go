@@ -298,10 +298,6 @@ func (g *Grid) OnEvent(ev termbox.Event) {
 	}
 }
 
-func (g *Grid) IsVisible() bool {
-	return true
-}
-
 func (g *Grid) SetCell(pos image.Point, w Widget) {
 	g.cells[pos] = w
 }

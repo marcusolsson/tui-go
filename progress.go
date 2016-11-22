@@ -67,10 +67,6 @@ func (p *Progress) Resize(size image.Point) {
 func (p *Progress) OnEvent(_ termbox.Event) {
 }
 
-func (p *Progress) IsVisible() bool {
-	return true
-}
-
 func (p *Progress) SetCurrent(c int) {
 	p.current = c
 }

@@ -12,7 +12,6 @@ type Entry struct {
 
 	size image.Point
 
-	hidden  bool
 	focused bool
 
 	onChange func(*Entry)
@@ -103,24 +102,12 @@ func (e *Entry) OnEvent(ev termbox.Event) {
 	}
 }
 
-func (e *Entry) IsVisible() bool {
-	return !e.hidden
-}
-
 func (e *Entry) OnChanged(fn func(entry *Entry)) {
 	e.onChange = fn
 }
 
 func (e *Entry) OnSubmit(fn func(entry *Entry)) {
 	e.onSubmit = fn
-}
-
-func (e *Entry) Show() {
-	e.hidden = false
-}
-
-func (e *Entry) Hide() {
-	e.hidden = true
 }
 
 func (e *Entry) SetText(text string) {

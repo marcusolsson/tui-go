@@ -98,10 +98,6 @@ func (b *Button) OnActivated(fn func(b *Button)) {
 	b.onActivated = fn
 }
 
-func (b *Button) IsVisible() bool {
-	return true
-}
-
 func (b *Button) SetFocused(f bool) {
 	b.focused = f
 }

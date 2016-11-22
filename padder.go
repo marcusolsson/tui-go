@@ -52,7 +52,3 @@ func (p *Padder) Resize(size image.Point) {
 func (p *Padder) OnEvent(ev termbox.Event) {
 	p.widget.OnEvent(ev)
 }
-
-func (p *Padder) IsVisible() bool {
-	return p.widget.IsVisible()
-}

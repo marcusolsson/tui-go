@@ -15,8 +15,6 @@ type VBox struct {
 
 	border bool
 
-	hidden bool
-
 	size image.Point
 }
 
@@ -31,14 +29,6 @@ func (b *VBox) Append(w Widget) {
 	b.children = append(b.children, w)
 }
 
-func (b *VBox) Show() {
-	b.hidden = false
-}
-
-func (b *VBox) Hide() {
-	b.hidden = true
-}
-
 func (b *VBox) SetSizePolicy(horizontal, vertical SizePolicy) {
 	b.horizontalSizePolicy = horizontal
 	b.verticalSizePolicy = vertical
@@ -50,10 +40,6 @@ func (b *VBox) SetBorder(enabled bool) {
 
 // Draw recursively draws the children it contains.
 func (b *VBox) Draw(p *Painter) {
-	if b.hidden {
-		return
-	}
-
 	sz := b.Size()
 
 	if b.border {
@@ -64,10 +50,6 @@ func (b *VBox) Draw(p *Painter) {
 
 	var off int
 	for _, child := range b.children {
-		if !child.IsVisible() {
-			continue
-		}
-
 		p.Translate(0, off)
 		child.Draw(p)
 		p.Restore()
@@ -196,10 +178,6 @@ func (b *VBox) OnEvent(ev termbox.Event) {
 	}
 }
 
-func (b *VBox) IsVisible() bool {
-	return !b.hidden
-}
-
 // HBox is a layout for placing widgets horizontally.
 type HBox struct {
 	children []Widget
@@ -208,8 +186,6 @@ type HBox struct {
 	verticalSizePolicy   SizePolicy
 
 	border bool
-
-	hidden bool
 
 	size image.Point
 }
@@ -244,10 +220,6 @@ func (b *HBox) Draw(p *Painter) {
 
 	var off int
 	for _, child := range b.children {
-		if !child.IsVisible() {
-			continue
-		}
-
 		p.Translate(off, 0)
 		child.Draw(p)
 		p.Restore()
@@ -373,16 +345,4 @@ func (b *HBox) OnEvent(ev termbox.Event) {
 	for _, child := range b.children {
 		child.OnEvent(ev)
 	}
-}
-
-func (b *HBox) IsVisible() bool {
-	return !b.hidden
-}
-
-func (b *HBox) Show() {
-	b.hidden = false
-}
-
-func (b *HBox) Hide() {
-	b.hidden = true
 }

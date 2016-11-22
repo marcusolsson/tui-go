@@ -63,10 +63,6 @@ func (l *Label) Resize(_ image.Point) {
 func (l *Label) OnEvent(_ termbox.Event) {
 }
 
-func (l *Label) IsVisible() bool {
-	return true
-}
-
 func (l *Label) SetText(text string) {
 	l.text = text
 }

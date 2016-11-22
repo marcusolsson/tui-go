@@ -1,20 +1,12 @@
 package main
 
-import (
-	"fmt"
-
-	"github.com/marcusolsson/tui-go"
-)
+import "github.com/marcusolsson/tui-go"
 
 type mail struct {
 	from    string
 	subject string
 	date    string
 	body    string
-}
-
-func (m mail) String() string {
-	return fmt.Sprintf("%s  %s  %s", m.subject, m.from, m.date)
 }
 
 var mails = []mail{
@@ -43,68 +35,50 @@ Here are the notes from today's meeting.
 
 func main() {
 	var (
-		fromLabel = tui.NewLabel("")
-		subjLabel = tui.NewLabel("")
-		dateLabel = tui.NewLabel("")
-		bodyLabel = tui.NewLabel("")
+		from    = tui.NewLabel("")
+		subject = tui.NewLabel("")
+		date    = tui.NewLabel("")
+		body    = tui.NewLabel("")
 	)
 
-	mailHeaders := tui.NewGrid(0, 0)
-	mailHeaders.SetSizePolicy(tui.Expanding, tui.Minimum)
-	mailHeaders.AppendRow(tui.NewLabel("From:"), fromLabel)
-	mailHeaders.AppendRow(tui.NewLabel("Subject:"), subjLabel)
-	mailHeaders.AppendRow(tui.NewLabel("Date:"), dateLabel)
+	info := tui.NewGrid(0, 0)
+	info.SetSizePolicy(tui.Expanding, tui.Minimum)
+	info.AppendRow(tui.NewLabel("From:"), from)
+	info.AppendRow(tui.NewLabel("Subject:"), subject)
+	info.AppendRow(tui.NewLabel("Date:"), date)
 
-	// Panel for reading the mail contents.
-	mailView := tui.NewVBox(
-		mailHeaders,
-		bodyLabel,
-	)
-	mailView.SetSizePolicy(tui.Expanding, tui.Expanding)
+	mail := tui.NewVBox(info, body)
+	mail.SetSizePolicy(tui.Expanding, tui.Expanding)
 
-	// List with all the mail items.
-	mailList := tui.NewTable(0, 0)
-	mailList.SetSizePolicy(tui.Expanding, tui.Minimum)
+	inbox := tui.NewTable(0, 0)
+	inbox.SetSizePolicy(tui.Expanding, tui.Minimum)
+	inbox.SetColumnStretch(0, 3)
+	inbox.SetColumnStretch(1, 2)
+	inbox.SetColumnStretch(2, 1)
 
 	for _, m := range mails {
-		mailList.AppendRow(
+		inbox.AppendRow(
 			tui.NewLabel(m.subject),
 			tui.NewLabel(m.from),
 			tui.NewLabel(m.date),
 		)
 	}
 
-	mailList.SetColumnStretch(0, 3)
-	mailList.SetColumnStretch(1, 2)
-	mailList.SetColumnStretch(2, 1)
-
-	//mailList.SetSizePolicy(tui.Expanding, tui.Expanding)
-	mailList.OnSelectionChanged(func(t *tui.Table) {
+	inbox.OnSelectionChanged(func(t *tui.Table) {
 		m := mails[t.Selected()]
-		fromLabel.SetText(m.from)
-		subjLabel.SetText(m.subject)
-		dateLabel.SetText(m.date)
-		bodyLabel.SetText(m.body)
+		from.SetText(m.from)
+		subject.SetText(m.subject)
+		date.SetText(m.date)
+		body.SetText(m.body)
 	})
 
-	// Main layout for the application.
-	root := tui.NewVBox(
-		mailList,
-		tui.NewLabel(""),
-		mailView,
-	)
+	// Select first mail on startup.
+	inbox.Select(0)
+
+	root := tui.NewVBox(inbox, tui.NewLabel(""), mail)
 	root.SetSizePolicy(tui.Expanding, tui.Expanding)
 
-	// Start the application.
-	ui := tui.New(root)
-	ui.SetShortcut('h', func() {
-		if mailView.IsVisible() {
-			mailView.Hide()
-		} else {
-			mailView.Show()
-		}
-	})
-	if err := ui.Run(); err != nil {
+	if err := tui.New(root).Run(); err != nil {
 		panic(err)
 	}
 }

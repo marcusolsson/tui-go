@@ -150,10 +150,6 @@ func (l *List) moveDown() {
 	}
 }
 
-func (l *List) IsVisible() bool {
-	return true
-}
-
 func (l *List) SetSizePolicy(h, v SizePolicy) {
 	l.sizePolicyX = h
 	l.sizePolicyY = v

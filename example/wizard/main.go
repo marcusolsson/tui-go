@@ -13,54 +13,46 @@ var logo = `     _____ __ ____  ___   ______________
   /____/_/ |_|  /_/_/ |_/_____/ /_/     `
 
 func main() {
+	user := tui.NewEntry()
+	user.SetFocused(true)
 
-	userpassBox := tui.NewGrid(0, 0)
-	userpassBox.SetSizePolicy(tui.Expanding, tui.Minimum)
+	password := tui.NewEntry()
 
-	userpassBox.AppendRow(
-		tui.NewPadder(tui.NewLabel("User"), image.Point{1, 0}),
-		tui.NewPadder(tui.NewLabel("Password"), image.Point{1, 0}),
-	)
+	form := tui.NewGrid(0, 0)
+	form.SetSizePolicy(tui.Expanding, tui.Minimum)
 
-	userEntry := tui.NewEntry()
-	userEntry.SetFocused(true)
+	form.AppendRow(tui.NewLabel("User"), tui.NewLabel("Password"))
+	form.AppendRow(user, password)
 
-	passEntry := tui.NewEntry()
+	login := tui.NewButton("[Login]")
+	login.SetFocused(true)
 
-	userpassBox.AppendRow(
-		tui.NewPadder(userEntry, image.Point{1, 0}),
-		tui.NewPadder(passEntry, image.Point{1, 0}),
-	)
+	register := tui.NewButton("[Register]")
 
-	loginBtn := tui.NewButton("[Login]")
-	loginBtn.SetFocused(true)
-
-	registerBtn := tui.NewButton("[Register]")
-
-	btnGroup := tui.NewHBox(
+	buttons := tui.NewHBox(
 		tui.NewSpacer(),
-		tui.NewPadder(loginBtn, image.Point{1, 0}),
-		tui.NewPadder(registerBtn, image.Point{1, 0}),
+		tui.NewPadder(login, image.Point{1, 0}),
+		tui.NewPadder(register, image.Point{1, 0}),
 	)
-	btnGroup.SetSizePolicy(tui.Expanding, tui.Minimum)
+	buttons.SetSizePolicy(tui.Expanding, tui.Minimum)
 
-	loginBox := tui.NewVBox(
+	window := tui.NewVBox(
 		tui.NewPadder(tui.NewLabel(logo), image.Point{10, 1}),
 		tui.NewPadder(tui.NewLabel("Welcome to Skynet! Login or register."), image.Point{12, 0}),
-		tui.NewPadder(userpassBox, image.Point{1, 1}),
-		btnGroup,
+		tui.NewPadder(form, image.Point{1, 1}),
+		buttons,
 	)
-	loginBox.SetBorder(true)
+	window.SetBorder(true)
 
 	wrapper := tui.NewVBox(
 		tui.NewSpacer(),
-		loginBox,
+		window,
 		tui.NewSpacer(),
 	)
 	wrapper.SetSizePolicy(tui.Minimum, tui.Expanding)
 
 	status := tui.NewStatusBar("Ready.")
-	loginBtn.OnActivated(func(b *tui.Button) {
+	login.OnActivated(func(b *tui.Button) {
 		status.SetText("Logged in.")
 	})
 
@@ -74,9 +66,7 @@ func main() {
 	root := tui.NewVBox(content, status)
 	root.SetSizePolicy(tui.Expanding, tui.Expanding)
 
-	// Start the application.
-	ui := tui.New(root)
-	if err := ui.Run(); err != nil {
+	if err := tui.New(root).Run(); err != nil {
 		panic(err)
 	}
 }

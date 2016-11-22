@@ -15,9 +15,11 @@ var songs = []song{
 }
 
 func main() {
-
 	library := tui.NewTable(0, 0)
 	library.SetSizePolicy(tui.Expanding, tui.Expanding)
+	library.SetColumnStretch(0, 1)
+	library.SetColumnStretch(1, 1)
+	library.SetColumnStretch(2, 2)
 
 	library.AppendRow(
 		tui.NewLabel("ARTIST"),
@@ -33,24 +35,16 @@ func main() {
 		)
 	}
 
-	library.SetColumnStretch(0, 1)
-	library.SetColumnStretch(1, 1)
-	library.SetColumnStretch(2, 2)
+	progress := tui.NewProgress(100)
+	progress.SetCurrent(30)
 
-	progressBar := tui.NewProgress(100)
-	progressBar.SetCurrent(30)
-
-	controls := tui.NewHBox(progressBar)
+	controls := tui.NewHBox(progress)
 	controls.SetSizePolicy(tui.Expanding, tui.Minimum)
 
 	status := tui.NewStatusBar("05:12 - 07:46")
-	status.SetPermanentText("VOLUME 68%")
+	status.SetPermanentText(`VOLUME 68%`)
 
-	root := tui.NewVBox(
-		library,
-		controls,
-		status,
-	)
+	root := tui.NewVBox(library, controls, status)
 	root.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	if err := tui.New(root).Run(); err != nil {

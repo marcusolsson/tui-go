@@ -23,5 +23,4 @@ type Widget interface {
 	Resize(size image.Point)
 
 	OnEvent(ev termbox.Event)
-	IsVisible() bool
 }

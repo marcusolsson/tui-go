@@ -11,6 +11,7 @@ type Table struct {
 	selected           int
 	onItemActivated    func(*Table)
 	onSelectionChanged func(*Table)
+	headers            []string
 
 	*Grid
 }
@@ -127,12 +128,20 @@ func (t *Table) moveDown() {
 	}
 }
 
+// SetSelected changes the currently selected item.
 func (t *Table) SetSelected(i int) {
 	t.selected = i
 }
 
+// Selected returns the index of the currently selected item.
 func (t *Table) Selected() int {
 	return t.selected
+}
+
+// Select calls SetSelected and the OnSelectionChanged function.
+func (t *Table) Select(i int) {
+	t.SetSelected(i)
+	t.onSelectionChanged(t)
 }
 
 func (t *Table) OnItemActivated(fn func(*Table)) {
@@ -141,4 +150,8 @@ func (t *Table) OnItemActivated(fn func(*Table)) {
 
 func (t *Table) OnSelectionChanged(fn func(*Table)) {
 	t.onSelectionChanged = fn
+}
+
+func (t *Table) SetHeaders(headers ...string) {
+	t.headers = headers
 }

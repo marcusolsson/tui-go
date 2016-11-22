@@ -57,10 +57,6 @@ func (b *StatusBar) Resize(size image.Point) {
 func (b *StatusBar) OnEvent(_ termbox.Event) {
 }
 
-func (b *StatusBar) IsVisible() bool {
-	return true
-}
-
 func (b *StatusBar) SetBrush(fg, bg termbox.Attribute) {
 	b.fg = fg
 	b.bg = bg
