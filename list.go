@@ -32,6 +32,10 @@ func NewList() *List {
 
 // Draw draws the list.
 func (l *List) Draw(p *Painter) {
+	if len(l.items) == 0 {
+		return
+	}
+
 	sz := l.Size()
 
 	start := clip(l.pos, 0, len(l.items)-1)

@@ -3,6 +3,8 @@ package tui
 import (
 	"image"
 	"testing"
+
+	"github.com/kr/pretty"
 )
 
 var listSizeTests = []struct {
@@ -31,7 +33,7 @@ var listSizeTests = []struct {
 	},
 }
 
-func TestListSize(t *testing.T) {
+func TestList_Size(t *testing.T) {
 	for _, tt := range listSizeTests {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
@@ -47,5 +49,26 @@ func TestListSize(t *testing.T) {
 				t.Errorf("l.SizeHint() = %s; want = %s", got, tt.sizeHint)
 			}
 		})
+	}
+}
+
+func TestList_Draw(t *testing.T) {
+	surface := newTestSurface(10, 5)
+	painter := NewPainter(surface)
+
+	l := NewList()
+	l.AddItems("foo", "bar")
+	l.Resize(surface.size)
+	l.Draw(painter)
+
+	want := `foo.......
+bar.......
+..........
+..........
+..........
+`
+
+	if surface.String() != want {
+		t.Error(pretty.Diff(surface.String(), want))
 	}
 }

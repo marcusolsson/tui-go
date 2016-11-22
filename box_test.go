@@ -86,7 +86,7 @@ var verticalBoxSizeTests = []struct {
 	},
 }
 
-func TestVBoxSize(t *testing.T) {
+func TestVBox_Size(t *testing.T) {
 	for _, tt := range verticalBoxSizeTests {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
@@ -202,7 +202,7 @@ var horizontalBoxSizeTests = []struct {
 	},
 }
 
-func TestHBoxSize(t *testing.T) {
+func TestHBox_Size(t *testing.T) {
 	for _, tt := range horizontalBoxSizeTests {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
