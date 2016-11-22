@@ -17,7 +17,6 @@ var songs = []song{
 func main() {
 
 	library := tui.NewTable(0, 0)
-	library.SetBorder(true)
 	library.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	library.AppendRow(
@@ -33,6 +32,10 @@ func main() {
 			tui.NewLabel(s.track),
 		)
 	}
+
+	library.SetColumnStretch(0, 1)
+	library.SetColumnStretch(1, 1)
+	library.SetColumnStretch(2, 2)
 
 	progressBar := tui.NewProgress(100)
 	progressBar.SetCurrent(30)

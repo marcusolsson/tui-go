@@ -149,6 +149,14 @@ func TestGrid_NestedSize(t *testing.T) {
 	}
 }
 
+func TestGrid(t *testing.T) {
+	g := NewGrid(2, 1)
+
+	g.SetColumnSizePolicy(0, Expanding)
+	g.SetColumnSizePolicy(1, Expanding)
+	g.SetColumnSizePolicy(2, Minimum)
+}
+
 func TestGrid_Draw(t *testing.T) {
 	surface := newTestSurface(15, 5)
 	painter := NewPainter(surface)

@@ -25,14 +25,19 @@ type Table struct {
 
 	sizePolicyX SizePolicy
 	sizePolicyY SizePolicy
+
+	columnStretch map[int]int
+	rowStretch    map[int]int
 }
 
 // Table returns a new Table.
 func NewTable(cols, rows int) *Table {
 	return &Table{
-		cols:  cols,
-		rows:  rows,
-		cells: make(map[image.Point]Widget),
+		cols:          cols,
+		rows:          rows,
+		cells:         make(map[image.Point]Widget),
+		columnStretch: make(map[int]int),
+		rowStretch:    make(map[int]int),
 	}
 }
 
@@ -151,30 +156,102 @@ func (g *Table) Resize(size image.Point) {
 		g.size.Y = size.Y
 	}
 
-	g.rowHeights = make([]int, g.rows)
-	for i := 0; i < g.rows; i++ {
-		g.rowHeights[i] = g.rowHeight(i)
-	}
-	g.colWidths = make([]int, g.cols)
-	for i := 0; i < g.cols; i++ {
-		g.colWidths[i] = g.columnWidth(i)
+	inner := g.size
+
+	if g.hasBorder {
+		inner.X = g.size.X - (g.cols + 1)
+		inner.Y = g.size.Y - (g.rows + 1)
 	}
 
-	// Expand the last column.
-	var colsum int
-	for _, w := range g.colWidths[:len(g.colWidths)] {
-		colsum += w
-	}
-	remaining := g.size.X - colsum
-	if g.hasBorder {
-		remaining -= g.cols + 1
-	}
-	g.colWidths[len(g.colWidths)-1] = g.colWidths[len(g.colWidths)-1] + remaining
+	g.rowHeights = g.distributeRowHeight(inner)
+	g.colWidths = g.distributeColumnWidth(inner)
 
 	// Resize children.
 	for pos, w := range g.cells {
 		w.Resize(image.Point{g.colWidths[pos.X], g.rowHeights[pos.Y]})
 	}
+}
+
+func (g *Table) distributeColumnWidth(available image.Point) []int {
+	columns := make([]int, g.cols)
+
+	// Distribute minimum space.
+	for i := 0; i < g.cols; i++ {
+		columns[i] = g.columnWidth(i)
+	}
+
+	var used int
+	for _, w := range columns {
+		used += w
+	}
+
+	// Distribute remaining space (if any).
+	extra := available.X - used
+
+L:
+	for extra > 0 {
+		starting := extra
+		for i, w := range columns {
+			if s, ok := g.columnStretch[i]; ok && s > 0 {
+				if extra > s {
+					columns[i] = w + s
+					extra -= s
+				} else {
+					columns[i] = w + extra
+					extra -= extra
+				}
+				if extra == 0 {
+					break L
+				}
+			}
+		}
+		if starting == extra {
+			break L
+		}
+	}
+
+	return columns
+}
+
+func (g *Table) distributeRowHeight(available image.Point) []int {
+	rows := make([]int, g.rows)
+
+	// Distribute minimum space.
+	for i := 0; i < g.rows; i++ {
+		rows[i] = g.rowHeight(i)
+	}
+
+	var used int
+	for _, h := range rows {
+		used += h
+	}
+
+	// Distribute remaining space (if any).
+	extra := available.Y - used
+
+L:
+	for extra > 0 {
+		starting := extra
+		for i, h := range rows {
+			if s, ok := g.rowStretch[i]; ok && s > 0 {
+				if extra > s {
+					rows[i] = h + s
+					extra -= s
+				} else {
+					rows[i] = h + extra
+					extra -= extra
+				}
+				if extra == 0 {
+					break L
+				}
+			}
+		}
+		if starting == extra {
+			break L
+		}
+	}
+
+	return rows
 }
 
 func (g *Table) mapCellToLocal(p image.Point) image.Point {
@@ -306,4 +383,12 @@ func (t *Table) OnItemActivated(fn func(*Table)) {
 
 func (t *Table) OnSelectionChanged(fn func(*Table)) {
 	t.onSelectionChanged = fn
+}
+
+func (g *Table) SetColumnStretch(col, stretch int) {
+	g.columnStretch[col] = stretch
+}
+
+func (g *Table) SetRowStretch(row, stretch int) {
+	g.rowStretch[row] = stretch
 }

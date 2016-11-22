@@ -50,7 +50,6 @@ func main() {
 	)
 
 	mailHeaders := tui.NewGrid(0, 0)
-	mailHeaders.SetBorder(true)
 	mailHeaders.SetSizePolicy(tui.Expanding, tui.Minimum)
 	mailHeaders.AppendRow(tui.NewLabel("From:"), fromLabel)
 	mailHeaders.AppendRow(tui.NewLabel("Subject:"), subjLabel)
@@ -66,7 +65,7 @@ func main() {
 	// List with all the mail items.
 	mailList := tui.NewTable(0, 0)
 	mailList.SetSizePolicy(tui.Expanding, tui.Minimum)
-	mailList.SetBorder(true)
+
 	for _, m := range mails {
 		mailList.AppendRow(
 			tui.NewLabel(m.subject),
@@ -74,6 +73,11 @@ func main() {
 			tui.NewLabel(m.date),
 		)
 	}
+
+	mailList.SetColumnStretch(0, 3)
+	mailList.SetColumnStretch(1, 2)
+	mailList.SetColumnStretch(2, 1)
+
 	//mailList.SetSizePolicy(tui.Expanding, tui.Expanding)
 	mailList.OnSelectionChanged(func(t *tui.Table) {
 		m := mails[t.Selected()]
@@ -84,7 +88,11 @@ func main() {
 	})
 
 	// Main layout for the application.
-	root := tui.NewVBox(mailList, mailView)
+	root := tui.NewVBox(
+		mailList,
+		tui.NewLabel(""),
+		mailView,
+	)
 	root.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	// Start the application.
