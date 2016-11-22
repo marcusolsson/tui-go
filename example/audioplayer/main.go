@@ -36,6 +36,7 @@ func main() {
 	}
 
 	progress := tui.NewProgress(100)
+	progress.SetSizePolicy(tui.Expanding, tui.Minimum)
 	progress.SetCurrent(30)
 
 	controls := tui.NewHBox(progress)

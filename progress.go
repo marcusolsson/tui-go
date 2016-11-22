@@ -11,6 +11,9 @@ type Progress struct {
 	size image.Point
 
 	current, max int
+
+	sizePolicyX SizePolicy
+	sizePolicyY SizePolicy
 }
 
 // NewProgress returns a new Progress.
@@ -22,12 +25,27 @@ func NewProgress(max int) *Progress {
 
 // Draw draws the spacer.
 func (p *Progress) Draw(painter *Painter) {
-	for i := 0; i < p.current; i++ {
+	hpol, _ := p.SizePolicy()
+
+	width := p.max
+	if hpol == Expanding {
+		width = p.Size().X
+	}
+
+	painter.DrawRune(0, 0, '[')
+	painter.DrawRune(width-1, 0, ']')
+
+	start := 1
+	end := width - 1
+	curr := int((float64(p.current) / float64(p.max)) * float64(end-start))
+
+	for i := start; i < curr; i++ {
 		painter.DrawRune(i, 0, '=')
 	}
-	for i := p.current; i < p.max; i++ {
+	for i := curr + start; i < end; i++ {
 		painter.DrawRune(i, 0, '-')
 	}
+	painter.DrawRune(curr, 0, '>')
 }
 
 // Size returns the size of the spacer.
@@ -42,7 +60,7 @@ func (p *Progress) SizeHint() image.Point {
 
 // SizePolicy returns the default layout behavior.
 func (p *Progress) SizePolicy() (SizePolicy, SizePolicy) {
-	return Expanding, Minimum
+	return p.sizePolicyX, p.sizePolicyY
 }
 
 // Resize updates the size of the spacer.
@@ -65,6 +83,11 @@ func (p *Progress) Resize(size image.Point) {
 }
 
 func (p *Progress) OnEvent(_ termbox.Event) {
+}
+
+func (p *Progress) SetSizePolicy(horizontal, vertical SizePolicy) {
+	p.sizePolicyX = horizontal
+	p.sizePolicyY = vertical
 }
 
 func (p *Progress) SetCurrent(c int) {
