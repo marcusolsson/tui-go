@@ -3,8 +3,6 @@ package tui
 import (
 	"image"
 	"strings"
-
-	termbox "github.com/nsf/termbox-go"
 )
 
 var _ Widget = &Button{}
@@ -26,24 +24,28 @@ func NewButton(text string) *Button {
 	}
 }
 
-func withBrush(p *Painter, fg, bg termbox.Attribute, fn func(*Painter)) {
+func withItemBrush(p *Painter, n string, fn func(*Painter)) {
+	p.SetBrush(p.palette.Item(n).Fg, p.palette.Item(n).Bg)
+	fn(p)
+	p.RestoreBrush()
+}
+
+func withBrush(p *Painter, fg, bg Color, fn func(*Painter)) {
 	p.SetBrush(fg, bg)
 	fn(p)
-	p.SetBrush(termbox.ColorDefault, termbox.ColorDefault)
+	p.RestoreBrush()
 }
 
 // Draw draws the button.
 func (b *Button) Draw(p *Painter) {
 	s := b.Size()
 
-	var fg, bg termbox.Attribute
-
+	style := "button"
 	if b.focused {
-		fg = termbox.ColorBlack
-		bg = termbox.ColorWhite
+		style += ".focused"
 	}
 
-	withBrush(p, fg, bg, func(p *Painter) {
+	p.WithStyledBrush(style, func(p *Painter) {
 		lines := strings.Split(b.text, "\n")
 		for i, line := range lines {
 			p.FillRect(0, i, s.X, 1)

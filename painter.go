@@ -8,7 +8,7 @@ import (
 
 // Surface defines a surface that can be painted on.
 type Surface interface {
-	SetCell(x, y int, ch rune, fg, bg termbox.Attribute)
+	SetCell(x, y int, ch rune, fg, bg Color)
 	SetCursor(x, y int)
 	Begin()
 	End()
@@ -22,8 +22,8 @@ func NewTermboxSurface() Surface {
 	return termboxSurface{}
 }
 
-func (s termboxSurface) SetCell(x, y int, ch rune, fg, bg termbox.Attribute) {
-	termbox.SetCell(x, y, ch, fg, bg)
+func (s termboxSurface) SetCell(x, y int, ch rune, fg, bg Color) {
+	termbox.SetCell(x, y, ch, termbox.Attribute(fg), termbox.Attribute(bg))
 }
 
 func (s termboxSurface) SetCursor(x, y int) {
@@ -48,19 +48,22 @@ type Painter struct {
 	// Surface to paint on.
 	surface Surface
 
+	palette *Palette
+
 	// Current brush.
-	fg, bg termbox.Attribute
+	fg, bg Color
 
 	// Transform stack
 	transforms []image.Point
 }
 
 // NewPainter returns a new instance of Painter.
-func NewPainter(s Surface) *Painter {
+func NewPainter(s Surface, p *Palette) *Painter {
 	return &Painter{
 		surface: s,
-		fg:      termbox.ColorDefault,
-		bg:      termbox.ColorDefault,
+		palette: p,
+		fg:      p.Item("normal").Fg,
+		bg:      p.Item("normal").Bg,
 	}
 }
 
@@ -158,9 +161,19 @@ func (p *Painter) DrawCursor(x, y int) {
 	p.surface.SetCursor(wp.X, wp.Y)
 }
 
-func (p *Painter) SetBrush(fg, bg termbox.Attribute) {
+func (p *Painter) SetBrush(fg, bg Color) {
 	p.fg = fg
 	p.bg = bg
+}
+
+func (p *Painter) RestoreBrush() {
+	p.SetBrush(p.palette.Item("normal").Fg, p.palette.Item("normal").Bg)
+}
+
+func (p *Painter) WithStyledBrush(n string, fn func(*Painter)) {
+	p.SetBrush(p.palette.Item(n).Fg, p.palette.Item(n).Bg)
+	fn(p)
+	p.RestoreBrush()
 }
 
 func (p *Painter) mapLocalToWorld(point image.Point) image.Point {

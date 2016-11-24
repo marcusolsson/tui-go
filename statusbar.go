@@ -26,22 +26,23 @@ func NewStatusBar(text string) *StatusBar {
 	}
 }
 
-// Draw draws the spacer.
+// Draw draws the status bar.
 func (b *StatusBar) Draw(p *Painter) {
 	s := b.Size()
-	p.SetBrush(b.fg, b.bg)
-	p.FillRect(0, 0, s.X, 1)
-	p.DrawText(0, 0, b.text)
-	p.DrawText(s.X-len(b.permText), 0, b.permText)
-	p.SetBrush(termbox.ColorDefault, termbox.ColorDefault)
+
+	p.WithStyledBrush("statusbar", func(p *Painter) {
+		p.FillRect(0, 0, s.X, 1)
+		p.DrawText(0, 0, b.text)
+		p.DrawText(s.X-len(b.permText), 0, b.permText)
+	})
 }
 
-// Size returns the size of the spacer.
+// Size returns the size of the status bar.
 func (b *StatusBar) Size() image.Point {
 	return b.size
 }
 
-// SizeHint returns the recommended size for the spacer.
+// SizeHint returns the recommended size for the status bar.
 func (b *StatusBar) SizeHint() image.Point {
 	return image.Point{0, 1}
 }
@@ -51,7 +52,7 @@ func (b *StatusBar) SizePolicy() (SizePolicy, SizePolicy) {
 	return Expanding, Minimum
 }
 
-// Resize updates the size of the spacer.
+// Resize updates the size of the status bar.
 func (b *StatusBar) Resize(size image.Point) {
 	b.size = size
 }

@@ -52,7 +52,7 @@ func TestLabel_Size(t *testing.T) {
 
 func TestLabel_Draw(t *testing.T) {
 	surface := newTestSurface(10, 5)
-	painter := NewPainter(surface)
+	painter := NewPainter(surface, NewPalette())
 
 	label := NewLabel("test")
 	label.Resize(surface.size)

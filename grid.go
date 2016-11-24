@@ -83,8 +83,9 @@ func (g *Grid) Draw(p *Painter) {
 	for i := 0; i < g.cols; i++ {
 		for j := 0; j < g.rows; j++ {
 			pos := image.Point{i, j}
+			wp := g.mapCellToLocal(pos)
+
 			if w, ok := g.cells[pos]; ok {
-				wp := g.mapCellToLocal(image.Point{i, j})
 				p.Translate(wp.X, wp.Y)
 				w.Draw(p)
 				p.Restore()

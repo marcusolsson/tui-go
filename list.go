@@ -1,10 +1,6 @@
 package tui
 
-import (
-	"image"
-
-	termbox "github.com/nsf/termbox-go"
-)
+import "image"
 
 var _ Widget = &List{}
 
@@ -47,14 +43,16 @@ func (l *List) Draw(p *Painter) {
 
 	for i, item := range l.items[start:end] {
 		tsel := l.selected - l.pos
+
+		style := "list.item"
 		if i == tsel {
-			p.SetBrush(termbox.ColorBlack, termbox.ColorWhite)
+			style += ".selected"
+		}
+
+		p.WithStyledBrush(style, func(p *Painter) {
 			p.FillRect(0, tsel, sz.X-2, 1)
-		}
-		p.DrawText(0, i, item)
-		if i == tsel {
-			p.SetBrush(termbox.ColorDefault, termbox.ColorDefault)
-		}
+			p.DrawText(0, i, item)
+		})
 	}
 }
 

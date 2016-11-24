@@ -37,7 +37,7 @@ func TestEntry_Size(t *testing.T) {
 
 func TestEntry_Draw(t *testing.T) {
 	surface := newTestSurface(15, 5)
-	painter := NewPainter(surface)
+	painter := NewPainter(surface, NewPalette())
 
 	e := NewEntry()
 	e.Resize(surface.size)

@@ -1,10 +1,6 @@
 package tui
 
-import (
-	"image"
-
-	termbox "github.com/nsf/termbox-go"
-)
+import "image"
 
 var _ Widget = &Table{}
 
@@ -72,22 +68,24 @@ func (g *Table) Draw(p *Painter) {
 	// Draw cell content.
 	for i := 0; i < g.cols; i++ {
 		for j := 0; j < g.rows; j++ {
+			style := "table.cell"
 			if j == g.selected {
-				wp := g.mapCellToLocal(image.Point{i, j})
+				style += ".selected"
+			}
+
+			p.WithStyledBrush(style, func(p *Painter) {
+				pos := image.Point{i, j}
+				wp := g.mapCellToLocal(pos)
 				w := g.colWidths[i]
-				p.SetBrush(termbox.ColorBlack, termbox.ColorWhite)
+
 				p.FillRect(wp.X, wp.Y, w, 1)
-			}
-			pos := image.Point{i, j}
-			if w, ok := g.cells[pos]; ok {
-				wp := g.mapCellToLocal(image.Point{i, j})
-				p.Translate(wp.X, wp.Y)
-				w.Draw(p)
-				p.Restore()
-			}
-			if j == g.selected {
-				p.SetBrush(termbox.ColorDefault, termbox.ColorDefault)
-			}
+
+				if w, ok := g.cells[pos]; ok {
+					p.Translate(wp.X, wp.Y)
+					w.Draw(p)
+					p.Restore()
+				}
+			})
 		}
 	}
 }

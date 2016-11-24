@@ -151,7 +151,7 @@ func TestGrid_NestedSize(t *testing.T) {
 
 func TestGrid_Draw(t *testing.T) {
 	surface := newTestSurface(15, 5)
-	painter := NewPainter(surface)
+	painter := NewPainter(surface, NewPalette())
 
 	g := NewGrid(0, 0)
 	g.AppendRow(NewLabel("testing"), NewLabel("test"))

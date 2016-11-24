@@ -76,7 +76,7 @@ func TestButton_OnActivated(t *testing.T) {
 
 func TestButton_Draw(t *testing.T) {
 	surface := newTestSurface(10, 5)
-	painter := NewPainter(surface)
+	painter := NewPainter(surface, NewPalette())
 
 	btn := NewButton("test")
 	btn.Resize(surface.size)

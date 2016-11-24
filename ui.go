@@ -13,13 +13,17 @@ type UI struct {
 // New returns a new instance of an application.
 func New(root Widget) *UI {
 	s := NewTermboxSurface()
-	p := NewPainter(s)
+	p := NewPainter(s, DefaultPalette)
 
 	return &UI{
 		Painter:   p,
 		Root:      root,
 		shortcuts: make(map[rune]func()),
 	}
+}
+
+func (ui *UI) SetPalette(p *Palette) {
+	ui.Painter.palette = p
 }
 
 func (ui *UI) SetShortcut(ch rune, fn func()) {

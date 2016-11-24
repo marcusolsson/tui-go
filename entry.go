@@ -28,12 +28,19 @@ func NewEntry() *Entry {
 func (e *Entry) Draw(p *Painter) {
 	s := e.Size()
 
-	p.FillRect(0, 0, s.X, 1)
-	p.DrawText(0, 0, e.text)
-
+	style := "entry"
 	if e.focused {
-		p.DrawCursor(len(e.text), 0)
+		style += ".focused"
 	}
+
+	p.WithStyledBrush(style, func(p *Painter) {
+		p.FillRect(0, 0, s.X, 1)
+		p.DrawText(0, 0, e.text)
+
+		if e.focused {
+			p.DrawCursor(len(e.text), 0)
+		}
+	})
 }
 
 // Size returns the size of the entry.
