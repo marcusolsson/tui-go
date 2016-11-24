@@ -7,9 +7,7 @@
 
 A UI library for terminal applications.
 
-tui (pronounced _tooey_) provides a higher-level programming model for building rich terminal
-applications. It lets you build layout-based user interfaces that (should)
-gracefully handle resizing for you.
+tui (pronounced _tooey_) provides a higher-level programming model for building rich terminal applications. It lets you build layout-based user interfaces that (should) gracefully handle resizing for you.
 
 ![Example](docs/example.png)
 
@@ -29,29 +27,27 @@ go get github.com/marcusolsson/tui-go
 import "github.com/marcusolsson/tui-go"
 ```
 
-If you want to know how it's like to build terminal applications with tui, check out some of the [examples](example).
+If you want to know what it is like to build terminal applications with tui-go, check out some of the [examples](example).
 
 ## Documentation
 
-The documentation is rather bare at the moment due to me changing the API
-pretty frequently. You can however explore the API in its current form at
-[godoc.org](https://godoc.org/github.com/marcusolsson/tui-go).
+The documentation is rather bare at the moment due to me changing the API pretty frequently. You can however explore the API in its current form at [godoc.org](https://godoc.org/github.com/marcusolsson/tui-go).
 
 ## Contributing
 
-I'm currently not accepting contributions or bug reports due to the project
-being pretty volatile at the moment. That being said, feel free to create an
-GitHub issue to suggest features you'd like to see.
+Feel free to submit pull requests, but consider letting me know by posting an issue first to make sure that your contributions will outlive any major refactoring in the near future.
+
+Please post any feature requests you might have. Smaller requests might end up being implemented rather quickly and larger ones will be considered for the road map.
 
 ## Related projects
 
 tui-go is mainly influenced by [Qt](https://www.qt.io/) and offers a similar programming model that has been adapted to Go and the terminal.
 
-Following Go projects are related to tui but offers different approaches for creating terminal applications.
+Following Go projects are related to tui-go but offers different approaches for creating terminal applications.
 
-- [termbox-go](https://github.com/nsf/termbox-go), is used by tui-go for drawing to the terminal.
-- [gocui](https://github.com/jroimartin/gocui), is a more minimalistic library for creating console user interfaces.
-- [termui](https://github.com/gizak/termui), focuses on building terminal dashboards.
+- [termbox-go](https://github.com/nsf/termbox-go) is used by tui-go for drawing to the terminal.
+- [gocui](https://github.com/jroimartin/gocui) is a more minimalistic library for creating console user interfaces.
+- [termui](https://github.com/gizak/termui) focuses on building terminal dashboards.
 
 ## License
 
