@@ -1,10 +1,8 @@
 package tui
 
-import (
-	"image"
+import "image"
 
-	termbox "github.com/nsf/termbox-go"
-)
+var _ Widget = &Entry{}
 
 // Entry is a one-line text editor.
 type Entry struct {
@@ -72,20 +70,29 @@ func (e *Entry) Resize(size image.Point) {
 	}
 }
 
-func (e *Entry) OnEvent(ev termbox.Event) {
+func (e *Entry) OnEvent(ev Event) {
 	if !e.focused {
 		return
 	}
 
-	switch ev.Type {
-	case termbox.EventKey:
+	if ev.Type != EventKey {
+		return
+	}
+
+	if ev.Key != 0 {
 		switch ev.Key {
-		case termbox.KeyEnter:
+		case KeyEnter:
 			if e.onSubmit != nil {
 				e.onSubmit(e)
 			}
 			return
-		case termbox.KeyBackspace2:
+		case KeySpace:
+			e.text = e.text + string(' ')
+			if e.onChange != nil {
+				e.onChange(e)
+			}
+			return
+		case KeyBackspace2:
 			if len(e.text) > 0 {
 				e.text = e.text[:len(e.text)-1]
 				if e.onChange != nil {
@@ -94,7 +101,7 @@ func (e *Entry) OnEvent(ev termbox.Event) {
 			}
 			return
 		}
-
+	} else {
 		e.text = e.text + string(ev.Ch)
 		if e.onChange != nil {
 			e.onChange(e)

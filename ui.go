@@ -47,7 +47,7 @@ func (ui *UI) Run() error {
 			case 'q':
 				return nil
 			}
-			ui.notify(ev)
+			ui.notify(convertEvent(ev))
 		case termbox.EventError:
 			return ev.Err
 		}
@@ -56,7 +56,7 @@ func (ui *UI) Run() error {
 	}
 }
 
-func (ui *UI) notify(ev termbox.Event) {
+func (ui *UI) notify(ev Event) {
 	if fn, ok := ui.shortcuts[ev.Ch]; ok {
 		fn()
 	}

@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/kr/pretty"
-	termbox "github.com/nsf/termbox-go"
 )
 
 var buttonSizeTests = []struct {
@@ -51,8 +50,9 @@ func TestButton_OnActivated(t *testing.T) {
 		invoked = true
 	})
 
-	ev := termbox.Event{
-		Key: termbox.KeyEnter,
+	ev := Event{
+		Type: EventKey,
+		Key:  KeyEnter,
 	}
 
 	t.Run("When button is not focused", func(t *testing.T) {

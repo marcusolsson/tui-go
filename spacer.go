@@ -1,10 +1,8 @@
 package tui
 
-import (
-	"image"
+import "image"
 
-	termbox "github.com/nsf/termbox-go"
-)
+var _ Widget = &Spacer{}
 
 // Spacer is a widget to fill out space.
 type Spacer struct {
@@ -40,5 +38,5 @@ func (s *Spacer) Resize(size image.Point) {
 	s.size = size
 }
 
-func (s *Spacer) OnEvent(_ termbox.Event) {
+func (s *Spacer) OnEvent(_ Event) {
 }

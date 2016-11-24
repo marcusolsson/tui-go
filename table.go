@@ -6,6 +6,8 @@ import (
 	termbox "github.com/nsf/termbox-go"
 )
 
+var _ Widget = &Table{}
+
 // Table is a widget that lays out widgets in a table.
 type Table struct {
 	selected           int
@@ -90,13 +92,13 @@ func (g *Table) Draw(p *Painter) {
 	}
 }
 
-func (t *Table) OnEvent(ev termbox.Event) {
+func (t *Table) OnEvent(ev Event) {
 	switch ev.Key {
-	case termbox.KeyArrowUp:
+	case KeyArrowUp:
 		t.moveUp()
-	case termbox.KeyArrowDown:
+	case KeyArrowDown:
 		t.moveDown()
-	case termbox.KeyEnter:
+	case KeyEnter:
 		if t.onItemActivated != nil {
 			t.onItemActivated(t)
 		}

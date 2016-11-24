@@ -1,10 +1,8 @@
 package tui
 
-import (
-	"image"
+import "image"
 
-	termbox "github.com/nsf/termbox-go"
-)
+var _ Widget = &Progress{}
 
 // Progress is a widget to fill out space.
 type Progress struct {
@@ -82,7 +80,7 @@ func (p *Progress) Resize(size image.Point) {
 	}
 }
 
-func (p *Progress) OnEvent(_ termbox.Event) {
+func (p *Progress) OnEvent(_ Event) {
 }
 
 func (p *Progress) SetSizePolicy(horizontal, vertical SizePolicy) {

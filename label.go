@@ -3,9 +3,9 @@ package tui
 import (
 	"image"
 	"strings"
-
-	termbox "github.com/nsf/termbox-go"
 )
+
+var _ Widget = &Label{}
 
 // Label is a widget to display read-only text.
 type Label struct {
@@ -60,7 +60,7 @@ func (l *Label) Resize(_ image.Point) {
 	l.size = l.SizeHint()
 }
 
-func (l *Label) OnEvent(_ termbox.Event) {
+func (l *Label) OnEvent(_ Event) {
 }
 
 func (l *Label) SetText(text string) {

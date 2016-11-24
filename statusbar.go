@@ -6,6 +6,8 @@ import (
 	termbox "github.com/nsf/termbox-go"
 )
 
+var _ Widget = &StatusBar{}
+
 // StatusBar is a widget to display status information.
 type StatusBar struct {
 	size image.Point
@@ -54,7 +56,7 @@ func (b *StatusBar) Resize(size image.Point) {
 	b.size = size
 }
 
-func (b *StatusBar) OnEvent(_ termbox.Event) {
+func (b *StatusBar) OnEvent(_ Event) {
 }
 
 func (b *StatusBar) SetBrush(fg, bg termbox.Attribute) {

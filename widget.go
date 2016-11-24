@@ -1,10 +1,6 @@
 package tui
 
-import (
-	"image"
-
-	termbox "github.com/nsf/termbox-go"
-)
+import "image"
 
 type SizePolicy int
 
@@ -22,5 +18,5 @@ type Widget interface {
 	SizePolicy() (SizePolicy, SizePolicy)
 	Resize(size image.Point)
 
-	OnEvent(ev termbox.Event)
+	OnEvent(ev Event)
 }

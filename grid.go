@@ -1,10 +1,8 @@
 package tui
 
-import (
-	"image"
+import "image"
 
-	termbox "github.com/nsf/termbox-go"
-)
+var _ Widget = &Grid{}
 
 // Grid is a widget that lays out widgets in a grid.
 type Grid struct {
@@ -292,7 +290,7 @@ func (b *Grid) columnWidth(i int) int {
 	return result
 }
 
-func (g *Grid) OnEvent(ev termbox.Event) {
+func (g *Grid) OnEvent(ev Event) {
 	for _, w := range g.cells {
 		w.OnEvent(ev)
 	}

@@ -1,10 +1,8 @@
 package tui
 
-import (
-	"image"
+import "image"
 
-	termbox "github.com/nsf/termbox-go"
-)
+var _ Widget = &Padder{}
 
 // Padder is a widget to fill out space.
 type Padder struct {
@@ -49,6 +47,6 @@ func (p *Padder) Resize(size image.Point) {
 	p.widget.Resize(size.Sub(p.padding.Mul(2)))
 }
 
-func (p *Padder) OnEvent(ev termbox.Event) {
+func (p *Padder) OnEvent(ev Event) {
 	p.widget.OnEvent(ev)
 }

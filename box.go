@@ -1,10 +1,9 @@
 package tui
 
-import (
-	"image"
+import "image"
 
-	termbox "github.com/nsf/termbox-go"
-)
+var _ Widget = &VBox{}
+var _ Widget = &HBox{}
 
 // VBox is a layout for placing widgets vertically.
 type VBox struct {
@@ -172,7 +171,7 @@ func (b *VBox) SizePolicy() (SizePolicy, SizePolicy) {
 	return b.horizontalSizePolicy, b.verticalSizePolicy
 }
 
-func (b *VBox) OnEvent(ev termbox.Event) {
+func (b *VBox) OnEvent(ev Event) {
 	for _, child := range b.children {
 		child.OnEvent(ev)
 	}
@@ -341,7 +340,7 @@ func (b *HBox) SizePolicy() (SizePolicy, SizePolicy) {
 	return b.horizontalSizePolicy, b.verticalSizePolicy
 }
 
-func (b *HBox) OnEvent(ev termbox.Event) {
+func (b *HBox) OnEvent(ev Event) {
 	for _, child := range b.children {
 		child.OnEvent(ev)
 	}

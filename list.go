@@ -6,9 +6,13 @@ import (
 	termbox "github.com/nsf/termbox-go"
 )
 
+var _ Widget = &List{}
+
 // List is a widget for displaying and selecting items.
 type List struct {
 	size image.Point
+
+	focused bool
 
 	items    []string
 	selected int
@@ -105,13 +109,21 @@ func (l *List) Resize(size image.Point) {
 	}
 }
 
-func (l *List) OnEvent(ev termbox.Event) {
+func (l *List) OnEvent(ev Event) {
+	if !l.focused {
+		return
+	}
+
+	if ev.Type != EventKey {
+		return
+	}
+
 	switch ev.Key {
-	case termbox.KeyArrowUp:
+	case KeyArrowUp:
 		l.moveUp()
-	case termbox.KeyArrowDown:
+	case KeyArrowDown:
 		l.moveDown()
-	case termbox.KeyEnter:
+	case KeyEnter:
 		if l.onItemActivated != nil {
 			l.onItemActivated(l)
 		}
@@ -169,6 +181,10 @@ func (l *List) Selected() int {
 
 func (l *List) SetRows(n int) {
 	l.numRows = n
+}
+
+func (l *List) SetFocused(f bool) {
+	l.focused = f
 }
 
 func (l *List) SelectedItem() string {

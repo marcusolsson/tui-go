@@ -7,6 +7,8 @@ import (
 	termbox "github.com/nsf/termbox-go"
 )
 
+var _ Widget = &Button{}
+
 // Button is a widget to fill out space.
 type Button struct {
 	text string
@@ -81,13 +83,17 @@ func (b *Button) Resize(size image.Point) {
 	b.size = b.SizeHint()
 }
 
-func (b *Button) OnEvent(ev termbox.Event) {
+func (b *Button) OnEvent(ev Event) {
 	if !b.focused {
 		return
 	}
 
+	if ev.Type != EventKey {
+		return
+	}
+
 	switch ev.Key {
-	case termbox.KeyEnter:
+	case KeyEnter:
 		if b.onActivated != nil {
 			b.onActivated(b)
 		}
