@@ -31,6 +31,17 @@ var listSizeTests = []struct {
 		size:     image.Point{0, 3},
 		sizeHint: image.Point{0, 3},
 	},
+	{
+		test: "Wide items",
+		setup: func() *List {
+			l := NewList()
+			l.SetRows(3)
+			l.AddItems("あäa")
+			return l
+		},
+		size:     image.Point{4, 3},
+		sizeHint: image.Point{4, 3},
+	},
 }
 
 func TestList_Size(t *testing.T) {

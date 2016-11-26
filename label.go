@@ -41,8 +41,8 @@ func (l *Label) SizeHint() image.Point {
 	lines := strings.Split(l.text, "\n")
 
 	for _, line := range lines {
-		if len(line) > size.X {
-			size.X = len(line)
+		if w := stringWidth(line); w > size.X {
+			size.X = w
 		}
 	}
 	size.Y = len(lines)

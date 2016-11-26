@@ -29,6 +29,14 @@ var labelTests = []struct {
 		size:     image.Point{4, 1},
 		sizeHint: image.Point{4, 1},
 	},
+	{
+		test: "Wide word",
+		setup: func() *Label {
+			return NewLabel("あäa")
+		},
+		size:     image.Point{4, 1},
+		sizeHint: image.Point{4, 1},
+	},
 }
 
 func TestLabel_Size(t *testing.T) {
