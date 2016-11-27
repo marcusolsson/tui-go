@@ -105,6 +105,113 @@ func TestVBox_Size(t *testing.T) {
 	}
 }
 
+var drawVBoxTests = []struct {
+	test  string
+	setup func() *VBox
+	want  string
+}{
+	{
+		test: "Empty box",
+		setup: func() *VBox {
+			b := NewVBox()
+			b.SetBorder(true)
+			return b
+		},
+		want: `┌┐........
+└┘........
+..........
+..........
+..........
+`,
+	},
+	{
+		test: "Box containing one widget",
+		setup: func() *VBox {
+			b := NewVBox(
+				NewLabel("test"),
+			)
+			b.SetBorder(true)
+			return b
+		},
+		want: `┌────┐....
+│test│....
+└────┘....
+..........
+..........
+`,
+	},
+	{
+		test: "Box expands horizontally",
+		setup: func() *VBox {
+			b := NewVBox(
+				NewLabel("test"),
+				NewLabel("foo"),
+			)
+			b.SetBorder(true)
+			b.SetSizePolicy(Expanding, Minimum)
+			return b
+		},
+		want: `┌────────┐
+│test....│
+│foo.....│
+└────────┘
+..........
+`,
+	},
+	{
+		test: "Box expands vertically",
+		setup: func() *VBox {
+			b := NewVBox(
+				NewLabel("test"),
+				NewLabel("foo"),
+			)
+			b.SetBorder(true)
+			b.SetSizePolicy(Minimum, Expanding)
+			return b
+		},
+		want: `┌────┐....
+│test│....
+│foo.│....
+│....│....
+└────┘....
+`,
+	},
+	{
+		test: "Box expands along both axes",
+		setup: func() *VBox {
+			b := NewVBox(
+				NewLabel("test"),
+				NewLabel("foo"),
+			)
+			b.SetBorder(true)
+			b.SetSizePolicy(Expanding, Expanding)
+			return b
+		},
+		want: `┌────────┐
+│test....│
+│foo.....│
+│........│
+└────────┘
+`,
+	},
+}
+
+func TestVBox_Draw(t *testing.T) {
+	for _, tt := range drawVBoxTests {
+		surface := newTestSurface(10, 5)
+		painter := NewPainter(surface, NewPalette())
+
+		b := tt.setup()
+
+		b.Resize(surface.size)
+		b.Draw(painter)
+
+		if surface.String() != tt.want {
+			t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+		}
+	}
+}
+
 var horizontalBoxSizeTests = []struct {
 	test     string
 	setup    func() *HBox
@@ -218,5 +325,112 @@ func TestHBox_Size(t *testing.T) {
 				t.Errorf("b.SizeHint() = %s; want = %s", got, tt.sizeHint)
 			}
 		})
+	}
+}
+
+var drawHBoxTests = []struct {
+	test  string
+	setup func() *HBox
+	want  string
+}{
+	{
+		test: "Empty box",
+		setup: func() *HBox {
+			b := NewHBox()
+			b.SetBorder(true)
+			return b
+		},
+		want: `┌┐........
+└┘........
+..........
+..........
+..........
+`,
+	},
+	{
+		test: "Box containing one widget",
+		setup: func() *HBox {
+			b := NewHBox(
+				NewLabel("test"),
+			)
+			b.SetBorder(true)
+			return b
+		},
+		want: `┌────┐....
+│test│....
+└────┘....
+..........
+..........
+`,
+	},
+	{
+		test: "Box expands horizontally",
+		setup: func() *HBox {
+			b := NewHBox(
+				NewLabel("test"),
+				NewLabel("foo"),
+			)
+			b.SetBorder(true)
+			b.SetSizePolicy(Expanding, Minimum)
+			return b
+		},
+		want: `┌────────┐
+│testfoo.│
+└────────┘
+..........
+..........
+`,
+	},
+	{
+		test: "Box expands vertically",
+		setup: func() *HBox {
+			b := NewHBox(
+				NewLabel("test"),
+				NewLabel("foo"),
+			)
+			b.SetBorder(true)
+			b.SetSizePolicy(Minimum, Expanding)
+			return b
+		},
+		want: `┌───────┐.
+│testfoo│.
+│.......│.
+│.......│.
+└───────┘.
+`,
+	},
+	{
+		test: "Box expands along both axes",
+		setup: func() *HBox {
+			b := NewHBox(
+				NewLabel("test"),
+				NewLabel("foo"),
+			)
+			b.SetBorder(true)
+			b.SetSizePolicy(Expanding, Expanding)
+			return b
+		},
+		want: `┌────────┐
+│testfoo.│
+│........│
+│........│
+└────────┘
+`,
+	},
+}
+
+func TestHBox_Draw(t *testing.T) {
+	for _, tt := range drawHBoxTests {
+		surface := newTestSurface(10, 5)
+		painter := NewPainter(surface, NewPalette())
+
+		b := tt.setup()
+
+		b.Resize(surface.size)
+		b.Draw(painter)
+
+		if surface.String() != tt.want {
+			t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+		}
 	}
 }

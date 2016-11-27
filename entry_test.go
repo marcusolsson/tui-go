@@ -54,3 +54,68 @@ func TestEntry_Draw(t *testing.T) {
 		t.Error(pretty.Diff(surface.String(), want))
 	}
 }
+
+func TestEntry_OnChanged(t *testing.T) {
+	e := NewEntry()
+
+	var invoked bool
+	e.OnChanged(func(e *Entry) {
+		invoked = true
+		if e.Text() != "t" {
+			t.Errorf("e.Text() = %s; want = %s", e.Text(), "t")
+		}
+	})
+
+	ev := Event{
+		Type: EventKey,
+		Ch:   't',
+	}
+
+	t.Run("When entry is not focused", func(t *testing.T) {
+		e.OnEvent(ev)
+		if invoked {
+			t.Errorf("entry should not be submitted")
+		}
+	})
+
+	invoked = false
+	e.SetFocused(true)
+
+	t.Run("When entry is focused", func(t *testing.T) {
+		e.OnEvent(ev)
+		if !invoked {
+			t.Errorf("entry should be submitted")
+		}
+	})
+}
+
+func TestEntry_OnSubmit(t *testing.T) {
+	e := NewEntry()
+
+	var invoked bool
+	e.OnSubmit(func(e *Entry) {
+		invoked = true
+	})
+
+	ev := Event{
+		Type: EventKey,
+		Key:  KeyEnter,
+	}
+
+	t.Run("When entry is not focused", func(t *testing.T) {
+		e.OnEvent(ev)
+		if invoked {
+			t.Errorf("entry should not be submitted")
+		}
+	})
+
+	invoked = false
+	e.SetFocused(true)
+
+	t.Run("When entry is focused", func(t *testing.T) {
+		e.OnEvent(ev)
+		if !invoked {
+			t.Errorf("button should be submitted")
+		}
+	})
+}

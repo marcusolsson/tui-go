@@ -35,7 +35,7 @@ func (s *testSurface) SetCursor(x, y int) {
 }
 
 func (s *testSurface) Begin() {
-	// NOP
+	s.cells = make(map[image.Point]termbox.Cell)
 }
 
 func (s *testSurface) End() {

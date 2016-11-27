@@ -78,7 +78,6 @@ func TestButton_OnActivated(t *testing.T) {
 			t.Errorf("button should be activated")
 		}
 	})
-
 }
 
 func TestButton_Draw(t *testing.T) {
