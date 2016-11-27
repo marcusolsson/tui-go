@@ -24,7 +24,7 @@ func trimRightLen(s string, n int) string {
 	c := utf8.RuneCountInString(s)
 	runeCount := 0
 	var i int
-	for i, _ = range s {
+	for i = range s {
 		if runeCount >= c-n {
 			break
 		}

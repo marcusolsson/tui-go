@@ -15,10 +15,10 @@ type Palette struct {
 
 var DefaultPalette = &Palette{
 	items: map[string]PaletteItem{
-		"normal":              PaletteItem{Color(termbox.ColorDefault), Color(termbox.ColorDefault)},
-		"list.item.selected":  PaletteItem{Color(termbox.ColorWhite), Color(termbox.ColorBlue)},
-		"table.cell.selected": PaletteItem{Color(termbox.ColorWhite), Color(termbox.ColorBlue)},
-		"button.focused":      PaletteItem{Color(termbox.ColorWhite), Color(termbox.ColorBlue)},
+		"normal":              {Color(termbox.ColorDefault), Color(termbox.ColorDefault)},
+		"list.item.selected":  {Color(termbox.ColorWhite), Color(termbox.ColorBlue)},
+		"table.cell.selected": {Color(termbox.ColorWhite), Color(termbox.ColorBlue)},
+		"button.focused":      {Color(termbox.ColorWhite), Color(termbox.ColorBlue)},
 	},
 }
 
