@@ -9,7 +9,6 @@ type Table struct {
 	selected           int
 	onItemActivated    func(*Table)
 	onSelectionChanged func(*Table)
-	headers            []string
 
 	*Grid
 }
@@ -150,8 +149,4 @@ func (t *Table) OnItemActivated(fn func(*Table)) {
 
 func (t *Table) OnSelectionChanged(fn func(*Table)) {
 	t.onSelectionChanged = fn
-}
-
-func (t *Table) SetHeaders(headers ...string) {
-	t.headers = headers
 }
