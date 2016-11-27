@@ -55,8 +55,8 @@ func (b *Button) SizeHint() image.Point {
 	lines := strings.Split(b.text, "\n")
 
 	for _, line := range lines {
-		if len(line) > size.X {
-			size.X = len(line)
+		if w := stringWidth(line); w > size.X {
+			size.X = w
 		}
 	}
 	size.Y = len(lines)

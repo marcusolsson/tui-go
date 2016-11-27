@@ -26,6 +26,13 @@ var buttonSizeTests = []struct {
 		size:     image.Point{4, 1},
 		sizeHint: image.Point{4, 1},
 	},
+	{
+		setup: func() *Button {
+			return NewButton("あäa")
+		},
+		size:     image.Point{4, 1},
+		sizeHint: image.Point{4, 1},
+	},
 }
 
 func TestButton_Size(t *testing.T) {

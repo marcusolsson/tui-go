@@ -33,7 +33,7 @@ func (b *StatusBar) Draw(p *Painter) {
 	p.WithStyledBrush("statusbar", func(p *Painter) {
 		p.FillRect(0, 0, s.X, 1)
 		p.DrawText(0, 0, b.text)
-		p.DrawText(s.X-len(b.permText), 0, b.permText)
+		p.DrawText(s.X-stringWidth(b.permText), 0, b.permText)
 	})
 }
 

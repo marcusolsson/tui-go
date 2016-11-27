@@ -39,7 +39,7 @@ func (e *Entry) Draw(p *Painter) {
 		p.DrawText(0, 0, e.text)
 
 		if e.focused {
-			p.DrawCursor(len(e.text), 0)
+			p.DrawCursor(stringWidth(e.text), 0)
 		}
 	})
 }
@@ -103,7 +103,7 @@ func (e *Entry) OnEvent(ev Event) {
 			return
 		case KeyBackspace2:
 			if len(e.text) > 0 {
-				e.text = e.text[:len(e.text)-1]
+				e.text = trimRightLen(e.text, 1)
 				if e.onChange != nil {
 					e.onChange(e)
 				}

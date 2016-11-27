@@ -22,10 +22,10 @@ func NewTable(cols, rows int) *Table {
 }
 
 // Draw draws the table.
-func (g *Table) Draw(p *Painter) {
-	s := g.Size()
+func (t *Table) Draw(p *Painter) {
+	s := t.Size()
 
-	if g.hasBorder {
+	if t.hasBorder {
 		border := 1
 
 		// Draw outmost border.
@@ -33,8 +33,8 @@ func (g *Table) Draw(p *Painter) {
 
 		// Draw column dividers.
 		var coloff int
-		for i := 0; i < g.cols-1; i++ {
-			x := g.colWidths[i] + coloff + border
+		for i := 0; i < t.cols-1; i++ {
+			x := t.colWidths[i] + coloff + border
 			p.DrawVerticalLine(x, 0, s.Y-1)
 			p.DrawRune(x, 0, '┬')
 			p.DrawRune(x, s.Y-1, '┴')
@@ -43,8 +43,8 @@ func (g *Table) Draw(p *Painter) {
 
 		// Draw row dividers.
 		var rowoff int
-		for j := 0; j < g.rows-1; j++ {
-			y := g.rowHeights[j] + rowoff + border
+		for j := 0; j < t.rows-1; j++ {
+			y := t.rowHeights[j] + rowoff + border
 			p.DrawHorizontalLine(0, s.X-1, y)
 			p.DrawRune(0, y, '├')
 			p.DrawRune(s.X-1, y, '┤')
@@ -53,11 +53,11 @@ func (g *Table) Draw(p *Painter) {
 
 		// Polish the intersections.
 		rowoff = 0
-		for j := 0; j < g.rows-1; j++ {
-			y := g.rowHeights[j] + rowoff + border
+		for j := 0; j < t.rows-1; j++ {
+			y := t.rowHeights[j] + rowoff + border
 			coloff = 0
-			for i := 0; i < g.cols-1; i++ {
-				x := g.colWidths[i] + coloff + border
+			for i := 0; i < t.cols-1; i++ {
+				x := t.colWidths[i] + coloff + border
 				p.DrawRune(x, y, '┼')
 				coloff = x
 			}
@@ -66,21 +66,21 @@ func (g *Table) Draw(p *Painter) {
 	}
 
 	// Draw cell content.
-	for i := 0; i < g.cols; i++ {
-		for j := 0; j < g.rows; j++ {
+	for i := 0; i < t.cols; i++ {
+		for j := 0; j < t.rows; j++ {
 			style := "table.cell"
-			if j == g.selected {
+			if j == t.selected {
 				style += ".selected"
 			}
 
 			p.WithStyledBrush(style, func(p *Painter) {
 				pos := image.Point{i, j}
-				wp := g.mapCellToLocal(pos)
-				w := g.colWidths[i]
+				wp := t.mapCellToLocal(pos)
+				w := t.colWidths[i]
 
 				p.FillRect(wp.X, wp.Y, w, 1)
 
-				if w, ok := g.cells[pos]; ok {
+				if w, ok := t.cells[pos]; ok {
 					p.Translate(wp.X, wp.Y)
 					w.Draw(p)
 					p.Restore()

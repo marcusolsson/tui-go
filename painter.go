@@ -99,8 +99,9 @@ func (p *Painter) Repaint(w Widget) {
 
 // DrawText paints a string starting at the given coordinate.
 func (p *Painter) DrawText(x, y int, text string) {
-	for i, r := range text {
-		p.DrawRune(i+x, y, r)
+	for _, r := range text {
+		p.DrawRune(x, y, r)
+		x += runeWidth(r)
 	}
 }
 

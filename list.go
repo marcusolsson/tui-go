@@ -75,8 +75,8 @@ func (l *List) Size() image.Point {
 func (l *List) SizeHint() image.Point {
 	var width int
 	for _, item := range l.items {
-		if len(item) > width {
-			width = len(item)
+		if w := stringWidth(item); w > width {
+			width = w
 		}
 	}
 	height := l.numRows
