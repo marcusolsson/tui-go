@@ -7,7 +7,8 @@ import (
 
 var _ Widget = &Button{}
 
-// Button is a widget to fill out space.
+// Button is a widget that can be activated to perform some action, or to
+// answer a question. It displays a label that can be activated.
 type Button struct {
 	text string
 
@@ -17,23 +18,11 @@ type Button struct {
 	onActivated func(*Button)
 }
 
-// NewButton returns a new Button.
+// NewButton returns a new Button with the specified label.
 func NewButton(text string) *Button {
 	return &Button{
 		text: text,
 	}
-}
-
-func withItemBrush(p *Painter, n string, fn func(*Painter)) {
-	p.SetBrush(p.palette.Item(n).Fg, p.palette.Item(n).Bg)
-	fn(p)
-	p.RestoreBrush()
-}
-
-func withBrush(p *Painter, fg, bg Color, fn func(*Painter)) {
-	p.SetBrush(fg, bg)
-	fn(p)
-	p.RestoreBrush()
 }
 
 // Draw draws the button.
@@ -85,6 +74,7 @@ func (b *Button) Resize(size image.Point) {
 	b.size = b.SizeHint()
 }
 
+// OnEvent handles terminal events.
 func (b *Button) OnEvent(ev Event) {
 	if !b.focused {
 		return
@@ -102,10 +92,12 @@ func (b *Button) OnEvent(ev Event) {
 	}
 }
 
+// OnActivated sets a function to be run whenever the button is activated.
 func (b *Button) OnActivated(fn func(b *Button)) {
 	b.onActivated = fn
 }
 
+// SetFocused focuses this button.
 func (b *Button) SetFocused(f bool) {
 	b.focused = f
 }

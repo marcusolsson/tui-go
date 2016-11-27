@@ -291,25 +291,30 @@ func (b *Grid) columnWidth(i int) int {
 	return result
 }
 
+// OnEvent handles terminal events.
 func (g *Grid) OnEvent(ev Event) {
 	for _, w := range g.cells {
 		w.OnEvent(ev)
 	}
 }
 
+// SetCell sets or replaces the contents of a cell.
 func (g *Grid) SetCell(pos image.Point, w Widget) {
 	g.cells[pos] = w
 }
 
+// SetBorder sets whether the border is visible or not.
 func (g *Grid) SetBorder(enabled bool) {
 	g.hasBorder = enabled
 }
 
+// SetSizePolicy sets the size policy for each axis.
 func (g *Grid) SetSizePolicy(horizontal, vertical SizePolicy) {
 	g.sizePolicyX = horizontal
 	g.sizePolicyY = vertical
 }
 
+// AppendRow adds a new row at the end.
 func (g *Grid) AppendRow(row ...Widget) {
 	g.rows++
 
@@ -323,10 +328,18 @@ func (g *Grid) AppendRow(row ...Widget) {
 	}
 }
 
+// SetColumnStretch sets the stretch factor for a given column. If stretch > 0,
+// the column will expand to fill up available space. If multiple columns have
+// a stretch factor > 0, stretch determines how much space the column get in
+// respect to the others. E.g. by setting SetColumnStretch(0, 1) and
+// SetColumnStretch(1, 2), the second column will fill up twice as much space
+// as the first one.
 func (g *Grid) SetColumnStretch(col, stretch int) {
 	g.columnStretch[col] = stretch
 }
 
+// SetRowStretch sets the stretch factor for a given row. For more on stretch
+// factors, see SetColumnStretch.
 func (g *Grid) SetRowStretch(row, stretch int) {
 	g.rowStretch[row] = stretch
 }

@@ -24,15 +24,18 @@ func NewVBox(c ...Widget) *VBox {
 	}
 }
 
+// Append adds a new widget to the layout.
 func (b *VBox) Append(w Widget) {
 	b.children = append(b.children, w)
 }
 
+// SetSizePolicy sets the size policy for each axis.
 func (b *VBox) SetSizePolicy(horizontal, vertical SizePolicy) {
 	b.horizontalSizePolicy = horizontal
 	b.verticalSizePolicy = vertical
 }
 
+// SetBorder sets whether the border is visible or not.
 func (b *VBox) SetBorder(enabled bool) {
 	b.border = enabled
 }
@@ -83,8 +86,7 @@ func (b *VBox) Size() image.Point {
 	return b.size
 }
 
-// Resize updates the size of the layout. This will recursively resize the
-// all the children in the layout.
+// Resize updates the size of the layout.
 func (b *VBox) Resize(size image.Point) {
 	switch b.horizontalSizePolicy {
 	case Minimum:
@@ -196,13 +198,18 @@ func NewHBox(c ...Widget) *HBox {
 	}
 }
 
-// SetSizePolicy updates the size policy for the layout. This will not visible
-// until next resize.
+// Append adds a new widget to the layout.
+func (b *HBox) Append(w Widget) {
+	b.children = append(b.children, w)
+}
+
+// SetSizePolicy sets the size policy for each axis.
 func (b *HBox) SetSizePolicy(horizontal, vertical SizePolicy) {
 	b.horizontalSizePolicy = horizontal
 	b.verticalSizePolicy = vertical
 }
 
+// SetBorder sets whether the border is visible or not.
 func (b *HBox) SetBorder(border bool) {
 	b.border = border
 }
@@ -252,8 +259,7 @@ func (b *HBox) Size() image.Point {
 	return b.size
 }
 
-// Resize updates the size of the layout. This will recursively resize the
-// all the children in the layout.
+// Resize updates the size of the layout.
 func (b *HBox) Resize(size image.Point) {
 	switch b.horizontalSizePolicy {
 	case Minimum:
@@ -340,6 +346,7 @@ func (b *HBox) SizePolicy() (SizePolicy, SizePolicy) {
 	return b.horizontalSizePolicy, b.verticalSizePolicy
 }
 
+// OnEvent handles terminal events.
 func (b *HBox) OnEvent(ev Event) {
 	for _, child := range b.children {
 		child.OnEvent(ev)

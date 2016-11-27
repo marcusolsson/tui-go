@@ -4,7 +4,7 @@ import "image"
 
 var _ Widget = &Progress{}
 
-// Progress is a widget to fill out space.
+// Progress is a widget to display a progress bar.
 type Progress struct {
 	size image.Point
 
@@ -21,7 +21,7 @@ func NewProgress(max int) *Progress {
 	}
 }
 
-// Draw draws the spacer.
+// Draw draws the progress bar.
 func (p *Progress) Draw(painter *Painter) {
 	hpol, _ := p.SizePolicy()
 
@@ -46,12 +46,12 @@ func (p *Progress) Draw(painter *Painter) {
 	painter.DrawRune(curr, 0, '>')
 }
 
-// Size returns the size of the spacer.
+// Size returns the size of the progress bar.
 func (p *Progress) Size() image.Point {
 	return p.size
 }
 
-// SizeHint returns the recommended size for the spacer.
+// SizeHint returns the recommended size for the progress bar.
 func (p *Progress) SizeHint() image.Point {
 	return image.Point{p.max, 1}
 }
@@ -61,7 +61,7 @@ func (p *Progress) SizePolicy() (SizePolicy, SizePolicy) {
 	return p.sizePolicyX, p.sizePolicyY
 }
 
-// Resize updates the size of the spacer.
+// Resize updates the size of the progress bar.
 func (p *Progress) Resize(size image.Point) {
 	hpol, vpol := p.SizePolicy()
 
