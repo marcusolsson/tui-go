@@ -1,5 +1,6 @@
 # tui: Terminal UI for Go
 
+[![Build Status](https://travis-ci.org/marcusolsson/tui-go.svg?branch=master)](https://travis-ci.org/marcusolsson/tui-go)
 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/marcusolsson/tui-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/marcusolsson/tui-go)](https://goreportcard.com/report/github.com/marcusolsson/tui-go)
 [![License MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](LICENSE)
