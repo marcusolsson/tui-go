@@ -51,6 +51,10 @@ func (p *Progress) Size() image.Point {
 	return p.size
 }
 
+func (p *Progress) MinSize() image.Point {
+	return image.Point{5, 1}
+}
+
 // SizeHint returns the recommended size for the progress bar.
 func (p *Progress) SizeHint() image.Point {
 	return image.Point{p.max, 1}

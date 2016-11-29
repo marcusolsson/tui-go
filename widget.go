@@ -13,6 +13,7 @@ const (
 type Widget interface {
 	Draw(p *Painter)
 
+	MinSize() image.Point
 	Size() image.Point
 	SizeHint() image.Point
 	SizePolicy() (SizePolicy, SizePolicy)
