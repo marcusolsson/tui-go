@@ -4,4 +4,5 @@ script: go test -race -v ./...
 
 go:
     - 1.7.3
+    - 1.8beta1
     - tip
