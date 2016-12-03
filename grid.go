@@ -252,7 +252,7 @@ func (g *Grid) distributeRowHeight(available image.Point) []int {
 
 	// Distribute minimum space.
 	for i := 0; i < g.rows; i++ {
-		rows[i] = g.rowHeight(i)
+		rows[i] = g.minRowHeight(i)
 	}
 
 	var used int
