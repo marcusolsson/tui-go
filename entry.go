@@ -49,6 +49,10 @@ func (e *Entry) Size() image.Point {
 	return e.size
 }
 
+func (e *Entry) MinSize() image.Point {
+	return e.SizeHint()
+}
+
 // SizeHint returns the recommended size for the entry.
 func (e *Entry) SizeHint() image.Point {
 	return image.Point{10, 1}

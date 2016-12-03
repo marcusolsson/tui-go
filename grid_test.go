@@ -3,8 +3,6 @@ package tui
 import (
 	"image"
 	"testing"
-
-	"github.com/kr/pretty"
 )
 
 var gridSizeTests = []struct {
@@ -149,25 +147,67 @@ func TestGrid_NestedSize(t *testing.T) {
 	}
 }
 
-func TestGrid_Draw(t *testing.T) {
-	surface := newTestSurface(15, 5)
-	painter := NewPainter(surface, NewPalette())
-
-	g := NewGrid(0, 0)
-	g.AppendRow(NewLabel("testing"), NewLabel("test"))
-	g.AppendRow(NewLabel("foo"), NewLabel("bar"))
-
-	g.Resize(surface.size)
-	g.Draw(painter)
-
-	want := `testingtest....
+var drawGridTests = []struct {
+	test  string
+	size  image.Point
+	setup func() *Grid
+	want  string
+}{
+	{
+		test: "Simple grid",
+		setup: func() *Grid {
+			g := NewGrid(0, 0)
+			g.AppendRow(NewLabel("testing"), NewLabel("test"))
+			g.AppendRow(NewLabel("foo"), NewLabel("bar"))
+			return g
+		},
+		want: `testingtest....
 foo....bar.....
 ...............
 ...............
 ...............
-`
+`,
+	},
+	{
+		test: "Word wrap",
+		setup: func() *Grid {
 
-	if surface.String() != want {
-		t.Error(pretty.Diff(surface.String(), want))
+			l := NewLabel("this will wrap")
+			l.SetSizePolicy(Expanding, Expanding)
+			l.SetWordWrap(true)
+
+			g := NewGrid(0, 0)
+			g.AppendRow(l, NewLabel("test"))
+			g.SetSizePolicy(Expanding, Expanding)
+
+			return g
+		},
+		want: `this will..test
+wrap...........
+...............
+...............
+...............
+`,
+	},
+}
+
+func TestGrid_Draw(t *testing.T) {
+	for _, tt := range drawGridTests {
+		var surface *testSurface
+		if tt.size.X == 0 && tt.size.Y == 0 {
+			surface = newTestSurface(15, 5)
+		} else {
+			surface = newTestSurface(tt.size.X, tt.size.Y)
+		}
+		painter := NewPainter(surface, NewPalette())
+
+		g := tt.setup()
+
+		g.Resize(surface.size)
+		g.Draw(painter)
+
+		if surface.String() != tt.want {
+			t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+		}
 	}
 }

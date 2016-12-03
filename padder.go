@@ -32,6 +32,10 @@ func (p *Padder) Size() image.Point {
 	return p.widget.Size().Add(p.padding.Mul(2))
 }
 
+func (p *Padder) MinSize() image.Point {
+	return p.widget.MinSize().Add(p.padding.Mul(2))
+}
+
 // SizeHint returns the recommended size for the padded widget.
 func (p *Padder) SizeHint() image.Point {
 	return p.widget.SizeHint().Add(p.padding.Mul(2))

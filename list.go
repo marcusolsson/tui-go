@@ -71,6 +71,10 @@ func (l *List) Size() image.Point {
 	return l.size
 }
 
+func (l *List) MinSize() image.Point {
+	return l.SizeHint()
+}
+
 // SizeHint returns the recommended size for the list.
 func (l *List) SizeHint() image.Point {
 	var width int

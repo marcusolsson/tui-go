@@ -48,6 +48,10 @@ func (b *Button) Size() image.Point {
 	return b.size
 }
 
+func (b *Button) MinSize() image.Point {
+	return b.SizeHint()
+}
+
 // SizeHint returns the recommended size for the button.
 func (b *Button) SizeHint() image.Point {
 	var size image.Point

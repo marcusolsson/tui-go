@@ -99,6 +99,29 @@ func (g *Grid) Size() image.Point {
 	return g.size
 }
 
+func (g *Grid) MinSize() image.Point {
+	if g.cols == 0 || g.rows == 0 {
+		return image.Point{}
+	}
+
+	var width int
+	for i := 0; i < g.cols; i++ {
+		width += g.minColumnWidth(i)
+	}
+
+	var height int
+	for j := 0; j < g.rows; j++ {
+		height += g.minRowHeight(j)
+	}
+
+	if g.hasBorder {
+		width += g.cols + 1
+		height += g.rows + 1
+	}
+
+	return image.Point{width, height}
+}
+
 // SizeHint returns the recommended size for the grid.
 func (g *Grid) SizeHint() image.Point {
 	if g.cols == 0 || g.rows == 0 {
@@ -167,7 +190,7 @@ func (g *Grid) distributeColumnWidth(available image.Point) []int {
 
 	// Distribute minimum space.
 	for i := 0; i < g.cols; i++ {
-		columns[i] = g.columnWidth(i)
+		columns[i] = g.minColumnWidth(i)
 	}
 
 	var used int
@@ -178,6 +201,27 @@ func (g *Grid) distributeColumnWidth(available image.Point) []int {
 	// Distribute remaining space (if any).
 	extra := available.X - used
 
+	// Distribute preferred space
+K:
+	for extra > 0 {
+		starting := extra
+		for i, w := range columns {
+			hint := g.columnWidth(i)
+			if w < hint {
+				columns[i] = w + 1
+				extra--
+
+				if extra == 0 {
+					break K
+				}
+			}
+		}
+		if starting == extra {
+			break K
+		}
+	}
+
+	// Distribute surplus space.
 L:
 	for extra > 0 {
 		starting := extra
@@ -219,6 +263,27 @@ func (g *Grid) distributeRowHeight(available image.Point) []int {
 	// Distribute remaining space (if any).
 	extra := available.Y - used
 
+	// Distribute preferred space
+K:
+	for extra > 0 {
+		starting := extra
+		for i, h := range rows {
+			hint := g.rowHeight(i)
+			if h < hint {
+				rows[i] = h + 1
+				extra--
+
+				if extra == 0 {
+					break K
+				}
+			}
+		}
+		if starting == extra {
+			break K
+		}
+	}
+
+	// Distribute surplus space.
 L:
 	for extra > 0 {
 		starting := extra
@@ -286,6 +351,35 @@ func (b *Grid) columnWidth(i int) int {
 
 		if w.SizeHint().X > result {
 			result = w.SizeHint().X
+		}
+	}
+	return result
+}
+
+func (b *Grid) minRowHeight(i int) int {
+	result := 0
+	for pos, w := range b.cells {
+		if pos.Y != i {
+			continue
+		}
+
+		if w.MinSize().Y > result {
+			result = w.MinSize().Y
+		}
+	}
+
+	return result
+}
+
+func (b *Grid) minColumnWidth(i int) int {
+	result := 0
+	for pos, w := range b.cells {
+		if pos.X != i {
+			continue
+		}
+
+		if w.MinSize().X > result {
+			result = w.MinSize().X
 		}
 	}
 	return result

@@ -7,13 +7,13 @@ import (
 
 var verticalBoxSizeTests = []struct {
 	test     string
-	setup    func() *VBox
+	setup    func() *Box
 	size     image.Point
 	sizeHint image.Point
 }{
 	{
 		test: "Stretch empty box",
-		setup: func() *VBox {
+		setup: func() *Box {
 			b := NewVBox()
 			b.SetBorder(true)
 			return b
@@ -23,7 +23,7 @@ var verticalBoxSizeTests = []struct {
 	},
 	{
 		test: "Stretch empty box",
-		setup: func() *VBox {
+		setup: func() *Box {
 			b := NewVBox()
 			b.SetBorder(true)
 			b.SetSizePolicy(Expanding, Minimum)
@@ -34,7 +34,7 @@ var verticalBoxSizeTests = []struct {
 	},
 	{
 		test: "Stretch empty box",
-		setup: func() *VBox {
+		setup: func() *Box {
 			b := NewVBox()
 			b.SetBorder(true)
 			b.SetSizePolicy(Expanding, Expanding)
@@ -45,7 +45,7 @@ var verticalBoxSizeTests = []struct {
 	},
 	{
 		test: "No stretch",
-		setup: func() *VBox {
+		setup: func() *Box {
 			b := NewVBox(
 				NewLabel("test"),
 				NewLabel("another test"),
@@ -58,7 +58,7 @@ var verticalBoxSizeTests = []struct {
 	},
 	{
 		test: "Stretchy width",
-		setup: func() *VBox {
+		setup: func() *Box {
 			b := NewVBox(
 				NewLabel("test"),
 				NewLabel("another test"),
@@ -72,7 +72,7 @@ var verticalBoxSizeTests = []struct {
 	},
 	{
 		test: "Stretchy width and height",
-		setup: func() *VBox {
+		setup: func() *Box {
 			b := NewVBox(
 				NewLabel("test"),
 				NewLabel("another test"),
@@ -107,12 +107,12 @@ func TestVBox_Size(t *testing.T) {
 
 var drawVBoxTests = []struct {
 	test  string
-	setup func() *VBox
+	setup func() *Box
 	want  string
 }{
 	{
 		test: "Empty box",
-		setup: func() *VBox {
+		setup: func() *Box {
 			b := NewVBox()
 			b.SetBorder(true)
 			return b
@@ -126,7 +126,7 @@ var drawVBoxTests = []struct {
 	},
 	{
 		test: "Box containing one widget",
-		setup: func() *VBox {
+		setup: func() *Box {
 			b := NewVBox(
 				NewLabel("test"),
 			)
@@ -142,7 +142,7 @@ var drawVBoxTests = []struct {
 	},
 	{
 		test: "Box expands horizontally",
-		setup: func() *VBox {
+		setup: func() *Box {
 			b := NewVBox(
 				NewLabel("test"),
 				NewLabel("foo"),
@@ -160,7 +160,7 @@ var drawVBoxTests = []struct {
 	},
 	{
 		test: "Box expands vertically",
-		setup: func() *VBox {
+		setup: func() *Box {
 			b := NewVBox(
 				NewLabel("test"),
 				NewLabel("foo"),
@@ -178,7 +178,7 @@ var drawVBoxTests = []struct {
 	},
 	{
 		test: "Box expands along both axes",
-		setup: func() *VBox {
+		setup: func() *Box {
 			b := NewVBox(
 				NewLabel("test"),
 				NewLabel("foo"),
@@ -214,13 +214,13 @@ func TestVBox_Draw(t *testing.T) {
 
 var horizontalBoxSizeTests = []struct {
 	test     string
-	setup    func() *HBox
+	setup    func() *Box
 	size     image.Point
 	sizeHint image.Point
 }{
 	{
 		test: "Stretch empty box",
-		setup: func() *HBox {
+		setup: func() *Box {
 			b := NewHBox()
 			b.SetBorder(true)
 			return b
@@ -230,7 +230,7 @@ var horizontalBoxSizeTests = []struct {
 	},
 	{
 		test: "Stretch empty box",
-		setup: func() *HBox {
+		setup: func() *Box {
 			b := NewHBox()
 			b.SetBorder(true)
 			b.SetSizePolicy(Expanding, Minimum)
@@ -241,7 +241,7 @@ var horizontalBoxSizeTests = []struct {
 	},
 	{
 		test: "Stretch empty box",
-		setup: func() *HBox {
+		setup: func() *Box {
 			b := NewHBox()
 			b.SetBorder(true)
 			b.SetSizePolicy(Expanding, Expanding)
@@ -252,7 +252,7 @@ var horizontalBoxSizeTests = []struct {
 	},
 	{
 		test: "No stretch",
-		setup: func() *HBox {
+		setup: func() *Box {
 			b := NewHBox(
 				NewLabel("test"),
 				NewLabel("another test"),
@@ -265,7 +265,7 @@ var horizontalBoxSizeTests = []struct {
 	},
 	{
 		test: "Stretchy width",
-		setup: func() *HBox {
+		setup: func() *Box {
 			b := NewHBox(
 				NewLabel("test"),
 				NewLabel("another test"),
@@ -279,7 +279,7 @@ var horizontalBoxSizeTests = []struct {
 	},
 	{
 		test: "Stretchy width and height",
-		setup: func() *HBox {
+		setup: func() *Box {
 			b := NewHBox(
 				NewLabel("test"),
 				NewLabel("another test"),
@@ -293,7 +293,7 @@ var horizontalBoxSizeTests = []struct {
 	},
 	{
 		test: "Nested box",
-		setup: func() *HBox {
+		setup: func() *Box {
 			nested := NewHBox(NewLabel("test"))
 			nested.SetBorder(true)
 			nested.SetSizePolicy(Expanding, Minimum)
@@ -330,12 +330,13 @@ func TestHBox_Size(t *testing.T) {
 
 var drawHBoxTests = []struct {
 	test  string
-	setup func() *HBox
+	size  image.Point
+	setup func() *Box
 	want  string
 }{
 	{
 		test: "Empty box",
-		setup: func() *HBox {
+		setup: func() *Box {
 			b := NewHBox()
 			b.SetBorder(true)
 			return b
@@ -349,7 +350,7 @@ var drawHBoxTests = []struct {
 	},
 	{
 		test: "Box containing one widget",
-		setup: func() *HBox {
+		setup: func() *Box {
 			b := NewHBox(
 				NewLabel("test"),
 			)
@@ -365,7 +366,7 @@ var drawHBoxTests = []struct {
 	},
 	{
 		test: "Box expands horizontally",
-		setup: func() *HBox {
+		setup: func() *Box {
 			b := NewHBox(
 				NewLabel("test"),
 				NewLabel("foo"),
@@ -383,7 +384,7 @@ var drawHBoxTests = []struct {
 	},
 	{
 		test: "Box expands vertically",
-		setup: func() *HBox {
+		setup: func() *Box {
 			b := NewHBox(
 				NewLabel("test"),
 				NewLabel("foo"),
@@ -401,7 +402,7 @@ var drawHBoxTests = []struct {
 	},
 	{
 		test: "Box expands along both axes",
-		setup: func() *HBox {
+		setup: func() *Box {
 			b := NewHBox(
 				NewLabel("test"),
 				NewLabel("foo"),
@@ -417,11 +418,66 @@ var drawHBoxTests = []struct {
 └────────┘
 `,
 	},
+	{
+		test: "Nested boxes expands equally",
+		size: image.Point{32, 5},
+		setup: func() *Box {
+			nested := NewVBox(
+				NewLabel("test"),
+			)
+			nested.SetBorder(true)
+			nested.SetSizePolicy(Expanding, Minimum)
+
+			b := NewHBox(
+				NewSpacer(),
+				nested,
+				NewSpacer(),
+			)
+			b.SetBorder(true)
+			b.SetSizePolicy(Expanding, Expanding)
+			return b
+		},
+		want: `┌──────────────────────────────┐
+│..........┌────────┐..........│
+│..........│test....│..........│
+│..........└────────┘..........│
+└──────────────────────────────┘
+`,
+	},
+	{
+		test: "Nested boxes expands equally",
+		size: image.Point{32, 5},
+		setup: func() *Box {
+			nested := NewVBox()
+			nested.SetBorder(true)
+			nested.SetSizePolicy(Expanding, Expanding)
+
+			b := NewHBox(
+				NewSpacer(),
+				nested,
+				NewSpacer(),
+			)
+			b.SetBorder(true)
+			b.SetSizePolicy(Expanding, Expanding)
+			return b
+		},
+		want: `┌──────────────────────────────┐
+│..........┌────────┐..........│
+│..........│........│..........│
+│..........└────────┘..........│
+└──────────────────────────────┘
+`,
+	},
 }
 
 func TestHBox_Draw(t *testing.T) {
 	for _, tt := range drawHBoxTests {
-		surface := newTestSurface(10, 5)
+		var surface *testSurface
+		if tt.size.X == 0 && tt.size.Y == 0 {
+			surface = newTestSurface(10, 5)
+		} else {
+			surface = newTestSurface(tt.size.X, tt.size.Y)
+		}
 		painter := NewPainter(surface, NewPalette())
 
 		b := tt.setup()

@@ -3,8 +3,6 @@ package tui
 import (
 	"image"
 	"testing"
-
-	"github.com/kr/pretty"
 )
 
 var labelTests = []struct {
@@ -46,7 +44,7 @@ func TestLabel_Size(t *testing.T) {
 			t.Parallel()
 
 			l := tt.setup()
-			l.Resize(image.Point{100, 00})
+			l.Resize(image.Point{100, 100})
 
 			if got := l.Size(); got != tt.size {
 				t.Errorf("l.Size() = %s; want = %s", got, tt.size)
@@ -58,22 +56,52 @@ func TestLabel_Size(t *testing.T) {
 	}
 }
 
+var drawLabelTests = []struct {
+	test  string
+	setup func() *Label
+	want  string
+}{
+	{
+		test: "Simple label",
+		setup: func() *Label {
+			return NewLabel("test")
+		},
+		want: `test......
+..........
+..........
+..........
+..........
+`,
+	},
+	{
+		test: "Word wrap",
+		setup: func() *Label {
+			l := NewLabel("this will wrap")
+			l.SetWordWrap(true)
+			l.SetSizePolicy(Expanding, Expanding)
+			return l
+		},
+		want: `this will.
+wrap......
+..........
+..........
+..........
+`,
+	},
+}
+
 func TestLabel_Draw(t *testing.T) {
-	surface := newTestSurface(10, 5)
-	painter := NewPainter(surface, NewPalette())
+	for _, tt := range drawLabelTests {
+		surface := newTestSurface(10, 5)
+		painter := NewPainter(surface, NewPalette())
 
-	label := NewLabel("test")
-	label.Resize(surface.size)
-	label.Draw(painter)
+		b := tt.setup()
 
-	want := `test......
-..........
-..........
-..........
-..........
-`
+		b.Resize(surface.size)
+		b.Draw(painter)
 
-	if surface.String() != want {
-		t.Error(pretty.Diff(surface.String(), want))
+		if surface.String() != tt.want {
+			t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+		}
 	}
 }

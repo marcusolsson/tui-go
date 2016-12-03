@@ -23,6 +23,10 @@ func (s *Spacer) Size() image.Point {
 	return s.size
 }
 
+func (s *Spacer) MinSize() image.Point {
+	return image.Point{}
+}
+
 // SizeHint returns the recommended size for the spacer.
 func (s *Spacer) SizeHint() image.Point {
 	return image.Point{}

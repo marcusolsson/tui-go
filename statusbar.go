@@ -42,6 +42,10 @@ func (b *StatusBar) Size() image.Point {
 	return b.size
 }
 
+func (b *StatusBar) MinSize() image.Point {
+	return b.SizeHint()
+}
+
 // SizeHint returns the recommended size for the status bar.
 func (b *StatusBar) SizeHint() image.Point {
 	return image.Point{0, 1}
