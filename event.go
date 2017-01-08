@@ -2,7 +2,6 @@ package tui
 
 import termbox "github.com/nsf/termbox-go"
 
-type Key termbox.Key
 type EventType termbox.EventType
 
 const (
@@ -15,11 +14,7 @@ const (
 	EventNone
 )
 
-type Event struct {
-	Type EventType
-	Key  Key
-	Ch   rune
-}
+type Key termbox.Key
 
 const (
 	KeyEnter      = Key(termbox.KeyEnter)
@@ -33,6 +28,12 @@ const (
 	KeyArrowLeft  = Key(termbox.KeyArrowLeft)
 	KeyArrowRight = Key(termbox.KeyArrowRight)
 )
+
+type Event struct {
+	Type EventType
+	Key  Key
+	Ch   rune
+}
 
 func convertEvent(tev termbox.Event) Event {
 	return Event{

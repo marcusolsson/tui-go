@@ -78,7 +78,11 @@ func main() {
 	root := tui.NewHBox(sidebar, chat)
 	root.SetSizePolicy(tui.Expanding, tui.Expanding)
 
-	if err := tui.New(root).Run(); err != nil {
+	ui := tui.New(root)
+	ui.SetKeybinding(tui.KeyEsc, func() {
+		ui.Quit()
+	})
+	if err := ui.Run(); err != nil {
 		panic(err)
 	}
 }

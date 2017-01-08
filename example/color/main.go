@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	tui "github.com/marcusolsson/tui-go"
 	termbox "github.com/nsf/termbox-go"
 )
@@ -21,8 +19,10 @@ func main() {
 
 	ui := tui.New(t)
 	ui.SetPalette(p)
-
+	ui.SetKeybinding(tui.KeyEsc, func() {
+		ui.Quit()
+	})
 	if err := ui.Run(); err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }
