@@ -2,7 +2,6 @@ package main
 
 import (
 	tui "github.com/marcusolsson/tui-go"
-	termbox "github.com/nsf/termbox-go"
 )
 
 func main() {
@@ -15,8 +14,8 @@ func main() {
 	// This is still a rough prototype and WILL change. Use at your own risk.
 	p := tui.NewPalette()
 	p.SetItem("table.cell.selected", tui.PaletteItem{
-		Bg: tui.Color(termbox.ColorRed),
-		Fg: tui.Color(termbox.ColorWhite),
+		Bg: tui.ColorRed,
+		Fg: tui.ColorWhite,
 	})
 
 	ui := tui.New(root)

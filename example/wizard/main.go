@@ -1,6 +1,8 @@
 package main
 
-import "github.com/marcusolsson/tui-go"
+import (
+	"github.com/marcusolsson/tui-go"
+)
 
 var logo = `     _____ __ ____  ___   ______________  
     / ___// //_/\ \/ / | / / ____/_  __/  

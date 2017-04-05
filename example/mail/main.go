@@ -1,6 +1,8 @@
 package main
 
-import "github.com/marcusolsson/tui-go"
+import (
+	tui "github.com/marcusolsson/tui-go"
+)
 
 type mail struct {
 	from    string

@@ -1,6 +1,8 @@
 package main
 
-import "github.com/marcusolsson/tui-go"
+import (
+	"github.com/marcusolsson/tui-go"
+)
 
 type song struct {
 	artist string

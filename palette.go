@@ -1,8 +1,14 @@
 package tui
 
-import termbox "github.com/nsf/termbox-go"
+type Color int
 
-type Color termbox.Attribute
+const (
+	ColorDefault Color = iota
+	ColorBlack
+	ColorWhite
+	ColorBlue
+	ColorRed
+)
 
 type PaletteItem struct {
 	Fg Color
@@ -15,10 +21,10 @@ type Palette struct {
 
 var DefaultPalette = &Palette{
 	items: map[string]PaletteItem{
-		"normal":              {Color(termbox.ColorDefault), Color(termbox.ColorDefault)},
-		"list.item.selected":  {Color(termbox.ColorWhite), Color(termbox.ColorBlue)},
-		"table.cell.selected": {Color(termbox.ColorWhite), Color(termbox.ColorBlue)},
-		"button.focused":      {Color(termbox.ColorWhite), Color(termbox.ColorBlue)},
+		"normal":              {ColorDefault, ColorDefault},
+		"list.item.selected":  {ColorWhite, ColorBlue},
+		"table.cell.selected": {ColorWhite, ColorBlue},
+		"button.focused":      {ColorWhite, ColorBlue},
 	},
 }
 
@@ -36,5 +42,5 @@ func (p *Palette) Item(name string) PaletteItem {
 	if c, ok := p.items[name]; ok {
 		return c
 	}
-	return PaletteItem{Color(termbox.ColorDefault), Color(termbox.ColorDefault)}
+	return PaletteItem{ColorDefault, ColorDefault}
 }

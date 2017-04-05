@@ -2,8 +2,6 @@ package tui
 
 import (
 	"image"
-
-	termbox "github.com/nsf/termbox-go"
 )
 
 // Surface defines a surface that can be painted on.
@@ -15,40 +13,12 @@ type Surface interface {
 	Size() image.Point
 }
 
-type termboxSurface struct{}
-
-// NewTermboxSurface returns the default paint surface.
-func NewTermboxSurface() Surface {
-	return termboxSurface{}
-}
-
-func (s termboxSurface) SetCell(x, y int, ch rune, fg, bg Color) {
-	termbox.SetCell(x, y, ch, termbox.Attribute(fg), termbox.Attribute(bg))
-}
-
-func (s termboxSurface) SetCursor(x, y int) {
-	termbox.SetCursor(x, y)
-}
-
-func (s termboxSurface) Begin() {
-	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
-}
-
-func (s termboxSurface) End() {
-	termbox.Flush()
-}
-
-func (s termboxSurface) Size() image.Point {
-	w, h := termbox.Size()
-	return image.Point{w, h}
-}
-
 // Painter provides operations to paint on a surface.
 type Painter struct {
 	// Surface to paint on.
 	surface Surface
 
-	palette *Palette
+	Palette *Palette
 
 	// Current brush.
 	fg, bg Color
@@ -63,7 +33,7 @@ type Painter struct {
 func NewPainter(s Surface, p *Palette) *Painter {
 	return &Painter{
 		surface: s,
-		palette: p,
+		Palette: p,
 		fg:      p.Item("normal").Fg,
 		bg:      p.Item("normal").Bg,
 	}
@@ -177,11 +147,11 @@ func (p *Painter) SetBrush(fg, bg Color) {
 }
 
 func (p *Painter) RestoreBrush() {
-	p.SetBrush(p.palette.Item("normal").Fg, p.palette.Item("normal").Bg)
+	p.SetBrush(p.Palette.Item("normal").Fg, p.Palette.Item("normal").Bg)
 }
 
 func (p *Painter) WithStyledBrush(n string, fn func(*Painter)) {
-	p.SetBrush(p.palette.Item(n).Fg, p.palette.Item(n).Bg)
+	p.SetBrush(p.Palette.Item(n).Fg, p.Palette.Item(n).Bg)
 	fn(p)
 	p.RestoreBrush()
 }
