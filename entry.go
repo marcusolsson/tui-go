@@ -35,9 +35,9 @@ func (e *Entry) Draw(p *Painter) {
 	}
 
 	p.WithStyledBrush(style, func(p *Painter) {
+		text := e.text
 		exceedsWidth := stringWidth(text) >= s.X
 
-		text := e.text
 		if exceedsWidth {
 			text = text[:s.X]
 		}
