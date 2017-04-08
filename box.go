@@ -4,8 +4,10 @@ import "image"
 
 var _ Widget = &Box{}
 
+// Alignment is used to set the direction in which widgets are laid out.
 type Alignment int
 
+// Available alignment options.
 const (
 	Horizontal Alignment = iota
 	Vertical
@@ -56,6 +58,7 @@ func (b *Box) SetBorder(enabled bool) {
 	b.border = enabled
 }
 
+// Alignment returns the currently set alignment or the Box.
 func (b *Box) Alignment() Alignment {
 	return b.alignment
 }
@@ -302,6 +305,7 @@ func (b *Box) SizePolicy() (SizePolicy, SizePolicy) {
 	return b.horizontalSizePolicy, b.verticalSizePolicy
 }
 
+// OnEvent handles an event and propagates it to all children.
 func (b *Box) OnEvent(ev Event) {
 	for _, child := range b.children {
 		child.OnEvent(ev)

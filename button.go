@@ -48,6 +48,7 @@ func (b *Button) Size() image.Point {
 	return b.size
 }
 
+// MinSize returns the minimum size the widget is allowed to be.
 func (b *Button) MinSize() image.Point {
 	return b.SizeHint()
 }

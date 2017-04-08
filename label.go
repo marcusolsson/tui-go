@@ -47,6 +47,7 @@ func (l *Label) Size() image.Point {
 	return l.size
 }
 
+// MinSize returns the minimum size the widget is allowed to be.
 func (l *Label) MinSize() image.Point {
 	return image.Point{}
 }
@@ -94,13 +95,16 @@ func (l *Label) Resize(size image.Point) {
 	}
 }
 
+// OnEvent handles an event.
 func (l *Label) OnEvent(_ Event) {
 }
 
+// SetText sets the text content of the label.
 func (l *Label) SetText(text string) {
 	l.text = text
 }
 
+// SetWordWrap sets whether text content should be wrapped.
 func (l *Label) SetWordWrap(enabled bool) {
 	l.wordWrap = enabled
 }

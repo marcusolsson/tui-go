@@ -61,6 +61,7 @@ func (e *Entry) Size() image.Point {
 	return e.size
 }
 
+// MinSize returns the minimum size the widget is allowed to be.
 func (e *Entry) MinSize() image.Point {
 	return e.SizeHint()
 }

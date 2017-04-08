@@ -32,6 +32,7 @@ func (p *Padder) Size() image.Point {
 	return p.widget.Size().Add(p.padding.Mul(2))
 }
 
+// MinSize returns the minimum size the widget is allowed to be.
 func (p *Padder) MinSize() image.Point {
 	return p.widget.MinSize().Add(p.padding.Mul(2))
 }

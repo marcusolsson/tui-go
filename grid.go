@@ -99,6 +99,7 @@ func (g *Grid) Size() image.Point {
 	return g.size
 }
 
+// MinSize returns the minimum size the widget is allowed to be.
 func (g *Grid) MinSize() image.Point {
 	if g.cols == 0 || g.rows == 0 {
 		return image.Point{}
@@ -327,9 +328,9 @@ func (g *Grid) mapCellToLocal(p image.Point) image.Point {
 	return image.Point{lx, ly}
 }
 
-func (b *Grid) rowHeight(i int) int {
+func (g *Grid) rowHeight(i int) int {
 	result := 0
-	for pos, w := range b.cells {
+	for pos, w := range g.cells {
 		if pos.Y != i {
 			continue
 		}
@@ -342,9 +343,9 @@ func (b *Grid) rowHeight(i int) int {
 	return result
 }
 
-func (b *Grid) columnWidth(i int) int {
+func (g *Grid) columnWidth(i int) int {
 	result := 0
-	for pos, w := range b.cells {
+	for pos, w := range g.cells {
 		if pos.X != i {
 			continue
 		}
@@ -356,9 +357,9 @@ func (b *Grid) columnWidth(i int) int {
 	return result
 }
 
-func (b *Grid) minRowHeight(i int) int {
+func (g *Grid) minRowHeight(i int) int {
 	result := 0
-	for pos, w := range b.cells {
+	for pos, w := range g.cells {
 		if pos.Y != i {
 			continue
 		}
@@ -371,9 +372,9 @@ func (b *Grid) minRowHeight(i int) int {
 	return result
 }
 
-func (b *Grid) minColumnWidth(i int) int {
+func (g *Grid) minColumnWidth(i int) int {
 	result := 0
-	for pos, w := range b.cells {
+	for pos, w := range g.cells {
 		if pos.X != i {
 			continue
 		}

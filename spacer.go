@@ -23,6 +23,7 @@ func (s *Spacer) Size() image.Point {
 	return s.size
 }
 
+// MinSize returns the minimum size the widget is allowed to be.
 func (s *Spacer) MinSize() image.Point {
 	return image.Point{}
 }

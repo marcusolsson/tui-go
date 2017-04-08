@@ -13,7 +13,7 @@ type Table struct {
 	*Grid
 }
 
-// Table returns a new Table.
+// NewTable returns a new Table.
 func NewTable(cols, rows int) *Table {
 	return &Table{
 		Grid: NewGrid(cols, rows),
@@ -89,6 +89,7 @@ func (t *Table) Draw(p *Painter) {
 	}
 }
 
+// OnEvent handles an event and propagates it to all children.
 func (t *Table) OnEvent(ev Event) {
 	switch ev.Key {
 	case KeyArrowUp:
@@ -143,10 +144,12 @@ func (t *Table) Select(i int) {
 	t.onSelectionChanged(t)
 }
 
+// OnItemActivated sets the function that is called when an item was activated.
 func (t *Table) OnItemActivated(fn func(*Table)) {
 	t.onItemActivated = fn
 }
 
+// OnSelectionChanged sets the function that is called when an item was selected.
 func (t *Table) OnSelectionChanged(fn func(*Table)) {
 	t.onSelectionChanged = fn
 }
