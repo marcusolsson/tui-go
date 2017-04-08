@@ -38,6 +38,9 @@ func (l *Label) Draw(p *Painter) {
 	}
 
 	for i, line := range lines {
+		if stringWidth(line) > l.Size().X {
+			line = line[:l.Size().X]
+		}
 		p.DrawText(0, i, line)
 	}
 }
@@ -47,24 +50,21 @@ func (l *Label) Size() image.Point {
 	return l.size
 }
 
-// MinSize returns the minimum size the widget is allowed to be.
-func (l *Label) MinSize() image.Point {
-	return image.Point{}
+// MinSizeHint returns the minimum size the widget is allowed to be.
+func (l *Label) MinSizeHint() image.Point {
+	return image.Point{1, 1}
 }
 
 // SizeHint returns the recommended size for the label.
 func (l *Label) SizeHint() image.Point {
-	if l.size.X < 0 && l.size.Y < 0 {
-		var max int
-		lines := strings.Split(l.text, "\n")
-		for _, line := range lines {
-			if w := stringWidth(line); w > max {
-				max = w
-			}
+	var max int
+	lines := strings.Split(l.text, "\n")
+	for _, line := range lines {
+		if w := stringWidth(line); w > max {
+			max = w
 		}
-		return image.Point{max, l.heightForWidth(max)}
 	}
-	return image.Point{l.size.X, l.heightForWidth(l.size.X)}
+	return image.Point{max, l.heightForWidth(max)}
 }
 
 // SizePolicy returns the default layout behavior.
@@ -78,21 +78,7 @@ func (l *Label) heightForWidth(w int) int {
 
 // Resize updates the size of the label.
 func (l *Label) Resize(size image.Point) {
-	hpol, vpol := l.SizePolicy()
-
-	switch hpol {
-	case Minimum:
-		l.size.X = l.SizeHint().X
-	case Expanding:
-		l.size.X = size.X
-	}
-
-	switch vpol {
-	case Minimum:
-		l.size.Y = l.SizeHint().Y
-	case Expanding:
-		l.size.Y = size.Y
-	}
+	l.size = size
 }
 
 // OnEvent handles an event.

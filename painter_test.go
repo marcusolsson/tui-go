@@ -48,6 +48,7 @@ func (s *testSurface) Size() image.Point {
 
 func (s *testSurface) String() string {
 	var buf bytes.Buffer
+	buf.WriteRune('\n')
 	for j := 0; j < s.size.Y; j++ {
 		for i := 0; i < s.size.X; i++ {
 			if cell, ok := s.cells[image.Point{i, j}]; ok {

@@ -16,6 +16,9 @@ type Button struct {
 	size    image.Point
 
 	onActivated func(*Button)
+
+	sizePolicyX SizePolicy
+	sizePolicyY SizePolicy
 }
 
 // NewButton returns a new Button with the specified label.
@@ -48,17 +51,19 @@ func (b *Button) Size() image.Point {
 	return b.size
 }
 
-// MinSize returns the minimum size the widget is allowed to be.
-func (b *Button) MinSize() image.Point {
-	return b.SizeHint()
+// MinSizeHint returns the minimum size the widget is allowed to be.
+func (b *Button) MinSizeHint() image.Point {
+	return image.Point{1, 1}
 }
 
 // SizeHint returns the recommended size for the button.
 func (b *Button) SizeHint() image.Point {
+	if len(b.text) == 0 {
+		return b.MinSizeHint()
+	}
+
 	var size image.Point
-
 	lines := strings.Split(b.text, "\n")
-
 	for _, line := range lines {
 		if w := stringWidth(line); w > size.X {
 			size.X = w
@@ -71,12 +76,12 @@ func (b *Button) SizeHint() image.Point {
 
 // SizePolicy returns the default layout behavior.
 func (b *Button) SizePolicy() (SizePolicy, SizePolicy) {
-	return Minimum, Minimum
+	return b.sizePolicyX, b.sizePolicyY
 }
 
 // Resize updates the size of the button.
 func (b *Button) Resize(size image.Point) {
-	b.size = b.SizeHint()
+	b.size = size
 }
 
 // OnEvent handles terminal events.
@@ -105,4 +110,10 @@ func (b *Button) OnActivated(fn func(b *Button)) {
 // SetFocused focuses this button.
 func (b *Button) SetFocused(f bool) {
 	b.focused = f
+}
+
+// SetSizePolicy sets the size policy for each axis.
+func (b *Button) SetSizePolicy(horizontal, vertical SizePolicy) {
+	b.sizePolicyX = horizontal
+	b.sizePolicyY = vertical
 }

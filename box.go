@@ -1,6 +1,8 @@
 package tui
 
-import "image"
+import (
+	"image"
+)
 
 var _ Widget = &Box{}
 
@@ -90,12 +92,12 @@ func (b *Box) Draw(p *Painter) {
 	}
 }
 
-// MinSize returns the minimum size for the layout.
-func (b *Box) MinSize() image.Point {
+// MinSizeHint returns the minimum size for the layout.
+func (b *Box) MinSizeHint() image.Point {
 	var minSize image.Point
 
 	for _, child := range b.children {
-		size := child.MinSize()
+		size := child.MinSizeHint()
 		if b.Alignment() == Horizontal {
 			minSize.X += size.X
 			if size.Y > minSize.Y {
@@ -147,159 +149,6 @@ func (b *Box) Size() image.Point {
 	return b.size
 }
 
-// Resize updates the size of the layout.
-func (b *Box) Resize(size image.Point) {
-	switch b.horizontalSizePolicy {
-	case Minimum:
-		b.size.X = b.SizeHint().X
-	case Expanding:
-		b.size.X = size.X
-	}
-
-	switch b.verticalSizePolicy {
-	case Minimum:
-		b.size.Y = b.SizeHint().Y
-	case Expanding:
-		b.size.Y = size.Y
-	}
-
-	inner := b.size
-
-	if b.border {
-		inner = b.size.Sub(image.Point{2, 2})
-	}
-
-	b.layoutChildren(inner)
-}
-
-func (b *Box) layoutChildren(size image.Point) {
-	space := b.distributeSpace(size)
-
-	for _, child := range b.children {
-		child.Resize(space[child])
-	}
-}
-
-func (b *Box) distributeSpace(available image.Point) map[Widget]image.Point {
-	widgets := make(map[Widget]image.Point)
-
-	// Distribute minimum space.
-	for _, child := range b.children {
-		widgets[child] = child.MinSize()
-	}
-
-	var used image.Point
-	for _, space := range widgets {
-		used = used.Add(space)
-	}
-
-	// Expand children.
-	for child, space := range widgets {
-		hpol, vpol := child.SizePolicy()
-		if b.Alignment() == Horizontal {
-			if vpol == Expanding {
-				space.Y = available.Y
-				widgets[child] = space
-			}
-		} else {
-			if hpol == Expanding {
-				space.X = available.X
-				widgets[child] = space
-			}
-		}
-	}
-
-	// Distribute remaining space (if any).
-	var extra int
-	if b.Alignment() == Horizontal {
-		extra = available.X - used.X
-	} else {
-		extra = available.Y - used.Y
-	}
-
-	// Distribute preferred space
-K:
-	for extra > 0 {
-		if b.Alignment() == Horizontal {
-			starting := extra
-			for child, space := range widgets {
-				hint := child.SizeHint()
-				if space.X < hint.X {
-					space.X++
-					widgets[child] = space
-
-					extra--
-					if extra == 0 {
-						break K
-					}
-				}
-			}
-			if starting == extra {
-				break K
-			}
-		} else {
-			starting := extra
-			for child, space := range widgets {
-				hint := child.SizeHint()
-				if space.Y < hint.Y {
-					space.Y++
-					widgets[child] = space
-
-					extra--
-					if extra == 0 {
-						break K
-					}
-				}
-			}
-			if starting == extra {
-				break K
-			}
-		}
-	}
-
-	// Distribute surplus space.
-L:
-	for extra > 0 {
-		if b.Alignment() == Horizontal {
-			starting := extra
-			for child, space := range widgets {
-				hpol, _ := child.SizePolicy()
-				if hpol == Expanding && isSmallestWidth(space.X, widgets) {
-					space.X++
-					widgets[child] = space
-
-					extra--
-					if extra == 0 {
-						break L
-					}
-				}
-			}
-			if starting == extra {
-				break L
-			}
-		} else {
-			starting := extra
-			for child, space := range widgets {
-				_, vpol := child.SizePolicy()
-				if vpol == Expanding && isSmallestHeight(space.Y, widgets) {
-					space.Y++
-					widgets[child] = space
-
-					extra--
-					if extra == 0 {
-						break L
-					}
-				}
-			}
-			if starting == extra {
-				break L
-			}
-		}
-	}
-
-	return widgets
-}
-
 // SizePolicy returns the default layout behavior.
 func (b *Box) SizePolicy() (SizePolicy, SizePolicy) {
 	return b.horizontalSizePolicy, b.verticalSizePolicy
@@ -312,22 +161,144 @@ func (b *Box) OnEvent(ev Event) {
 	}
 }
 
-func isSmallestWidth(w int, widgets map[Widget]image.Point) bool {
-	for child, space := range widgets {
-		hpol, _ := child.SizePolicy()
-		if hpol == Expanding && space.X < w {
-			return false
-		}
+// Resize updates the size of the layout.
+func (b *Box) Resize(size image.Point) {
+	b.size = size
+	inner := b.size
+	if b.border {
+		inner = b.size.Sub(image.Point{2, 2})
 	}
-	return true
+	b.layoutChildren(inner)
 }
 
-func isSmallestHeight(h int, widgets map[Widget]image.Point) bool {
-	for child, space := range widgets {
-		_, vpol := child.SizePolicy()
-		if vpol == Expanding && space.Y < h {
-			return false
+func (b *Box) layoutChildren(size image.Point) {
+	space := doLayout(b.children, dim(b.Alignment(), size), b.Alignment())
+
+	for i, s := range space {
+		switch b.Alignment() {
+		case Horizontal:
+			b.children[i].Resize(image.Point{s, size.Y})
+		case Vertical:
+			b.children[i].Resize(image.Point{size.X, s})
 		}
 	}
-	return true
+}
+
+func doLayout(ws []Widget, space int, a Alignment) []int {
+	sizes := make([]int, len(ws))
+
+	remaining := space
+
+	// Distribute MinSizeHint
+	for {
+		var changed bool
+		for i, sz := range sizes {
+			if sz < dim(a, ws[i].MinSizeHint()) {
+				sizes[i] = sz + 1
+				remaining--
+				if remaining <= 0 {
+					goto Resize
+				}
+				changed = true
+			}
+		}
+		if !changed {
+			break
+		}
+	}
+
+	// Distribute Minimum
+	for {
+		var changed bool
+		for i, sz := range sizes {
+			p := alignedSizePolicy(a, ws[i])
+			if p == Minimum && sz < dim(a, ws[i].SizeHint()) {
+				sizes[i] = sz + 1
+				remaining--
+				if remaining <= 0 {
+					goto Resize
+				}
+				changed = true
+			}
+		}
+		if !changed {
+			break
+		}
+	}
+
+	// Distribute Preferred
+	for {
+		var changed bool
+		for i, sz := range sizes {
+			p := alignedSizePolicy(a, ws[i])
+			if (p == Preferred || p == Maximum) && sz < dim(a, ws[i].SizeHint()) {
+				sizes[i] = sz + 1
+				remaining--
+				if remaining <= 0 {
+					goto Resize
+				}
+				changed = true
+			}
+		}
+		if !changed {
+			break
+		}
+	}
+
+	// Distribute Expanding
+	for {
+		var changed bool
+		for i, sz := range sizes {
+			p := alignedSizePolicy(a, ws[i])
+			if p == Expanding {
+				sizes[i] = sz + 1
+				remaining--
+				if remaining <= 0 {
+					goto Resize
+				}
+				changed = true
+			}
+		}
+		if !changed {
+			break
+		}
+	}
+
+	// Distribute Preferred after Expanding was given a shot
+	for {
+		var changed bool
+		for i, sz := range sizes {
+			p := alignedSizePolicy(a, ws[i])
+			if p == Preferred {
+				sizes[i] = sz + 1
+				remaining--
+				if remaining <= 0 {
+					goto Resize
+				}
+				changed = true
+			}
+		}
+		if !changed {
+			break
+		}
+	}
+
+Resize:
+
+	return sizes
+}
+
+func dim(a Alignment, pt image.Point) int {
+	if a == Horizontal {
+		return pt.X
+	}
+	return pt.Y
+}
+
+func alignedSizePolicy(a Alignment, w Widget) SizePolicy {
+	hpol, vpol := w.SizePolicy()
+	if a == Horizontal {
+		return hpol
+	}
+	return vpol
 }

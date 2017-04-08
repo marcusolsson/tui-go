@@ -16,7 +16,7 @@ var labelTests = []struct {
 		setup: func() *Label {
 			return NewLabel("")
 		},
-		size:     image.Point{0, 1},
+		size:     image.Point{100, 100},
 		sizeHint: image.Point{0, 1},
 	},
 	{
@@ -24,7 +24,7 @@ var labelTests = []struct {
 		setup: func() *Label {
 			return NewLabel("test")
 		},
-		size:     image.Point{4, 1},
+		size:     image.Point{100, 100},
 		sizeHint: image.Point{4, 1},
 	},
 	{
@@ -32,7 +32,7 @@ var labelTests = []struct {
 		setup: func() *Label {
 			return NewLabel("あäa")
 		},
-		size:     image.Point{4, 1},
+		size:     image.Point{100, 100},
 		sizeHint: image.Point{4, 1},
 	},
 }
@@ -66,7 +66,8 @@ var drawLabelTests = []struct {
 		setup: func() *Label {
 			return NewLabel("test")
 		},
-		want: `test......
+		want: `
+test......
 ..........
 ..........
 ..........
@@ -81,7 +82,8 @@ var drawLabelTests = []struct {
 			l.SetSizePolicy(Expanding, Expanding)
 			return l
 		},
-		want: `this will.
+		want: `
+this will.
 wrap......
 ..........
 ..........

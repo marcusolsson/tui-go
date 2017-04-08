@@ -51,8 +51,8 @@ func (p *Progress) Size() image.Point {
 	return p.size
 }
 
-// MinSize returns the minimum size the widget is allowed to be.
-func (p *Progress) MinSize() image.Point {
+// MinSizeHint returns the minimum size the widget is allowed to be.
+func (p *Progress) MinSizeHint() image.Point {
 	return image.Point{5, 1}
 }
 

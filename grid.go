@@ -1,6 +1,9 @@
 package tui
 
-import "image"
+import (
+	"image"
+	"math"
+)
 
 var _ Widget = &Grid{}
 
@@ -99,8 +102,8 @@ func (g *Grid) Size() image.Point {
 	return g.size
 }
 
-// MinSize returns the minimum size the widget is allowed to be.
-func (g *Grid) MinSize() image.Point {
+// MinSizeHint returns the minimum size the widget is allowed to be.
+func (g *Grid) MinSizeHint() image.Point {
 	if g.cols == 0 || g.rows == 0 {
 		return image.Point{}
 	}
@@ -152,11 +155,135 @@ func (g *Grid) SizePolicy() (SizePolicy, SizePolicy) {
 	return g.sizePolicyX, g.sizePolicyY
 }
 
-// Resize updates the size of the grid.
 func (g *Grid) Resize(size image.Point) {
+	g.size = size
+	inner := g.size
+	if g.hasBorder {
+		inner.X = g.size.X - (g.cols + 1)
+		inner.Y = g.size.Y - (g.rows + 1)
+	}
+	g.layoutChildren(inner)
+}
+
+func (g *Grid) layoutChildren(size image.Point) {
+	g.colWidths = g.doLayout(dim(Horizontal, size), Horizontal)
+	g.rowHeights = g.doLayout(dim(Vertical, size), Vertical)
+
+	for pos, w := range g.cells {
+		w.Resize(image.Point{g.colWidths[pos.X], g.rowHeights[pos.Y]})
+	}
+}
+
+func (g *Grid) doLayout(space int, a Alignment) []int {
+	var sizes []int
+
+	if a == Horizontal {
+		sizes = make([]int, g.cols)
+	} else if a == Vertical {
+		sizes = make([]int, g.rows)
+	}
+
+	remaining := space
+
+	// Distribute MinSizeHint
+	for {
+		var changed bool
+		for i, sz := range sizes {
+			ws := g.rowcol(i, a)
+			var sizeHint int
+			for _, w := range ws {
+				s := dim(a, w.MinSizeHint())
+				if sizeHint < s {
+					sizeHint = s
+				}
+			}
+			if sz < sizeHint {
+				sizes[i] = sz + 1
+				remaining--
+				if remaining <= 0 {
+					goto Resize
+				}
+				changed = true
+			}
+		}
+		if !changed {
+			break
+		}
+	}
+
+	// Distribute Minimum
+	for {
+		var changed bool
+		for i, sz := range sizes {
+			ws := g.rowcol(i, a)
+			var sizeHint int
+			for _, w := range ws {
+				s := dim(a, w.SizeHint())
+				p := alignedSizePolicy(a, w)
+				if p == Minimum && sizeHint < s {
+					sizeHint = s
+				}
+			}
+			if sz < sizeHint {
+				sizes[i] = sz + 1
+				remaining--
+				if remaining <= 0 {
+					goto Resize
+				}
+				changed = true
+			}
+		}
+		if !changed {
+			break
+		}
+	}
+
+	// Distribute remaining space
+	for {
+		var changed bool
+		min := math.MaxInt8
+		for _, sz := range sizes {
+			if sz < min {
+				min = sz
+			}
+		}
+		for i, sz := range sizes {
+			if sz == min {
+				sizes[i] = sz + 1
+				remaining--
+				if remaining <= 0 {
+					goto Resize
+				}
+				changed = true
+			}
+		}
+		if !changed {
+			break
+		}
+	}
+
+Resize:
+
+	return sizes
+}
+
+func (g *Grid) rowcol(i int, a Alignment) []Widget {
+	cells := make([]Widget, 0)
+	for p, w := range g.cells {
+		if dim(a, p) == i {
+			cells = append(cells, w)
+		}
+	}
+	return cells
+}
+
+// Resize updates the size of the grid.
+func (g *Grid) Resize2(size image.Point) {
 	hpol, vpol := g.SizePolicy()
 
 	switch hpol {
+	case Preferred:
+		fallthrough
 	case Minimum:
 		g.size.X = g.SizeHint().X
 	case Expanding:
@@ -164,6 +291,8 @@ func (g *Grid) Resize(size image.Point) {
 	}
 
 	switch vpol {
+	case Preferred:
+		fallthrough
 	case Minimum:
 		g.size.Y = g.SizeHint().Y
 	case Expanding:
@@ -364,8 +493,8 @@ func (g *Grid) minRowHeight(i int) int {
 			continue
 		}
 
-		if w.MinSize().Y > result {
-			result = w.MinSize().Y
+		if w.MinSizeHint().Y > result {
+			result = w.MinSizeHint().Y
 		}
 	}
 
@@ -379,8 +508,8 @@ func (g *Grid) minColumnWidth(i int) int {
 			continue
 		}
 
-		if w.MinSize().X > result {
-			result = w.MinSize().X
+		if w.MinSizeHint().X > result {
+			result = w.MinSizeHint().X
 		}
 	}
 	return result

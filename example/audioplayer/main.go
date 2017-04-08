@@ -16,7 +16,7 @@ var songs = []song{
 
 func main() {
 	library := tui.NewTable(0, 0)
-	library.SetSizePolicy(tui.Expanding, tui.Expanding)
+	library.SetSizePolicy(tui.Expanding, tui.Preferred)
 	library.SetColumnStretch(0, 1)
 	library.SetColumnStretch(1, 1)
 	library.SetColumnStretch(2, 2)
@@ -45,8 +45,7 @@ func main() {
 	status := tui.NewStatusBar("05:12 - 07:46")
 	status.SetPermanentText(`VOLUME 68%`)
 
-	root := tui.NewVBox(library, controls, status)
-	root.SetSizePolicy(tui.Expanding, tui.Expanding)
+	root := tui.NewVBox(library, tui.NewSpacer(), controls, status)
 
 	ui := tui.New(root)
 	ui.SetKeybinding(tui.KeyEsc, func() {

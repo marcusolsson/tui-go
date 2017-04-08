@@ -5,106 +5,6 @@ import (
 	"testing"
 )
 
-var verticalBoxSizeTests = []struct {
-	test     string
-	setup    func() *Box
-	size     image.Point
-	sizeHint image.Point
-}{
-	{
-		test: "Stretch empty box",
-		setup: func() *Box {
-			b := NewVBox()
-			b.SetBorder(true)
-			return b
-		},
-		size:     image.Point{2, 2},
-		sizeHint: image.Point{2, 2},
-	},
-	{
-		test: "Stretch empty box",
-		setup: func() *Box {
-			b := NewVBox()
-			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Minimum)
-			return b
-		},
-		size:     image.Point{100, 2},
-		sizeHint: image.Point{2, 2},
-	},
-	{
-		test: "Stretch empty box",
-		setup: func() *Box {
-			b := NewVBox()
-			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
-			return b
-		},
-		size:     image.Point{100, 100},
-		sizeHint: image.Point{2, 2},
-	},
-	{
-		test: "No stretch",
-		setup: func() *Box {
-			b := NewVBox(
-				NewLabel("test"),
-				NewLabel("another test"),
-			)
-			b.SetBorder(true)
-			return b
-		},
-		size:     image.Point{14, 4},
-		sizeHint: image.Point{14, 4},
-	},
-	{
-		test: "Stretchy width",
-		setup: func() *Box {
-			b := NewVBox(
-				NewLabel("test"),
-				NewLabel("another test"),
-			)
-			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Minimum)
-			return b
-		},
-		size:     image.Point{100, 4},
-		sizeHint: image.Point{14, 4},
-	},
-	{
-		test: "Stretchy width and height",
-		setup: func() *Box {
-			b := NewVBox(
-				NewLabel("test"),
-				NewLabel("another test"),
-			)
-			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
-			return b
-		},
-		size:     image.Point{100, 100},
-		sizeHint: image.Point{14, 4},
-	},
-}
-
-func TestVBox_Size(t *testing.T) {
-	for _, tt := range verticalBoxSizeTests {
-		tt := tt
-		t.Run(tt.test, func(t *testing.T) {
-			t.Parallel()
-
-			b := tt.setup()
-			b.Resize(image.Point{100, 100})
-
-			if got := b.Size(); got != tt.size {
-				t.Errorf("b.Size() = %s; want = %s", got, tt.size)
-			}
-			if got := b.SizeHint(); got != tt.sizeHint {
-				t.Errorf("b.SizeHint() = %s; want = %s", got, tt.sizeHint)
-			}
-		})
-	}
-}
-
 var drawVBoxTests = []struct {
 	test  string
 	setup func() *Box
@@ -117,11 +17,12 @@ var drawVBoxTests = []struct {
 			b.SetBorder(true)
 			return b
 		},
-		want: `┌┐........
-└┘........
-..........
-..........
-..........
+		want: `
+┌────────┐
+│........│
+│........│
+│........│
+└────────┘
 `,
 	},
 	{
@@ -133,64 +34,29 @@ var drawVBoxTests = []struct {
 			b.SetBorder(true)
 			return b
 		},
-		want: `┌────┐....
-│test│....
-└────┘....
-..........
-..........
-`,
-	},
-	{
-		test: "Box expands horizontally",
-		setup: func() *Box {
-			b := NewVBox(
-				NewLabel("test"),
-				NewLabel("foo"),
-			)
-			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Minimum)
-			return b
-		},
-		want: `┌────────┐
+		want: `
+┌────────┐
 │test....│
-│foo.....│
-└────────┘
-..........
-`,
-	},
-	{
-		test: "Box expands vertically",
-		setup: func() *Box {
-			b := NewVBox(
-				NewLabel("test"),
-				NewLabel("foo"),
-			)
-			b.SetBorder(true)
-			b.SetSizePolicy(Minimum, Expanding)
-			return b
-		},
-		want: `┌────┐....
-│test│....
-│foo.│....
-│....│....
-└────┘....
-`,
-	},
-	{
-		test: "Box expands along both axes",
-		setup: func() *Box {
-			b := NewVBox(
-				NewLabel("test"),
-				NewLabel("foo"),
-			)
-			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
-			return b
-		},
-		want: `┌────────┐
-│test....│
-│foo.....│
 │........│
+│........│
+└────────┘
+`,
+	},
+	{
+		test: "Box containing multiple widget",
+		setup: func() *Box {
+			b := NewVBox(
+				NewLabel("test"),
+				NewLabel("foo"),
+			)
+			b.SetBorder(true)
+			return b
+		},
+		want: `
+┌────────┐
+│test....│
+│........│
+│foo.....│
 └────────┘
 `,
 	},
@@ -198,131 +64,18 @@ var drawVBoxTests = []struct {
 
 func TestVBox_Draw(t *testing.T) {
 	for _, tt := range drawVBoxTests {
-		surface := newTestSurface(10, 5)
-		painter := NewPainter(surface, NewPalette())
-
-		b := tt.setup()
-
-		b.Resize(surface.size)
-		b.Draw(painter)
-
-		if surface.String() != tt.want {
-			t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
-		}
-	}
-}
-
-var horizontalBoxSizeTests = []struct {
-	test     string
-	setup    func() *Box
-	size     image.Point
-	sizeHint image.Point
-}{
-	{
-		test: "Stretch empty box",
-		setup: func() *Box {
-			b := NewHBox()
-			b.SetBorder(true)
-			return b
-		},
-		size:     image.Point{2, 2},
-		sizeHint: image.Point{2, 2},
-	},
-	{
-		test: "Stretch empty box",
-		setup: func() *Box {
-			b := NewHBox()
-			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Minimum)
-			return b
-		},
-		size:     image.Point{100, 2},
-		sizeHint: image.Point{2, 2},
-	},
-	{
-		test: "Stretch empty box",
-		setup: func() *Box {
-			b := NewHBox()
-			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
-			return b
-		},
-		size:     image.Point{100, 100},
-		sizeHint: image.Point{2, 2},
-	},
-	{
-		test: "No stretch",
-		setup: func() *Box {
-			b := NewHBox(
-				NewLabel("test"),
-				NewLabel("another test"),
-			)
-			b.SetBorder(true)
-			return b
-		},
-		size:     image.Point{18, 3},
-		sizeHint: image.Point{18, 3},
-	},
-	{
-		test: "Stretchy width",
-		setup: func() *Box {
-			b := NewHBox(
-				NewLabel("test"),
-				NewLabel("another test"),
-			)
-			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Minimum)
-			return b
-		},
-		size:     image.Point{100, 3},
-		sizeHint: image.Point{18, 3},
-	},
-	{
-		test: "Stretchy width and height",
-		setup: func() *Box {
-			b := NewHBox(
-				NewLabel("test"),
-				NewLabel("another test"),
-			)
-			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
-			return b
-		},
-		size:     image.Point{100, 100},
-		sizeHint: image.Point{18, 3},
-	},
-	{
-		test: "Nested box",
-		setup: func() *Box {
-			nested := NewHBox(NewLabel("test"))
-			nested.SetBorder(true)
-			nested.SetSizePolicy(Expanding, Minimum)
-
-			b := NewHBox(nested)
-			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
-
-			return b
-		},
-		size:     image.Point{100, 100},
-		sizeHint: image.Point{8, 5},
-	},
-}
-
-func TestHBox_Size(t *testing.T) {
-	for _, tt := range horizontalBoxSizeTests {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
-			t.Parallel()
+			surface := newTestSurface(10, 5)
+			painter := NewPainter(surface, NewPalette())
 
 			b := tt.setup()
-			b.Resize(image.Point{100, 100})
 
-			if got := b.Size(); got != tt.size {
-				t.Errorf("b.Size() = %s; want = %s", got, tt.size)
-			}
-			if got := b.SizeHint(); got != tt.sizeHint {
-				t.Errorf("b.SizeHint() = %s; want = %s", got, tt.sizeHint)
+			b.Resize(surface.size)
+			b.Draw(painter)
+
+			if surface.String() != tt.want {
+				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
 			}
 		})
 	}
@@ -341,11 +94,12 @@ var drawHBoxTests = []struct {
 			b.SetBorder(true)
 			return b
 		},
-		want: `┌┐........
-└┘........
-..........
-..........
-..........
+		want: `
+┌────────┐
+│........│
+│........│
+│........│
+└────────┘
 `,
 	},
 	{
@@ -357,62 +111,27 @@ var drawHBoxTests = []struct {
 			b.SetBorder(true)
 			return b
 		},
-		want: `┌────┐....
-│test│....
-└────┘....
-..........
-..........
-`,
-	},
-	{
-		test: "Box expands horizontally",
-		setup: func() *Box {
-			b := NewHBox(
-				NewLabel("test"),
-				NewLabel("foo"),
-			)
-			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Minimum)
-			return b
-		},
-		want: `┌────────┐
-│testfoo.│
+		want: `
+┌────────┐
+│test....│
+│........│
+│........│
 └────────┘
-..........
-..........
 `,
 	},
 	{
-		test: "Box expands vertically",
+		test: "Box containing multiple widgets",
 		setup: func() *Box {
 			b := NewHBox(
 				NewLabel("test"),
 				NewLabel("foo"),
 			)
 			b.SetBorder(true)
-			b.SetSizePolicy(Minimum, Expanding)
 			return b
 		},
-		want: `┌───────┐.
-│testfoo│.
-│.......│.
-│.......│.
-└───────┘.
-`,
-	},
-	{
-		test: "Box expands along both axes",
-		setup: func() *Box {
-			b := NewHBox(
-				NewLabel("test"),
-				NewLabel("foo"),
-			)
-			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
-			return b
-		},
-		want: `┌────────┐
-│testfoo.│
+		want: `
+┌────────┐
+│test.foo│
 │........│
 │........│
 └────────┘
@@ -426,7 +145,6 @@ var drawHBoxTests = []struct {
 				NewLabel("test"),
 			)
 			nested.SetBorder(true)
-			nested.SetSizePolicy(Expanding, Minimum)
 
 			b := NewHBox(
 				NewSpacer(),
@@ -434,37 +152,96 @@ var drawHBoxTests = []struct {
 				NewSpacer(),
 			)
 			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
 			return b
 		},
-		want: `┌──────────────────────────────┐
-│..........┌────────┐..........│
-│..........│test....│..........│
-│..........└────────┘..........│
+		want: `
+┌──────────────────────────────┐
+│............┌────┐............│
+│............│test│............│
+│............└────┘............│
 └──────────────────────────────┘
 `,
 	},
 	{
-		test: "Nested boxes expands equally",
-		size: image.Point{32, 5},
+		test: "Two columns",
+		size: image.Point{32, 10},
 		setup: func() *Box {
-			nested := NewVBox()
-			nested.SetBorder(true)
-			nested.SetSizePolicy(Expanding, Expanding)
+			first := NewVBox(
+				NewLabel("test"),
+			)
+			first.SetBorder(true)
+
+			second := NewVBox(
+				NewLabel("test"),
+			)
+			second.SetBorder(true)
 
 			b := NewHBox(
-				NewSpacer(),
-				nested,
-				NewSpacer(),
+				first,
+				second,
 			)
 			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
 			return b
 		},
-		want: `┌──────────────────────────────┐
-│..........┌────────┐..........│
-│..........│........│..........│
-│..........└────────┘..........│
+		want: `
+┌──────────────────────────────┐
+│┌─────────────┐┌─────────────┐│
+││test.........││test.........││
+││.............││.............││
+││.............││.............││
+││.............││.............││
+││.............││.............││
+││.............││.............││
+│└─────────────┘└─────────────┘│
+└──────────────────────────────┘
+`,
+	},
+	{
+		test: "Two rows with two columns",
+		size: image.Point{32, 22},
+		setup: func() *Box {
+			col0 := NewVBox(NewLabel("test"))
+			col0.SetBorder(true)
+			col1 := NewVBox(NewLabel("test"))
+			col1.SetBorder(true)
+
+			row0 := NewHBox(col0, col1)
+			row0.SetBorder(true)
+
+			col2 := NewVBox(NewLabel("test"))
+			col2.SetBorder(true)
+			col3 := NewVBox(NewLabel("test"))
+			col3.SetBorder(true)
+
+			row1 := NewHBox(col2, col3)
+			row1.SetBorder(true)
+
+			b := NewVBox(row0, row1)
+			b.SetBorder(true)
+			return b
+		},
+		want: `
+┌──────────────────────────────┐
+│┌────────────────────────────┐│
+││┌────────────┐┌────────────┐││
+│││test........││test........│││
+│││............││............│││
+│││............││............│││
+│││............││............│││
+│││............││............│││
+│││............││............│││
+││└────────────┘└────────────┘││
+│└────────────────────────────┘│
+│┌────────────────────────────┐│
+││┌────────────┐┌────────────┐││
+│││test........││test........│││
+│││............││............│││
+│││............││............│││
+│││............││............│││
+│││............││............│││
+│││............││............│││
+││└────────────┘└────────────┘││
+│└────────────────────────────┘│
 └──────────────────────────────┘
 `,
 	},
@@ -472,21 +249,52 @@ var drawHBoxTests = []struct {
 
 func TestHBox_Draw(t *testing.T) {
 	for _, tt := range drawHBoxTests {
-		var surface *testSurface
-		if tt.size.X == 0 && tt.size.Y == 0 {
-			surface = newTestSurface(10, 5)
-		} else {
-			surface = newTestSurface(tt.size.X, tt.size.Y)
-		}
-		painter := NewPainter(surface, NewPalette())
+		tt := tt
+		t.Run(tt.test, func(t *testing.T) {
+			var surface *testSurface
+			if tt.size.X == 0 && tt.size.Y == 0 {
+				surface = newTestSurface(10, 5)
+			} else {
+				surface = newTestSurface(tt.size.X, tt.size.Y)
+			}
+			painter := NewPainter(surface, NewPalette())
 
-		b := tt.setup()
+			b := tt.setup()
 
-		b.Resize(surface.size)
-		b.Draw(painter)
+			b.Resize(surface.size)
+			b.Draw(painter)
 
-		if surface.String() != tt.want {
-			t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
-		}
+			if surface.String() != tt.want {
+				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			}
+		})
 	}
 }
+
+type dummyWidget struct {
+	minSizeHint image.Point
+	sizeHint    image.Point
+	size        image.Point
+	sizePolicyX SizePolicy
+	sizePolicyY SizePolicy
+}
+
+func (w *dummyWidget) MinSizeHint() image.Point {
+	return w.minSizeHint
+}
+func (w *dummyWidget) Size() image.Point {
+	return w.size
+}
+func (w *dummyWidget) SizeHint() image.Point {
+	return w.sizeHint
+}
+func (w *dummyWidget) SizePolicy() (SizePolicy, SizePolicy) {
+	return w.sizePolicyX, w.sizePolicyY
+}
+func (w *dummyWidget) Resize(size image.Point) {
+	w.size = size
+}
+
+// Not used
+func (w *dummyWidget) Draw(p *Painter)  {}
+func (w *dummyWidget) OnEvent(ev Event) {}

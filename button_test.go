@@ -3,49 +3,53 @@ package tui
 import (
 	"image"
 	"testing"
-
-	"github.com/kr/pretty"
 )
 
 var buttonSizeTests = []struct {
-	setup    func() *Button
-	size     image.Point
-	sizeHint image.Point
+	setup       func() *Button
+	minSizeHint image.Point
+	sizeHint    image.Point
+	size        image.Point
 }{
 	{
 		setup: func() *Button {
 			return NewButton("")
 		},
-		size:     image.Point{0, 1},
-		sizeHint: image.Point{0, 1},
+		minSizeHint: image.Point{1, 1},
+		sizeHint:    image.Point{1, 1},
+		size:        image.Point{100, 100},
 	},
 	{
 		setup: func() *Button {
 			return NewButton("test")
 		},
-		size:     image.Point{4, 1},
-		sizeHint: image.Point{4, 1},
+		minSizeHint: image.Point{1, 1},
+		sizeHint:    image.Point{4, 1},
+		size:        image.Point{100, 100},
 	},
 	{
 		setup: func() *Button {
 			return NewButton("あäa")
 		},
-		size:     image.Point{4, 1},
-		sizeHint: image.Point{4, 1},
+		minSizeHint: image.Point{1, 1},
+		sizeHint:    image.Point{4, 1},
+		size:        image.Point{100, 100},
 	},
 }
 
 func TestButton_Size(t *testing.T) {
 	for _, tt := range buttonSizeTests {
-		b := tt.setup()
-		b.Resize(image.Point{100, 00})
+		t.Run("", func(t *testing.T) {
+			b := tt.setup()
+			b.Resize(image.Point{100, 100})
 
-		if got := b.Size(); got != tt.size {
-			t.Errorf("b.Size() = %s; want = %s", got, tt.size)
-		}
-		if got := b.SizeHint(); got != tt.sizeHint {
-			t.Errorf("b.SizeHint() = %s; want = %s", got, tt.sizeHint)
-		}
+			if got := b.Size(); got != tt.size {
+				t.Errorf("b.Size() = %s; want = %s", got, tt.size)
+			}
+			if got := b.SizeHint(); got != tt.sizeHint {
+				t.Errorf("b.SizeHint() = %s; want = %s", got, tt.sizeHint)
+			}
+		})
 	}
 }
 
@@ -88,7 +92,8 @@ func TestButton_Draw(t *testing.T) {
 	btn.Resize(surface.size)
 	btn.Draw(painter)
 
-	want := `test......
+	want := `
+test      
 ..........
 ..........
 ..........
@@ -96,6 +101,6 @@ func TestButton_Draw(t *testing.T) {
 `
 
 	if surface.String() != want {
-		t.Error(pretty.Diff(surface.String(), want))
+		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
 	}
 }

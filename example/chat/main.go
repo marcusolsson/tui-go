@@ -34,19 +34,20 @@ func main() {
 		tui.NewLabel(""),
 		tui.NewLabel("DIRECT MESSAGES"),
 		messages,
+		tui.NewSpacer(),
 	)
 	sidebar.SetBorder(true)
-	sidebar.SetSizePolicy(tui.Minimum, tui.Expanding)
 
 	history := tui.NewVBox()
 	history.SetBorder(true)
-	history.SetSizePolicy(tui.Expanding, tui.Expanding)
+	history.Append(tui.NewSpacer())
 
 	for _, m := range posts {
 		b := tui.NewHBox(
 			tui.NewLabel(m.time),
 			tui.NewPadder(1, 0, tui.NewLabel(fmt.Sprintf("<%s>", m.username))),
 			tui.NewLabel(m.message),
+			tui.NewSpacer(),
 		)
 
 		history.Append(b)
@@ -68,6 +69,7 @@ func main() {
 			tui.NewLabel(time.Now().Format("15:04")),
 			tui.NewPadder(1, 0, tui.NewLabel(fmt.Sprintf("<%s>", "john"))),
 			tui.NewLabel(e.Text()),
+			tui.NewSpacer(),
 		)
 
 		history.Append(b)

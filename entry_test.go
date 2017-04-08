@@ -6,29 +6,36 @@ import (
 )
 
 var entrySizeTests = []struct {
-	setup    func() *Entry
-	size     image.Point
-	sizeHint image.Point
+	test        string
+	setup       func() *Entry
+	minSizeHint image.Point
+	sizeHint    image.Point
+	size        image.Point
 }{
 	{
+		test: "Entry default size",
 		setup: func() *Entry {
 			return NewEntry()
 		},
-		size:     image.Point{10, 1},
-		sizeHint: image.Point{10, 1},
+		minSizeHint: image.Point{1, 1},
+		sizeHint:    image.Point{10, 1},
+		size:        image.Point{100, 100},
 	},
 }
 
 func TestEntry_Size(t *testing.T) {
 	for _, tt := range entrySizeTests {
 		e := tt.setup()
-		e.Resize(image.Point{100, 00})
+		e.Resize(image.Point{100, 100})
 
 		if got := e.Size(); got != tt.size {
 			t.Errorf("e.Size() = %s; want = %s", got, tt.size)
 		}
 		if got := e.SizeHint(); got != tt.sizeHint {
 			t.Errorf("e.SizeHint() = %s; want = %s", got, tt.sizeHint)
+		}
+		if got := e.MinSizeHint(); got != tt.minSizeHint {
+			t.Errorf("e.MinSizeHint() = %s; want = %s", got, tt.minSizeHint)
 		}
 	}
 }
@@ -40,12 +47,13 @@ var drawEntryTests = []struct {
 	want  string
 }{
 	{
-		test: "Simple",
+		test: "Empty entry",
 		size: image.Point{15, 5},
 		setup: func() *Entry {
 			return NewEntry()
 		},
-		want: `          .....
+		want: `
+               
 ...............
 ...............
 ...............
@@ -60,7 +68,8 @@ var drawEntryTests = []struct {
 			e.SetText("test")
 			return e
 		},
-		want: `test      .....
+		want: `
+test           
 ...............
 ...............
 ...............
@@ -75,7 +84,8 @@ var drawEntryTests = []struct {
 			e.SetText("Lorem ipsum dolor sit amet")
 			return e
 		},
-		want: `r sit amet.....
+		want: `
+ dolor sit amet
 ...............
 ...............
 ...............
@@ -91,7 +101,8 @@ var drawEntryTests = []struct {
 			e.SetFocused(true)
 			return e
 		},
-		want: ` sit amet .....
+		want: `
+dolor sit amet 
 ...............
 ...............
 ...............
@@ -102,22 +113,25 @@ var drawEntryTests = []struct {
 
 func TestEntry_Draw(t *testing.T) {
 	for _, tt := range drawEntryTests {
-		var surface *testSurface
-		if tt.size.X == 0 && tt.size.Y == 0 {
-			surface = newTestSurface(10, 5)
-		} else {
-			surface = newTestSurface(tt.size.X, tt.size.Y)
-		}
-		painter := NewPainter(surface, NewPalette())
+		tt := tt
+		t.Run(tt.test, func(t *testing.T) {
+			var surface *testSurface
+			if tt.size.X == 0 && tt.size.Y == 0 {
+				surface = newTestSurface(10, 5)
+			} else {
+				surface = newTestSurface(tt.size.X, tt.size.Y)
+			}
+			painter := NewPainter(surface, NewPalette())
 
-		b := tt.setup()
+			b := tt.setup()
 
-		b.Resize(surface.size)
-		b.Draw(painter)
+			b.Resize(surface.size)
+			b.Draw(painter)
 
-		if surface.String() != tt.want {
-			t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
-		}
+			if surface.String() != tt.want {
+				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			}
+		})
 	}
 }
 
@@ -184,4 +198,177 @@ func TestEntry_OnSubmit(t *testing.T) {
 			t.Errorf("button should be submitted")
 		}
 	})
+}
+
+var layoutEntryTests = []struct {
+	test  string
+	setup func() *Box
+	want  string
+}{
+	{
+		test: "Preferred",
+		setup: func() *Box {
+			e := NewEntry()
+			e.SetSizePolicy(Preferred, Preferred)
+
+			b := NewHBox(e)
+			b.SetBorder(true)
+			b.SetSizePolicy(Expanding, Expanding)
+
+			return b
+		},
+		want: `
+┌──────────────────┐
+│                  │
+│..................│
+│..................│
+└──────────────────┘
+`,
+	},
+	{
+		test: "Preferred/Preferred",
+		setup: func() *Box {
+			e1 := NewEntry()
+			e1.SetSizePolicy(Preferred, Preferred)
+			e1.SetText("0123456789foo")
+
+			e2 := NewEntry()
+			e2.SetSizePolicy(Preferred, Preferred)
+			e2.SetText("0123456789bar")
+
+			b := NewHBox(e1, e2)
+			b.SetBorder(true)
+			b.SetSizePolicy(Expanding, Expanding)
+
+			return b
+		},
+		want: `
+┌──────────────────┐
+│456789foo456789bar│
+│..................│
+│..................│
+└──────────────────┘
+`,
+	},
+	{
+		test: "Preferred/Minimum",
+		setup: func() *Box {
+			e1 := NewEntry()
+			e1.SetSizePolicy(Preferred, Preferred)
+			e1.SetText("0123456789foo")
+
+			e2 := NewEntry()
+			e2.SetSizePolicy(Minimum, Preferred)
+			e2.SetText("0123456789bar")
+
+			b := NewHBox(e1, e2)
+			b.SetBorder(true)
+			b.SetSizePolicy(Expanding, Expanding)
+
+			return b
+		},
+		want: `
+┌──────────────────┐
+│0123456789foo89bar│
+│..................│
+│..................│
+└──────────────────┘
+`,
+	},
+	{
+		test: "Minimum/Preferred",
+		setup: func() *Box {
+			e1 := NewEntry()
+			e1.SetSizePolicy(Minimum, Preferred)
+			e1.SetText("0123456789foo")
+
+			e2 := NewEntry()
+			e2.SetSizePolicy(Preferred, Preferred)
+			e2.SetText("0123456789bar")
+
+			b := NewHBox(e1, e2)
+			b.SetBorder(true)
+			b.SetSizePolicy(Expanding, Expanding)
+
+			return b
+		},
+		want: `
+┌──────────────────┐
+│89foo0123456789bar│
+│..................│
+│..................│
+└──────────────────┘
+`,
+	},
+	{
+		test: "Preferred/Expanding",
+		setup: func() *Box {
+			e1 := NewEntry()
+			e1.SetSizePolicy(Preferred, Preferred)
+			e1.SetText("foo")
+
+			e2 := NewEntry()
+			e2.SetSizePolicy(Expanding, Preferred)
+			e2.SetText("bar")
+
+			b := NewHBox(e1, e2)
+			b.SetBorder(true)
+			b.SetSizePolicy(Expanding, Expanding)
+
+			return b
+		},
+		want: `
+┌──────────────────┐
+│foobar            │
+│..................│
+│..................│
+└──────────────────┘
+`,
+	},
+	{
+		test: "Expanding/Preferred",
+		setup: func() *Box {
+			e1 := NewEntry()
+			e1.SetSizePolicy(Expanding, Preferred)
+			e1.SetText("foo")
+
+			e2 := NewEntry()
+			e2.SetSizePolicy(Preferred, Preferred)
+			e2.SetText("bar")
+
+			b := NewHBox(e1, e2)
+			b.SetBorder(true)
+			b.SetSizePolicy(Expanding, Expanding)
+
+			return b
+		},
+		want: `
+┌──────────────────┐
+│foo            bar│
+│..................│
+│..................│
+└──────────────────┘
+`,
+	},
+}
+
+func TestEntry_Layout(t *testing.T) {
+	t.Skip("enable when layout engine is working correctly")
+
+	for _, tt := range layoutEntryTests {
+		tt := tt
+		t.Run(tt.test, func(t *testing.T) {
+			surface := newTestSurface(20, 5)
+			painter := NewPainter(surface, NewPalette())
+
+			b := tt.setup()
+
+			b.Resize(surface.size)
+			b.Draw(painter)
+
+			if surface.String() != tt.want {
+				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			}
+		})
+	}
 }

@@ -42,14 +42,14 @@ func (b *StatusBar) Size() image.Point {
 	return b.size
 }
 
-// MinSize returns the minimum size the widget is allowed to be.
-func (b *StatusBar) MinSize() image.Point {
-	return b.SizeHint()
+// MinSizeHint returns the minimum size the widget is allowed to be.
+func (b *StatusBar) MinSizeHint() image.Point {
+	return image.Point{1, 1}
 }
 
 // SizeHint returns the recommended size for the status bar.
 func (b *StatusBar) SizeHint() image.Point {
-	return image.Point{0, 1}
+	return image.Point{10, 1}
 }
 
 // SizePolicy returns the default layout behavior.

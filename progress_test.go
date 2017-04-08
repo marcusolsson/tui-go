@@ -17,7 +17,8 @@ func TestProgress_Draw(t *testing.T) {
 	p.Resize(surface.size)
 	p.Draw(painter)
 
-	want := `[===>-----]
+	want := `
+[===>-----]
 ...........
 `
 

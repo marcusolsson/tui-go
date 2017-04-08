@@ -7,31 +7,29 @@ import (
 	wordwrap "github.com/mitchellh/go-wordwrap"
 )
 
-var _ Widget = &Entry{}
+var _ Widget = &TextEdit{}
 
-// Entry is a one-line text editor. It lets the user supply your application
-// with text, e.g. to input user and password information.
-type Entry struct {
+// TextEdit is a multi-line text editor.
+type TextEdit struct {
 	text string
 
 	size image.Point
 
 	focused bool
 
-	onTextChange func(*Entry)
-	onSubmit     func(*Entry)
+	onTextChange func(*TextEdit)
 
 	sizePolicyX SizePolicy
 	sizePolicyY SizePolicy
 }
 
-// NewEntry returns a new Entry.
-func NewEntry() *Entry {
-	return &Entry{}
+// TextEdit returns a new TextEdit.
+func NewTextEdit() *TextEdit {
+	return &TextEdit{}
 }
 
 // Draw draws the entry.
-func (e *Entry) Draw(p *Painter) {
+func (e *TextEdit) Draw(p *Painter) {
 	s := e.Size()
 
 	style := "entry"
@@ -40,54 +38,52 @@ func (e *Entry) Draw(p *Painter) {
 	}
 
 	p.WithStyledBrush(style, func(p *Painter) {
-		tw := stringWidth(e.text)
-
-		offx := tw - s.X
-		if e.focused {
-			offx++
+		lines := strings.Split(wordwrap.WrapString(e.text, uint(s.X)), "\n")
+		for i, line := range lines {
+			p.FillRect(0, i, s.X, 1)
+			p.DrawText(0, i, line)
 		}
-
-		text := e.text
-		if tw >= s.X {
-			text = text[offx:]
-		}
-
-		p.FillRect(0, 0, s.X, 1)
-		p.DrawText(0, 0, text)
 
 		if e.focused {
-			p.DrawCursor(stringWidth(text), 0)
+			p.DrawCursor(stringWidth(lines[len(lines)-1]), len(lines)-1)
 		}
+
+		return
 	})
 }
 
 // Size returns the size of the entry.
-func (e *Entry) Size() image.Point {
+func (e *TextEdit) Size() image.Point {
 	return e.size
 }
 
 // MinSizeHint returns the minimum size the widget is allowed to be.
-func (e *Entry) MinSizeHint() image.Point {
+func (e *TextEdit) MinSizeHint() image.Point {
 	return image.Point{1, 1}
 }
 
 // SizeHint returns the recommended size for the entry.
-func (e *Entry) SizeHint() image.Point {
-	return image.Point{10, 1}
+func (e *TextEdit) SizeHint() image.Point {
+	p := image.Point{10, 1}
+	if e.size.X > p.X {
+		p.X = e.size.X
+	}
+
+	return image.Point{p.X, e.heightForWidth(p.X)}
 }
 
 // SizePolicy returns the default layout behavior.
-func (e *Entry) SizePolicy() (SizePolicy, SizePolicy) {
+func (e *TextEdit) SizePolicy() (SizePolicy, SizePolicy) {
 	return e.sizePolicyX, e.sizePolicyY
 }
 
 // Resize updates the size of the entry.
-func (e *Entry) Resize(size image.Point) {
+func (e *TextEdit) Resize(size image.Point) {
 	e.size = size
 }
 
 // OnEvent handles terminal events.
-func (e *Entry) OnEvent(ev Event) {
+func (e *TextEdit) OnEvent(ev Event) {
 	if !e.focused {
 		return
 	}
@@ -99,9 +95,7 @@ func (e *Entry) OnEvent(ev Event) {
 	if ev.Key != 0 {
 		switch ev.Key {
 		case KeyEnter:
-			if e.onSubmit != nil {
-				e.onSubmit(e)
-			}
+			e.text = e.text + "\n"
 			return
 		case KeySpace:
 			e.text = e.text + string(' ')
@@ -126,39 +120,33 @@ func (e *Entry) OnEvent(ev Event) {
 	}
 }
 
-// OnChanged sets a function to be run whenever the content of the entry has
-// been changed.
-func (e *Entry) OnChanged(fn func(entry *Entry)) {
+// OnTextChanged sets a function to be run whenever the text content of the
+// widget has been changed.
+func (e *TextEdit) OnTextChanged(fn func(entry *TextEdit)) {
 	e.onTextChange = fn
 }
 
-// OnSubmit sets a function to be run whenever the user submits the entry (by
-// pressing KeyEnter).
-func (e *Entry) OnSubmit(fn func(entry *Entry)) {
-	e.onSubmit = fn
-}
-
 // SetText sets the text content of the entry.
-func (e *Entry) SetText(text string) {
+func (e *TextEdit) SetText(text string) {
 	e.text = text
 }
 
 // Text returns the text content of the entry.
-func (e *Entry) Text() string {
+func (e *TextEdit) Text() string {
 	return e.text
 }
 
 // SetSizePolicy sets the size policy for each axis.
-func (e *Entry) SetSizePolicy(horizontal, vertical SizePolicy) {
+func (e *TextEdit) SetSizePolicy(horizontal, vertical SizePolicy) {
 	e.sizePolicyX = horizontal
 	e.sizePolicyY = vertical
 }
 
 // SetFocused focuses this entry.
-func (e *Entry) SetFocused(f bool) {
+func (e *TextEdit) SetFocused(f bool) {
 	e.focused = f
 }
 
-func (e *Entry) heightForWidth(w int) int {
+func (e *TextEdit) heightForWidth(w int) int {
 	return len(strings.Split(wordwrap.WrapString(e.text, uint(w)), "\n"))
 }

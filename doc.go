@@ -24,23 +24,11 @@ position your widgets without having to specify their exact coordinates.
 Here, the VBox will ensure that the Button will be placed underneath the Label.
 There are currently three layouts to choose from; VBox, HBox and Grid.
 
-Sizing
+Size policies
 
-The Size method returns the space each widget occupies and is recalculated on
-calling Resize. SizeHint is the minimum, or even preferred, size of the widget.
+Sizing of widgets is controlled by its SizePolicy. For now, you can read more
+about how size policies work in the Qt docs:
 
-Typically, you will not have to call Resize, Size or SizeHint yourself.
-Instead, SizePolicy is used to determine how a widget expands when there are
-more space than it needs. Currently there are two size policies available:
-Minimum and Expanding.
-
-Minimum tells the widget not to use more space than the SizeHint, while Maximum
-lets the widget expand to fill the available space.
-
-	box := tui.NewVBox()
-	box.SetSizePolicy(tui.Minimum, tui.Expanding)
-
-Here, the layout will shrink to its minimal size along the horizontal axis but
-expand along the vertical axis. An example of this would be a sidebar.
+http://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum
 */
 package tui

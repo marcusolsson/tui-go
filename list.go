@@ -71,8 +71,8 @@ func (l *List) Size() image.Point {
 	return l.size
 }
 
-// MinSize returns the minimum size the widget is allowed to be.
-func (l *List) MinSize() image.Point {
+// MinSizeHint returns the minimum size the widget is allowed to be.
+func (l *List) MinSizeHint() image.Point {
 	return l.SizeHint()
 }
 
@@ -98,6 +98,8 @@ func (l *List) Resize(size image.Point) {
 	hpol, vpol := l.SizePolicy()
 
 	switch hpol {
+	case Preferred:
+		fallthrough
 	case Minimum:
 		l.size.X = l.SizeHint().X
 	case Expanding:
@@ -105,6 +107,8 @@ func (l *List) Resize(size image.Point) {
 	}
 
 	switch vpol {
+	case Preferred:
+		fallthrough
 	case Minimum:
 		l.size.Y = l.SizeHint().Y
 	case Expanding:
