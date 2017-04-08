@@ -3,8 +3,6 @@ package tui
 import (
 	"image"
 	"testing"
-
-	"github.com/kr/pretty"
 )
 
 var entrySizeTests = []struct {
@@ -35,23 +33,91 @@ func TestEntry_Size(t *testing.T) {
 	}
 }
 
+var drawEntryTests = []struct {
+	test  string
+	size  image.Point
+	setup func() *Entry
+	want  string
+}{
+	{
+		test: "Simple",
+		size: image.Point{15, 5},
+		setup: func() *Entry {
+			return NewEntry()
+		},
+		want: `          .....
+...............
+...............
+...............
+...............
+`,
+	},
+	{
+		test: "Entry with text",
+		size: image.Point{15, 5},
+		setup: func() *Entry {
+			e := NewEntry()
+			e.SetText("test")
+			return e
+		},
+		want: `test      .....
+...............
+...............
+...............
+...............
+`,
+	},
+	{
+		test: "Scrolling entry",
+		size: image.Point{15, 5},
+		setup: func() *Entry {
+			e := NewEntry()
+			e.SetText("Lorem ipsum dolor sit amet")
+			return e
+		},
+		want: `r sit amet.....
+...............
+...............
+...............
+...............
+`,
+	},
+	{
+		test: "Scrolling entry when focused",
+		size: image.Point{15, 5},
+		setup: func() *Entry {
+			e := NewEntry()
+			e.SetText("Lorem ipsum dolor sit amet")
+			e.SetFocused(true)
+			return e
+		},
+		want: ` sit amet .....
+...............
+...............
+...............
+...............
+`,
+	},
+}
+
 func TestEntry_Draw(t *testing.T) {
-	surface := newTestSurface(15, 5)
-	painter := NewPainter(surface, NewPalette())
+	for _, tt := range drawEntryTests {
+		var surface *testSurface
+		if tt.size.X == 0 && tt.size.Y == 0 {
+			surface = newTestSurface(10, 5)
+		} else {
+			surface = newTestSurface(tt.size.X, tt.size.Y)
+		}
+		painter := NewPainter(surface, NewPalette())
 
-	e := NewEntry()
-	e.Resize(surface.size)
-	e.Draw(painter)
+		b := tt.setup()
 
-	want := `         ......
-...............
-...............
-...............
-...............
-`
+		b.Resize(surface.size)
+		b.Draw(painter)
 
-	if surface.String() != want {
-		t.Error(pretty.Diff(surface.String(), want))
+		if surface.String() != tt.want {
+			t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+		}
 	}
 }
 

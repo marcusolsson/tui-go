@@ -35,22 +35,23 @@ func (e *Entry) Draw(p *Painter) {
 	}
 
 	p.WithStyledBrush(style, func(p *Painter) {
-		text := e.text
-		exceedsWidth := stringWidth(text) >= s.X
+		tw := stringWidth(e.text)
 
-		if exceedsWidth {
-			text = text[:s.X]
+		offx := tw - s.X
+		if e.focused {
+			offx++
 		}
 
-		p.FillRect(0, 0, s.X-1, 1)
+		text := e.text
+		if tw >= s.X {
+			text = text[offx:]
+		}
+
+		p.FillRect(0, 0, s.X, 1)
 		p.DrawText(0, 0, text)
 
 		if e.focused {
-			if stringWidth(text) >= s.X {
-				p.DrawCursor(s.X-1, 0)
-			} else {
-				p.DrawCursor(stringWidth(e.text), 0)
-			}
+			p.DrawCursor(stringWidth(text), 0)
 		}
 	})
 }

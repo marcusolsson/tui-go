@@ -82,6 +82,12 @@ func main() {
 	ui.SetKeybinding(tui.KeyEsc, func() {
 		ui.Quit()
 	})
+	ui.SetKeybinding(tui.KeyArrowUp, func() {
+		input.SetFocused(true)
+	})
+	ui.SetKeybinding(tui.KeyArrowDown, func() {
+		input.SetFocused(false)
+	})
 	if err := ui.Run(); err != nil {
 		panic(err)
 	}
