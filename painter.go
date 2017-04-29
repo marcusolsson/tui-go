@@ -55,6 +55,8 @@ type Painter struct {
 
 	// Transform stack
 	transforms []image.Point
+
+	mask image.Rectangle
 }
 
 // NewPainter returns a new instance of Painter.
@@ -107,6 +109,13 @@ func (p *Painter) DrawText(x, y int, text string) {
 
 // DrawRune paints a rune at the given coordinate.
 func (p *Painter) DrawRune(x, y int, r rune) {
+	// If a mask is set, only draw if the mask contains the coordinate.
+	if p.mask != image.ZR {
+		if (x < p.mask.Min.X) || (x > p.mask.Max.X) ||
+			(y < p.mask.Min.Y) || (y > p.mask.Max.Y) {
+			return
+		}
+	}
 	wp := p.mapLocalToWorld(image.Point{x, y})
 	p.surface.SetCell(wp.X, wp.Y, r, p.fg, p.bg)
 }
@@ -175,6 +184,11 @@ func (p *Painter) WithStyledBrush(n string, fn func(*Painter)) {
 	p.SetBrush(p.palette.Item(n).Fg, p.palette.Item(n).Bg)
 	fn(p)
 	p.RestoreBrush()
+}
+
+func (p *Painter) WithMask(r image.Rectangle) *Painter {
+	p.mask = r
+	return p
 }
 
 func (p *Painter) mapLocalToWorld(point image.Point) image.Point {

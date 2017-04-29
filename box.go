@@ -84,11 +84,14 @@ func (b *Box) Draw(p *Painter) {
 			p.Translate(0, off.Y)
 		}
 
-		child.Draw(p)
+		child.Draw(p.WithMask(image.Rectangle{
+			Min: image.ZP,
+			Max: child.Size().Sub(image.Point{1, 1}),
+		}))
+
 		p.Restore()
 
-		sz := child.Size()
-		off = off.Add(sz)
+		off = off.Add(child.Size())
 	}
 }
 

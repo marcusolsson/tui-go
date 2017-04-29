@@ -38,9 +38,6 @@ func (l *Label) Draw(p *Painter) {
 	}
 
 	for i, line := range lines {
-		if stringWidth(line) > l.Size().X {
-			line = line[:l.Size().X]
-		}
 		p.DrawText(0, i, line)
 	}
 }
