@@ -11,21 +11,16 @@ var _ Widget = &Label{}
 
 // Label is a widget to display read-only text.
 type Label struct {
-	text string
+	WidgetBase
 
+	text     string
 	wordWrap bool
-
-	size image.Point
-
-	sizePolicyX SizePolicy
-	sizePolicyY SizePolicy
 }
 
 // NewLabel returns a new Label.
 func NewLabel(text string) *Label {
 	return &Label{
 		text: text,
-		size: image.Point{-1, -1},
 	}
 }
 
@@ -40,11 +35,6 @@ func (l *Label) Draw(p *Painter) {
 	for i, line := range lines {
 		p.DrawText(0, i, line)
 	}
-}
-
-// Size returns the size of the label.
-func (l *Label) Size() image.Point {
-	return l.size
 }
 
 // MinSizeHint returns the minimum size the widget is allowed to be.
@@ -64,22 +54,8 @@ func (l *Label) SizeHint() image.Point {
 	return image.Point{max, l.heightForWidth(max)}
 }
 
-// SizePolicy returns the default layout behavior.
-func (l *Label) SizePolicy() (SizePolicy, SizePolicy) {
-	return l.sizePolicyX, l.sizePolicyY
-}
-
 func (l *Label) heightForWidth(w int) int {
 	return len(strings.Split(wordwrap.WrapString(l.text, uint(w)), "\n"))
-}
-
-// Resize updates the size of the label.
-func (l *Label) Resize(size image.Point) {
-	l.size = size
-}
-
-// OnEvent handles an event.
-func (l *Label) OnEvent(_ Event) {
 }
 
 // SetText sets the text content of the label.
@@ -90,10 +66,4 @@ func (l *Label) SetText(text string) {
 // SetWordWrap sets whether text content should be wrapped.
 func (l *Label) SetWordWrap(enabled bool) {
 	l.wordWrap = enabled
-}
-
-// SetSizePolicy sets the size policy for each axis.
-func (l *Label) SetSizePolicy(horizontal, vertical SizePolicy) {
-	l.sizePolicyX = horizontal
-	l.sizePolicyY = vertical
 }

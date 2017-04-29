@@ -6,74 +6,36 @@ var _ Widget = &List{}
 
 // List is a widget for displaying and selecting items.
 type List struct {
-	size image.Point
-
-	focused bool
+	WidgetBase
 
 	items    []string
 	selected int
-	numRows  int
 	pos      int
 
 	onItemActivated    func(*List)
 	onSelectionChanged func(*List)
-
-	sizePolicyX SizePolicy
-	sizePolicyY SizePolicy
 }
 
-// NewList returns a new List with no selection and a default number of rows.
+// NewList returns a new List with no selection.
 func NewList() *List {
 	return &List{
 		selected: -1,
-		numRows:  5,
 	}
 }
 
 // Draw draws the list.
 func (l *List) Draw(p *Painter) {
-	if len(l.items) == 0 {
-		return
-	}
-
-	sz := l.Size()
-
-	start := clip(l.pos, 0, len(l.items)-1)
-	end := clip(l.pos+l.numRows, start, len(l.items))
-
-	for i, item := range l.items[start:end] {
-		tsel := l.selected - l.pos
-
+	for i, item := range l.items {
 		style := "list.item"
-		if i == tsel {
+		if i == l.selected-l.pos {
 			style += ".selected"
 		}
 
 		p.WithStyledBrush(style, func(p *Painter) {
-			p.FillRect(0, tsel, sz.X-2, 1)
+			p.FillRect(0, i, l.Size().X, 1)
 			p.DrawText(0, i, item)
 		})
 	}
-}
-
-func clip(n, min, max int) int {
-	if n < min {
-		return min
-	}
-	if n > max {
-		return max
-	}
-	return n
-}
-
-// Size returns the size of the list.
-func (l *List) Size() image.Point {
-	return l.size
-}
-
-// MinSizeHint returns the minimum size the widget is allowed to be.
-func (l *List) MinSizeHint() image.Point {
-	return l.SizeHint()
 }
 
 // SizeHint returns the recommended size for the list.
@@ -84,36 +46,7 @@ func (l *List) SizeHint() image.Point {
 			width = w
 		}
 	}
-	height := l.numRows
-	return image.Point{width, height}
-}
-
-// SizePolicy returns the default layout behavior.
-func (l *List) SizePolicy() (SizePolicy, SizePolicy) {
-	return l.sizePolicyX, l.sizePolicyY
-}
-
-// Resize updates the size of the list.
-func (l *List) Resize(size image.Point) {
-	hpol, vpol := l.SizePolicy()
-
-	switch hpol {
-	case Preferred:
-		fallthrough
-	case Minimum:
-		l.size.X = l.SizeHint().X
-	case Expanding:
-		l.size.X = size.X
-	}
-
-	switch vpol {
-	case Preferred:
-		fallthrough
-	case Minimum:
-		l.size.Y = l.SizeHint().Y
-	case Expanding:
-		l.size.Y = size.Y
-	}
+	return image.Point{width, len(l.items)}
 }
 
 func (l *List) OnEvent(ev Event) {
@@ -160,18 +93,13 @@ func (l *List) moveUp() {
 func (l *List) moveDown() {
 	if l.selected < len(l.items)-1 {
 		l.selected++
-		if l.selected >= l.pos+l.numRows {
+		if l.selected >= l.pos+len(l.items) {
 			l.pos++
 		}
 	}
 	if l.onSelectionChanged != nil {
 		l.onSelectionChanged(l)
 	}
-}
-
-func (l *List) SetSizePolicy(h, v SizePolicy) {
-	l.sizePolicyX = h
-	l.sizePolicyY = v
 }
 
 func (l *List) AddItems(items ...string) {
@@ -184,14 +112,6 @@ func (l *List) SetSelected(i int) {
 
 func (l *List) Selected() int {
 	return l.selected
-}
-
-func (l *List) SetRows(n int) {
-	l.numRows = n
-}
-
-func (l *List) SetFocused(f bool) {
-	l.focused = f
 }
 
 func (l *List) SelectedItem() string {

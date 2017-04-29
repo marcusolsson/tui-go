@@ -12,17 +12,12 @@ var _ Widget = &Entry{}
 // Entry is a one-line text editor. It lets the user supply your application
 // with text, e.g. to input user and password information.
 type Entry struct {
+	WidgetBase
+
 	text string
-
-	size image.Point
-
-	focused bool
 
 	onTextChange func(*Entry)
 	onSubmit     func(*Entry)
-
-	sizePolicyX SizePolicy
-	sizePolicyY SizePolicy
 }
 
 // NewEntry returns a new Entry.
@@ -35,7 +30,7 @@ func (e *Entry) Draw(p *Painter) {
 	s := e.Size()
 
 	style := "entry"
-	if e.focused {
+	if e.IsFocused() {
 		style += ".focused"
 	}
 
@@ -43,7 +38,7 @@ func (e *Entry) Draw(p *Painter) {
 		tw := stringWidth(e.text)
 
 		offx := tw - s.X
-		if e.focused {
+		if e.IsFocused() {
 			offx++
 		}
 
@@ -55,20 +50,10 @@ func (e *Entry) Draw(p *Painter) {
 		p.FillRect(0, 0, s.X, 1)
 		p.DrawText(0, 0, text)
 
-		if e.focused {
+		if e.IsFocused() {
 			p.DrawCursor(stringWidth(text), 0)
 		}
 	})
-}
-
-// Size returns the size of the entry.
-func (e *Entry) Size() image.Point {
-	return e.size
-}
-
-// MinSizeHint returns the minimum size the widget is allowed to be.
-func (e *Entry) MinSizeHint() image.Point {
-	return image.Point{1, 1}
 }
 
 // SizeHint returns the recommended size for the entry.
@@ -76,19 +61,9 @@ func (e *Entry) SizeHint() image.Point {
 	return image.Point{10, 1}
 }
 
-// SizePolicy returns the default layout behavior.
-func (e *Entry) SizePolicy() (SizePolicy, SizePolicy) {
-	return e.sizePolicyX, e.sizePolicyY
-}
-
-// Resize updates the size of the entry.
-func (e *Entry) Resize(size image.Point) {
-	e.size = size
-}
-
 // OnEvent handles terminal events.
 func (e *Entry) OnEvent(ev Event) {
-	if !e.focused {
+	if !e.IsFocused() {
 		return
 	}
 
@@ -146,17 +121,6 @@ func (e *Entry) SetText(text string) {
 // Text returns the text content of the entry.
 func (e *Entry) Text() string {
 	return e.text
-}
-
-// SetSizePolicy sets the size policy for each axis.
-func (e *Entry) SetSizePolicy(horizontal, vertical SizePolicy) {
-	e.sizePolicyX = horizontal
-	e.sizePolicyY = vertical
-}
-
-// SetFocused focuses this entry.
-func (e *Entry) SetFocused(f bool) {
-	e.focused = f
 }
 
 func (e *Entry) heightForWidth(w int) int {

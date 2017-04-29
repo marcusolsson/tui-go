@@ -5,15 +5,15 @@ import (
 )
 
 func main() {
-	t := tui.NewTable(0, 0)
-	t.AppendRow(tui.NewLabel("First row"))
-	t.AppendRow(tui.NewLabel("Second row"))
+	l := tui.NewList()
+	l.SetFocused(true)
+	l.AddItems("First row", "Second row", "Third row", "Fourth row", "Fifth row", "Sixth row")
 
-	root := tui.NewVBox(t, tui.NewSpacer())
+	root := tui.NewVBox(l)
 
 	// This is still a rough prototype and WILL change. Use at your own risk.
 	p := tui.NewPalette()
-	p.SetItem("table.cell.selected", tui.PaletteItem{
+	p.SetItem("list.item.selected", tui.PaletteItem{
 		Bg: tui.ColorRed,
 		Fg: tui.ColorWhite,
 	})

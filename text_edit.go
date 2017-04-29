@@ -11,16 +11,11 @@ var _ Widget = &TextEdit{}
 
 // TextEdit is a multi-line text editor.
 type TextEdit struct {
+	WidgetBase
+
 	text string
 
-	size image.Point
-
-	focused bool
-
 	onTextChange func(*TextEdit)
-
-	sizePolicyX SizePolicy
-	sizePolicyY SizePolicy
 }
 
 // TextEdit returns a new TextEdit.
@@ -33,7 +28,7 @@ func (e *TextEdit) Draw(p *Painter) {
 	s := e.Size()
 
 	style := "entry"
-	if e.focused {
+	if e.IsFocused() {
 		style += ".focused"
 	}
 
@@ -44,7 +39,7 @@ func (e *TextEdit) Draw(p *Painter) {
 			p.DrawText(0, i, line)
 		}
 
-		if e.focused {
+		if e.IsFocused() {
 			p.DrawCursor(stringWidth(lines[len(lines)-1]), len(lines)-1)
 		}
 
@@ -52,39 +47,19 @@ func (e *TextEdit) Draw(p *Painter) {
 	})
 }
 
-// Size returns the size of the entry.
-func (e *TextEdit) Size() image.Point {
-	return e.size
-}
-
-// MinSizeHint returns the minimum size the widget is allowed to be.
-func (e *TextEdit) MinSizeHint() image.Point {
-	return image.Point{1, 1}
-}
-
 // SizeHint returns the recommended size for the entry.
 func (e *TextEdit) SizeHint() image.Point {
 	p := image.Point{10, 1}
-	if e.size.X > p.X {
-		p.X = e.size.X
+	if e.Size().X > p.X {
+		p.X = e.Size().X
 	}
 
 	return image.Point{p.X, e.heightForWidth(p.X)}
 }
 
-// SizePolicy returns the default layout behavior.
-func (e *TextEdit) SizePolicy() (SizePolicy, SizePolicy) {
-	return e.sizePolicyX, e.sizePolicyY
-}
-
-// Resize updates the size of the entry.
-func (e *TextEdit) Resize(size image.Point) {
-	e.size = size
-}
-
 // OnEvent handles terminal events.
 func (e *TextEdit) OnEvent(ev Event) {
-	if !e.focused {
+	if !e.IsFocused() {
 		return
 	}
 
@@ -134,17 +109,6 @@ func (e *TextEdit) SetText(text string) {
 // Text returns the text content of the entry.
 func (e *TextEdit) Text() string {
 	return e.text
-}
-
-// SetSizePolicy sets the size policy for each axis.
-func (e *TextEdit) SetSizePolicy(horizontal, vertical SizePolicy) {
-	e.sizePolicyX = horizontal
-	e.sizePolicyY = vertical
-}
-
-// SetFocused focuses this entry.
-func (e *TextEdit) SetFocused(f bool) {
-	e.focused = f
 }
 
 func (e *TextEdit) heightForWidth(w int) int {
