@@ -50,6 +50,8 @@ Following Go projects are related to tui-go but offers different approaches for 
 - [gocui](https://github.com/jroimartin/gocui) is a more minimalistic library for creating console user interfaces.
 - [termui](https://github.com/gizak/termui) focuses on building terminal dashboards.
 
+If you want a better overview of the alternatives for creating terminal applications, check out [this article](https://appliedgo.net/tui/) by [AppliedGo](https://appliedgo.net/).
+
 ## License
 
 tui-go is released under the [MIT License](LICENSE).
