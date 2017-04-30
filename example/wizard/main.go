@@ -17,7 +17,6 @@ func main() {
 	password := tui.NewEntry()
 
 	form := tui.NewGrid(0, 0)
-	form.SetSizePolicy(tui.Expanding, tui.Minimum)
 
 	form.AppendRow(tui.NewLabel("User"), tui.NewLabel("Password"))
 	form.AppendRow(user, password)
@@ -32,7 +31,6 @@ func main() {
 		tui.NewPadder(1, 0, login),
 		tui.NewPadder(1, 0, register),
 	)
-	buttons.SetSizePolicy(tui.Expanding, tui.Minimum)
 
 	window := tui.NewVBox(
 		tui.NewPadder(10, 1, tui.NewLabel(logo)),
@@ -47,22 +45,17 @@ func main() {
 		window,
 		tui.NewSpacer(),
 	)
-	wrapper.SetSizePolicy(tui.Minimum, tui.Expanding)
+	content := tui.NewHBox(tui.NewSpacer(), wrapper, tui.NewSpacer())
 
 	status := tui.NewStatusBar("Ready.")
 	login.OnActivated(func(b *tui.Button) {
 		status.SetText("Logged in.")
 	})
 
-	content := tui.NewHBox(
-		tui.NewSpacer(),
-		wrapper,
-		tui.NewSpacer(),
+	root := tui.NewVBox(
+		content,
+		status,
 	)
-	content.SetSizePolicy(tui.Expanding, tui.Expanding)
-
-	root := tui.NewVBox(content, status)
-	root.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	ui := tui.New(root)
 	ui.SetKeybinding(tui.KeyEsc, func() {

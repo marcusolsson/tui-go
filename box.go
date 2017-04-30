@@ -19,9 +19,6 @@ const (
 type Box struct {
 	children []Widget
 
-	horizontalSizePolicy SizePolicy
-	verticalSizePolicy   SizePolicy
-
 	border bool
 
 	size      image.Point
@@ -51,8 +48,7 @@ func (b *Box) Append(w Widget) {
 
 // SetSizePolicy sets the size policy for each axis.
 func (b *Box) SetSizePolicy(horizontal, vertical SizePolicy) {
-	b.horizontalSizePolicy = horizontal
-	b.verticalSizePolicy = vertical
+	// TODO: Boxes don't support size policies
 }
 
 // SetBorder sets whether the border is visible or not.
@@ -154,7 +150,8 @@ func (b *Box) Size() image.Point {
 
 // SizePolicy returns the default layout behavior.
 func (b *Box) SizePolicy() (SizePolicy, SizePolicy) {
-	return b.horizontalSizePolicy, b.verticalSizePolicy
+	// TODO: Boxes don't support size policies
+	return Preferred, Preferred
 }
 
 // OnEvent handles an event and propagates it to all children.
