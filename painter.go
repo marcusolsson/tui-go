@@ -6,7 +6,7 @@ import (
 
 // Surface defines a surface that can be painted on.
 type Surface interface {
-	SetCell(x, y int, ch rune, fg, bg Color)
+	SetCell(x, y int, ch rune, s Style)
 	SetCursor(x, y int)
 	Begin()
 	End()
@@ -15,13 +15,13 @@ type Surface interface {
 
 // Painter provides operations to paint on a surface.
 type Painter struct {
+	Theme *Theme
+
 	// Surface to paint on.
 	surface Surface
 
-	Palette *Palette
-
 	// Current brush.
-	fg, bg Color
+	style Style
 
 	// Transform stack
 	transforms []image.Point
@@ -30,12 +30,11 @@ type Painter struct {
 }
 
 // NewPainter returns a new instance of Painter.
-func NewPainter(s Surface, p *Palette) *Painter {
+func NewPainter(s Surface, p *Theme) *Painter {
 	return &Painter{
+		Theme:   p,
 		surface: s,
-		Palette: p,
-		fg:      p.Item("normal").Fg,
-		bg:      p.Item("normal").Bg,
+		style:   p.Style("normal"),
 	}
 }
 
@@ -69,12 +68,9 @@ func (p *Painter) Repaint(w Widget) {
 	p.End()
 }
 
-// DrawText paints a string starting at the given coordinate.
-func (p *Painter) DrawText(x, y int, text string) {
-	for _, r := range text {
-		p.DrawRune(x, y, r)
-		x += runeWidth(r)
-	}
+func (p *Painter) DrawCursor(x, y int) {
+	wp := p.mapLocalToWorld(image.Point{x, y})
+	p.surface.SetCursor(wp.X, wp.Y)
 }
 
 // DrawRune paints a rune at the given coordinate.
@@ -87,20 +83,26 @@ func (p *Painter) DrawRune(x, y int, r rune) {
 		}
 	}
 	wp := p.mapLocalToWorld(image.Point{x, y})
-	p.surface.SetCell(wp.X, wp.Y, r, p.fg, p.bg)
+	p.surface.SetCell(wp.X, wp.Y, r, p.style)
+}
+
+// DrawText paints a string starting at the given coordinate.
+func (p *Painter) DrawText(x, y int, text string) {
+	for _, r := range text {
+		p.DrawRune(x, y, r)
+		x += runeWidth(r)
+	}
 }
 
 func (p *Painter) DrawHorizontalLine(x1, x2, y int) {
 	for x := x1; x < x2; x++ {
-		wp := p.mapLocalToWorld(image.Point{x, y})
-		p.surface.SetCell(wp.X, wp.Y, '─', p.fg, p.bg)
+		p.DrawRune(x, y, '─')
 	}
 }
 
 func (p *Painter) DrawVerticalLine(x, y1, y2 int) {
 	for y := y1; y < y2; y++ {
-		wp := p.mapLocalToWorld(image.Point{x, y})
-		p.surface.SetCell(wp.X, wp.Y, '│', p.fg, p.bg)
+		p.DrawRune(x, y, '│')
 	}
 }
 
@@ -108,20 +110,22 @@ func (p *Painter) DrawVerticalLine(x, y1, y2 int) {
 func (p *Painter) DrawRect(x, y, w, h int) {
 	for j := 0; j < h; j++ {
 		for i := 0; i < w; i++ {
-			wp := p.mapLocalToWorld(image.Point{i + x, j + y})
+			m := i + x
+			n := j + y
+
 			switch {
 			case i == 0 && j == 0:
-				p.surface.SetCell(wp.X, wp.Y, '┌', p.fg, p.bg)
+				p.DrawRune(m, n, '┌')
 			case i == w-1 && j == 0:
-				p.surface.SetCell(wp.X, wp.Y, '┐', p.fg, p.bg)
+				p.DrawRune(m, n, '┐')
 			case i == 0 && j == h-1:
-				p.surface.SetCell(wp.X, wp.Y, '└', p.fg, p.bg)
+				p.DrawRune(m, n, '└')
 			case i == w-1 && j == h-1:
-				p.surface.SetCell(wp.X, wp.Y, '┘', p.fg, p.bg)
+				p.DrawRune(m, n, '┘')
 			case i == 0 || i == w-1:
-				p.surface.SetCell(wp.X, wp.Y, '│', p.fg, p.bg)
+				p.DrawRune(m, n, '│')
 			case j == 0 || j == h-1:
-				p.surface.SetCell(wp.X, wp.Y, '─', p.fg, p.bg)
+				p.DrawRune(m, n, '─')
 			}
 		}
 	}
@@ -130,30 +134,23 @@ func (p *Painter) DrawRect(x, y, w, h int) {
 func (p *Painter) FillRect(x, y, w, h int) {
 	for j := 0; j < h; j++ {
 		for i := 0; i < w; i++ {
-			wp := p.mapLocalToWorld(image.Point{i + x, j + y})
-			p.surface.SetCell(wp.X, wp.Y, ' ', p.fg, p.bg)
+			p.DrawRune(i+x, j+y, ' ')
 		}
 	}
 }
 
-func (p *Painter) DrawCursor(x, y int) {
-	wp := p.mapLocalToWorld(image.Point{x, y})
-	p.surface.SetCursor(wp.X, wp.Y)
+func (p *Painter) SetStyle(s Style) {
+	p.style = s
 }
 
-func (p *Painter) SetBrush(fg, bg Color) {
-	p.fg = fg
-	p.bg = bg
+func (p *Painter) RestoreStyle() {
+	p.SetStyle(p.Theme.Style("normal"))
 }
 
-func (p *Painter) RestoreBrush() {
-	p.SetBrush(p.Palette.Item("normal").Fg, p.Palette.Item("normal").Bg)
-}
-
-func (p *Painter) WithStyledBrush(n string, fn func(*Painter)) {
-	p.SetBrush(p.Palette.Item(n).Fg, p.Palette.Item(n).Bg)
+func (p *Painter) WithStyle(n string, fn func(*Painter)) {
+	p.SetStyle(p.Theme.Style(n))
 	fn(p)
-	p.RestoreBrush()
+	p.RestoreStyle()
 }
 
 func (p *Painter) WithMask(r image.Rectangle) *Painter {

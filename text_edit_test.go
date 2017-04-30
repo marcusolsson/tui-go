@@ -39,7 +39,7 @@ func TestTextEdit_Draw(t *testing.T) {
 			} else {
 				surface = newTestSurface(tt.size.X, tt.size.Y)
 			}
-			painter := NewPainter(surface, NewPalette())
+			painter := NewPainter(surface, NewTheme())
 
 			b := tt.setup()
 

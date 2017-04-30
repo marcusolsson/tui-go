@@ -1,12 +1,13 @@
 package tui
 
 type UI interface {
-	SetPalette(p *Palette)
+	SetTheme(p *Theme)
 	SetKeybinding(k interface{}, fn func())
 	Run() error
 	Quit()
 }
 
 func New(root Widget) UI {
-	return newTermboxUI(root)
+	tcellui, _ := newTcellUI(root)
+	return tcellui
 }

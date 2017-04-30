@@ -71,7 +71,7 @@ func TestList_Size(t *testing.T) {
 
 func TestList_Draw(t *testing.T) {
 	surface := newTestSurface(10, 5)
-	painter := NewPainter(surface, NewPalette())
+	painter := NewPainter(surface, NewTheme())
 
 	l := NewList()
 	l.AddItems("foo", "bar")

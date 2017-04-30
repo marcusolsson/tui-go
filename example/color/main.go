@@ -12,14 +12,12 @@ func main() {
 	root := tui.NewVBox(l)
 
 	// This is still a rough prototype and WILL change. Use at your own risk.
-	p := tui.NewPalette()
-	p.SetItem("list.item.selected", tui.PaletteItem{
-		Bg: tui.ColorRed,
-		Fg: tui.ColorWhite,
-	})
+	t := tui.NewTheme()
+	t.SetStyle("list.item", tui.Style{Bg: tui.ColorCyan, Fg: tui.ColorMagenta})
+	t.SetStyle("list.item.selected", tui.Style{Bg: tui.ColorRed, Fg: tui.ColorWhite})
 
 	ui := tui.New(root)
-	ui.SetPalette(p)
+	ui.SetTheme(t)
 	ui.SetKeybinding(tui.KeyEsc, func() {
 		ui.Quit()
 	})

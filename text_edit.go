@@ -32,7 +32,7 @@ func (e *TextEdit) Draw(p *Painter) {
 		style += ".focused"
 	}
 
-	p.WithStyledBrush(style, func(p *Painter) {
+	p.WithStyle(style, func(p *Painter) {
 		lines := strings.Split(wordwrap.WrapString(e.text, uint(s.X)), "\n")
 		for i, line := range lines {
 			p.FillRect(0, i, s.X, 1)

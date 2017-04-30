@@ -72,7 +72,7 @@ func (t *Table) Draw(p *Painter) {
 				style += ".selected"
 			}
 
-			p.WithStyledBrush(style, func(p *Painter) {
+			p.WithStyle(style, func(p *Painter) {
 				pos := image.Point{i, j}
 				wp := t.mapCellToLocal(pos)
 				w := t.colWidths[i]

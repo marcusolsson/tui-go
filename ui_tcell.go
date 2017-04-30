@@ -28,7 +28,7 @@ func newTcellUI(root Widget) (*tcellUI, error) {
 	s := &tcellSurface{
 		screen: screen,
 	}
-	p := NewPainter(s, DefaultPalette)
+	p := NewPainter(s, DefaultTheme)
 
 	return &tcellUI{
 		Painter:     p,
@@ -39,8 +39,8 @@ func newTcellUI(root Widget) (*tcellUI, error) {
 	}, nil
 }
 
-func (ui *tcellUI) SetPalette(p *Palette) {
-	ui.Painter.Palette = p
+func (ui *tcellUI) SetTheme(p *Theme) {
+	ui.Painter.Theme = p
 }
 
 func (ui *tcellUI) SetKeybinding(k interface{}, fn func()) {
@@ -146,10 +146,10 @@ type tcellSurface struct {
 	screen tcell.Screen
 }
 
-func (s *tcellSurface) SetCell(x, y int, ch rune, fg, bg Color) {
+func (s *tcellSurface) SetCell(x, y int, ch rune, style Style) {
 	st := tcell.StyleDefault.Normal().
-		Foreground(convertColor(fg, false)).
-		Background(convertColor(bg, false))
+		Foreground(convertColor(style.Fg, false)).
+		Background(convertColor(style.Bg, false))
 
 	s.screen.SetContent(x, y, ch, nil, st)
 }
@@ -182,10 +182,18 @@ func convertColor(col Color, fg bool) tcell.Color {
 		return tcell.ColorBlack
 	case ColorWhite:
 		return tcell.ColorWhite
-	case ColorBlue:
-		return tcell.ColorBlue
 	case ColorRed:
 		return tcell.ColorRed
+	case ColorGreen:
+		return tcell.ColorGreen
+	case ColorBlue:
+		return tcell.ColorBlue
+	case ColorCyan:
+		return tcell.ColorDarkCyan
+	case ColorMagenta:
+		return tcell.ColorDarkMagenta
+	case ColorYellow:
+		return tcell.ColorYellow
 	default:
 		return tcell.ColorDefault
 	}

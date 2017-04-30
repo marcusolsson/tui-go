@@ -22,11 +22,11 @@ func newTestSurface(w, h int) *testSurface {
 	}
 }
 
-func (s *testSurface) SetCell(x, y int, ch rune, fg, bg Color) {
+func (s *testSurface) SetCell(x, y int, ch rune, style Style) {
 	s.cells[image.Point{x, y}] = termbox.Cell{
 		Ch: ch,
-		Fg: termbox.Attribute(fg),
-		Bg: termbox.Attribute(bg),
+		Fg: termbox.Attribute(style.Fg),
+		Bg: termbox.Attribute(style.Bg),
 	}
 }
 

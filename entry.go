@@ -34,7 +34,7 @@ func (e *Entry) Draw(p *Painter) {
 		style += ".focused"
 	}
 
-	p.WithStyledBrush(style, func(p *Painter) {
+	p.WithStyle(style, func(p *Painter) {
 		tw := stringWidth(e.text)
 
 		offx := tw - s.X

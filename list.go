@@ -31,7 +31,7 @@ func (l *List) Draw(p *Painter) {
 			style += ".selected"
 		}
 
-		p.WithStyledBrush(style, func(p *Painter) {
+		p.WithStyle(style, func(p *Painter) {
 			p.FillRect(0, i, l.Size().X, 1)
 			p.DrawText(0, i, item)
 		})

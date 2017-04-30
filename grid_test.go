@@ -95,7 +95,7 @@ var drawGridTests = []struct {
 func TestGrid_Draw(t *testing.T) {
 	for _, tt := range drawGridTests {
 		surface := newTestSurface(tt.size.X, tt.size.Y)
-		painter := NewPainter(surface, NewPalette())
+		painter := NewPainter(surface, NewTheme())
 
 		g := tt.setup()
 

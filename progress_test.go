@@ -8,7 +8,7 @@ import (
 
 func TestProgress_Draw(t *testing.T) {
 	surface := newTestSurface(11, 2)
-	painter := NewPainter(surface, NewPalette())
+	painter := NewPainter(surface, NewTheme())
 
 	p := NewProgress(100)
 	p.SetSizePolicy(Expanding, Minimum)

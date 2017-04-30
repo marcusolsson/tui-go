@@ -17,7 +17,7 @@ type termboxUI struct {
 
 func newTermboxUI(root Widget) *termboxUI {
 	s := &termboxSurface{}
-	p := NewPainter(s, DefaultPalette)
+	p := NewPainter(s, DefaultTheme)
 
 	return &termboxUI{
 		Painter:     p,
@@ -27,8 +27,8 @@ func newTermboxUI(root Widget) *termboxUI {
 	}
 }
 
-func (ui *termboxUI) SetPalette(p *Palette) {
-	ui.Painter.Palette = p
+func (ui *termboxUI) SetTheme(p *Theme) {
+	ui.Painter.Theme = p
 }
 
 func (ui *termboxUI) SetKeybinding(k interface{}, fn func()) {
@@ -152,8 +152,8 @@ func convertTermboxEventKey(key termbox.Key) Key {
 
 type termboxSurface struct{}
 
-func (s termboxSurface) SetCell(x, y int, ch rune, fg, bg Color) {
-	termbox.SetCell(x, y, ch, convertTermboxColor(fg), convertTermboxColor(bg))
+func (s termboxSurface) SetCell(x, y int, ch rune, style Style) {
+	termbox.SetCell(x, y, ch, convertTermboxColor(style.Fg), convertTermboxColor(style.Bg))
 }
 
 func (s termboxSurface) SetCursor(x, y int) {
@@ -181,10 +181,18 @@ func convertTermboxColor(col Color) termbox.Attribute {
 		return termbox.ColorBlack
 	case ColorWhite:
 		return termbox.ColorWhite
-	case ColorBlue:
-		return termbox.ColorBlue
 	case ColorRed:
 		return termbox.ColorRed
+	case ColorGreen:
+		return termbox.ColorGreen
+	case ColorBlue:
+		return termbox.ColorBlue
+	case ColorCyan:
+		return termbox.ColorCyan
+	case ColorMagenta:
+		return termbox.ColorMagenta
+	case ColorYellow:
+		return termbox.ColorYellow
 	default:
 		return termbox.ColorDefault
 	}

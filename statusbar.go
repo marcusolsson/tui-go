@@ -30,7 +30,7 @@ func NewStatusBar(text string) *StatusBar {
 func (b *StatusBar) Draw(p *Painter) {
 	s := b.Size()
 
-	p.WithStyledBrush("statusbar", func(p *Painter) {
+	p.WithStyle("statusbar", func(p *Painter) {
 		p.FillRect(0, 0, s.X, 1)
 		p.DrawText(0, 0, b.text)
 		p.DrawText(s.X-stringWidth(b.permText), 0, b.permText)

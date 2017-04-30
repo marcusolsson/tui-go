@@ -67,7 +67,7 @@ func TestVBox_Draw(t *testing.T) {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
 			surface := newTestSurface(10, 5)
-			painter := NewPainter(surface, NewPalette())
+			painter := NewPainter(surface, NewTheme())
 
 			b := tt.setup()
 
@@ -257,7 +257,7 @@ func TestHBox_Draw(t *testing.T) {
 			} else {
 				surface = newTestSurface(tt.size.X, tt.size.Y)
 			}
-			painter := NewPainter(surface, NewPalette())
+			painter := NewPainter(surface, NewTheme())
 
 			b := tt.setup()
 

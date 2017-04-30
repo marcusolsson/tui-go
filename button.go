@@ -33,7 +33,7 @@ func (b *Button) Draw(p *Painter) {
 		style += ".focused"
 	}
 
-	p.WithStyledBrush(style, func(p *Painter) {
+	p.WithStyle(style, func(p *Painter) {
 		lines := strings.Split(b.text, "\n")
 		for i, line := range lines {
 			p.FillRect(0, i, s.X, 1)
