@@ -17,11 +17,13 @@ const (
 
 // Box is a layout for placing widgets.
 type Box struct {
+	WidgetBase
+
 	children []Widget
 
 	border bool
+	title  string
 
-	size      image.Point
 	alignment Alignment
 }
 
@@ -46,14 +48,13 @@ func (b *Box) Append(w Widget) {
 	b.children = append(b.children, w)
 }
 
-// SetSizePolicy sets the size policy for each axis.
-func (b *Box) SetSizePolicy(horizontal, vertical SizePolicy) {
-	// TODO: Boxes don't support size policies
-}
-
 // SetBorder sets whether the border is visible or not.
 func (b *Box) SetBorder(enabled bool) {
 	b.border = enabled
+}
+
+func (b *Box) SetTitle(title string) {
+	b.title = title
 }
 
 // Alignment returns the currently set alignment or the Box.
@@ -67,6 +68,8 @@ func (b *Box) Draw(p *Painter) {
 
 	if b.border {
 		p.DrawRect(0, 0, sz.X, sz.Y)
+		p.WithMask(image.Rect(2, 0, sz.X-3, 0)).DrawText(2, 0, b.title)
+
 		p.Translate(1, 1)
 		defer p.Restore()
 	}
@@ -141,17 +144,6 @@ func (b *Box) SizeHint() image.Point {
 	}
 
 	return sizeHint
-}
-
-// Size returns the size of the layout.
-func (b *Box) Size() image.Point {
-	return b.size
-}
-
-// SizePolicy returns the default layout behavior.
-func (b *Box) SizePolicy() (SizePolicy, SizePolicy) {
-	// TODO: Boxes don't support size policies
-	return Preferred, Preferred
 }
 
 // OnEvent handles an event and propagates it to all children.
