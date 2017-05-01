@@ -36,24 +36,7 @@ Here are the notes from today's meeting.
 }
 
 func main() {
-	var (
-		from    = tui.NewLabel("")
-		subject = tui.NewLabel("")
-		date    = tui.NewLabel("")
-		body    = tui.NewLabel("")
-	)
-
-	info := tui.NewGrid(0, 0)
-	info.SetSizePolicy(tui.Expanding, tui.Minimum)
-	info.AppendRow(tui.NewLabel("From:"), from)
-	info.AppendRow(tui.NewLabel("Subject:"), subject)
-	info.AppendRow(tui.NewLabel("Date:"), date)
-
-	mail := tui.NewVBox(info, body)
-	mail.SetSizePolicy(tui.Expanding, tui.Expanding)
-
 	inbox := tui.NewTable(0, 0)
-	inbox.SetSizePolicy(tui.Expanding, tui.Minimum)
 	inbox.SetColumnStretch(0, 3)
 	inbox.SetColumnStretch(1, 2)
 	inbox.SetColumnStretch(2, 1)
@@ -65,6 +48,23 @@ func main() {
 			tui.NewLabel(m.date),
 		)
 	}
+
+	var (
+		from    = tui.NewLabel("")
+		subject = tui.NewLabel("")
+		date    = tui.NewLabel("")
+	)
+
+	info := tui.NewGrid(0, 0)
+	info.AppendRow(tui.NewLabel("From:"), from)
+	info.AppendRow(tui.NewLabel("Subject:"), subject)
+	info.AppendRow(tui.NewLabel("Date:"), date)
+
+	body := tui.NewLabel("")
+	body.SetSizePolicy(tui.Preferred, tui.Expanding)
+
+	mail := tui.NewVBox(info, body)
+	mail.SetSizePolicy(tui.Preferred, tui.Expanding)
 
 	inbox.OnSelectionChanged(func(t *tui.Table) {
 		m := mails[t.Selected()]
@@ -78,7 +78,6 @@ func main() {
 	inbox.Select(0)
 
 	root := tui.NewVBox(inbox, tui.NewLabel(""), mail)
-	root.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	ui := tui.New(root)
 	ui.SetKeybinding(tui.KeyEsc, func() {

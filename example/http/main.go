@@ -5,7 +5,11 @@ import (
 )
 
 func main() {
-	reqParams := tui.NewVBox(tui.NewLabel("x=2"))
+	reqParamsEdit := tui.NewTextEdit()
+	reqParamsEdit.SetText("x=2")
+	reqParamsEdit.SetFocused(true)
+
+	reqParams := tui.NewVBox(reqParamsEdit)
 	reqParams.SetTitle("URL Params")
 	reqParams.SetBorder(true)
 
@@ -38,6 +42,7 @@ func main() {
 
 	req := tui.NewVBox(reqParams, reqMethod, reqData, reqHead)
 	resp := tui.NewVBox(respHead, respBody)
+	resp.SetSizePolicy(tui.Expanding, tui.Preferred)
 
 	browser := tui.NewHBox(req, resp)
 	browser.SetSizePolicy(tui.Preferred, tui.Expanding)

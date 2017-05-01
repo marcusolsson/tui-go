@@ -55,11 +55,11 @@ func main() {
 
 	input := tui.NewEntry()
 	input.SetFocused(true)
-	input.SetSizePolicy(tui.Expanding, tui.Minimum)
+	input.SetSizePolicy(tui.Expanding, tui.Maximum)
 
 	inputBox := tui.NewHBox(input)
 	inputBox.SetBorder(true)
-	inputBox.SetSizePolicy(tui.Expanding, tui.Minimum)
+	inputBox.SetSizePolicy(tui.Expanding, tui.Maximum)
 
 	chat := tui.NewVBox(history, inputBox)
 	chat.SetSizePolicy(tui.Expanding, tui.Expanding)

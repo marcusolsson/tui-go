@@ -2,6 +2,7 @@ package tui
 
 import (
 	"image"
+	"math"
 )
 
 var _ Widget = &Box{}
@@ -179,25 +180,29 @@ func (b *Box) layoutChildren(size image.Point) {
 func doLayout(ws []Widget, space int, a Alignment) []int {
 	sizes := make([]int, len(ws))
 
+	if len(sizes) == 0 {
+		return sizes
+	}
+
 	remaining := space
 
 	// Distribute MinSizeHint
-	for {
-		var changed bool
-		for i, sz := range sizes {
-			if sz < dim(a, ws[i].MinSizeHint()) {
-				sizes[i] = sz + 1
-				remaining--
-				if remaining <= 0 {
-					goto Resize
-				}
-				changed = true
-			}
-		}
-		if !changed {
-			break
-		}
-	}
+	// for {
+	// 	var changed bool
+	// 	for i, sz := range sizes {
+	// 		if sz < dim(a, ws[i].MinSizeHint()) {
+	// 			sizes[i] = sz + 1
+	// 			remaining--
+	// 			if remaining <= 0 {
+	// 				goto Resize
+	// 			}
+	// 			changed = true
+	// 		}
+	// 	}
+	// 	if !changed {
+	// 		break
+	// 	}
+	// }
 
 	// Distribute Minimum
 	for {
@@ -256,12 +261,22 @@ func doLayout(ws []Widget, space int, a Alignment) []int {
 		}
 	}
 
-	// Distribute Preferred after Expanding was given a shot
+	// Distribute Expanding
 	for {
+		min := math.MaxInt8
+		for i, s := range sizes {
+			p := alignedSizePolicy(a, ws[i])
+			if (p == Preferred || p == Minimum) && s <= min {
+				min = s
+			}
+		}
 		var changed bool
 		for i, sz := range sizes {
+			if sz != min {
+				continue
+			}
 			p := alignedSizePolicy(a, ws[i])
-			if p == Preferred {
+			if p == Preferred || p == Minimum {
 				sizes[i] = sz + 1
 				remaining--
 				if remaining <= 0 {
@@ -274,6 +289,24 @@ func doLayout(ws []Widget, space int, a Alignment) []int {
 			break
 		}
 	}
+	// Distribute Preferred after Expanding was given a shot
+	// for {
+	// 	var changed bool
+	// 	for i, sz := range sizes {
+	// 		p := alignedSizePolicy(a, ws[i])
+	// 		if p == Preferred {
+	// 			sizes[i] = sz + 1
+	// 			remaining--
+	// 			if remaining <= 0 {
+	// 				goto Resize
+	// 			}
+	// 			changed = true
+	// 		}
+	// 	}
+	// 	if !changed {
+	// 		break
+	// 	}
+	// }
 
 Resize:
 

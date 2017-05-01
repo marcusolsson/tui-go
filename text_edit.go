@@ -49,12 +49,14 @@ func (e *TextEdit) Draw(p *Painter) {
 
 // SizeHint returns the recommended size for the entry.
 func (e *TextEdit) SizeHint() image.Point {
-	p := image.Point{10, 1}
-	if e.Size().X > p.X {
-		p.X = e.Size().X
+	var max int
+	lines := strings.Split(e.text, "\n")
+	for _, line := range lines {
+		if w := stringWidth(line); w > max {
+			max = w
+		}
 	}
-
-	return image.Point{p.X, e.heightForWidth(p.X)}
+	return image.Point{max, e.heightForWidth(max)}
 }
 
 // OnEvent handles terminal events.

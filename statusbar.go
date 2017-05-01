@@ -54,7 +54,7 @@ func (b *StatusBar) SizeHint() image.Point {
 
 // SizePolicy returns the default layout behavior.
 func (b *StatusBar) SizePolicy() (SizePolicy, SizePolicy) {
-	return Expanding, Minimum
+	return Expanding, Maximum
 }
 
 // Resize updates the size of the status bar.
