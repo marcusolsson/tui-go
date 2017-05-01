@@ -38,12 +38,9 @@ func (e *TextEdit) Draw(p *Painter) {
 			p.FillRect(0, i, s.X, 1)
 			p.DrawText(0, i, line)
 		}
-
 		if e.IsFocused() {
 			p.DrawCursor(stringWidth(lines[len(lines)-1]), len(lines)-1)
 		}
-
-		return
 	})
 }
 

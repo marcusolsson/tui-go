@@ -161,11 +161,11 @@ func (s termboxSurface) SetCursor(x, y int) {
 }
 
 func (s termboxSurface) Begin() {
-	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+	_ = termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 }
 
 func (s termboxSurface) End() {
-	termbox.Flush()
+	_ = termbox.Flush()
 }
 
 func (s termboxSurface) Size() image.Point {

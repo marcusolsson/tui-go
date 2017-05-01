@@ -84,7 +84,6 @@ func (ui *tcellUI) Run() error {
 			ui.Painter.Repaint(ui.Root)
 		}
 	}
-	return nil
 }
 
 // Quit signals to the UI to start shutting down.
