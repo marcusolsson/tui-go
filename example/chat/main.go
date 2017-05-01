@@ -19,21 +19,13 @@ var posts = []post{
 }
 
 func main() {
-	channels := tui.NewVBox(
-		tui.NewLabel("general"),
-		tui.NewLabel("random"),
-	)
-
-	messages := tui.NewVBox(
-		tui.NewLabel("slackbot"),
-	)
-
 	sidebar := tui.NewVBox(
 		tui.NewLabel("CHANNELS"),
-		channels,
+		tui.NewLabel("general"),
+		tui.NewLabel("random"),
 		tui.NewLabel(""),
 		tui.NewLabel("DIRECT MESSAGES"),
-		messages,
+		tui.NewLabel("slackbot"),
 		tui.NewSpacer(),
 	)
 	sidebar.SetBorder(true)
@@ -43,14 +35,12 @@ func main() {
 	history.Append(tui.NewSpacer())
 
 	for _, m := range posts {
-		b := tui.NewHBox(
+		history.Append(tui.NewHBox(
 			tui.NewLabel(m.time),
 			tui.NewPadder(1, 0, tui.NewLabel(fmt.Sprintf("<%s>", m.username))),
 			tui.NewLabel(m.message),
 			tui.NewSpacer(),
-		)
-
-		history.Append(b)
+		))
 	}
 
 	input := tui.NewEntry()
@@ -65,31 +55,22 @@ func main() {
 	chat.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	input.OnSubmit(func(e *tui.Entry) {
-		b := tui.NewHBox(
+		history.Append(tui.NewHBox(
 			tui.NewLabel(time.Now().Format("15:04")),
 			tui.NewPadder(1, 0, tui.NewLabel(fmt.Sprintf("<%s>", "john"))),
 			tui.NewLabel(e.Text()),
 			tui.NewSpacer(),
-		)
-
-		history.Append(b)
-
+		))
 		input.SetText("")
 	})
 
 	root := tui.NewHBox(sidebar, chat)
-	root.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	ui := tui.New(root)
-	ui.SetKeybinding(tui.KeyEsc, func() {
-		ui.Quit()
-	})
-	ui.SetKeybinding(tui.KeyArrowUp, func() {
-		input.SetFocused(true)
-	})
-	ui.SetKeybinding(tui.KeyArrowDown, func() {
-		input.SetFocused(false)
-	})
+	ui.SetKeybinding(tui.KeyEsc, func() { ui.Quit() })
+	ui.SetKeybinding(tui.KeyArrowUp, func() { input.SetFocused(true) })
+	ui.SetKeybinding(tui.KeyArrowDown, func() { input.SetFocused(false) })
+
 	if err := ui.Run(); err != nil {
 		panic(err)
 	}

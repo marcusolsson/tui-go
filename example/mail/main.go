@@ -1,7 +1,7 @@
 package main
 
 import (
-	tui "github.com/marcusolsson/tui-go"
+	"github.com/marcusolsson/tui-go"
 )
 
 type mail struct {
@@ -80,12 +80,9 @@ func main() {
 	root := tui.NewVBox(inbox, tui.NewLabel(""), mail)
 
 	ui := tui.New(root)
-	ui.SetKeybinding(tui.KeyEsc, func() {
-		ui.Quit()
-	})
-	ui.SetKeybinding('q', func() {
-		ui.Quit()
-	})
+	ui.SetKeybinding(tui.KeyEsc, func() { ui.Quit() })
+	ui.SetKeybinding('q', func() { ui.Quit() })
+
 	if err := ui.Run(); err != nil {
 		panic(err)
 	}

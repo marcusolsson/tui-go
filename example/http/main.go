@@ -57,9 +57,8 @@ func main() {
 	root := tui.NewVBox(urlBox, browser)
 
 	ui := tui.New(root)
-	ui.SetKeybinding(tui.KeyEsc, func() {
-		ui.Quit()
-	})
+	ui.SetKeybinding(tui.KeyEsc, func() { ui.Quit() })
+
 	if err := ui.Run(); err != nil {
 		panic(err)
 	}

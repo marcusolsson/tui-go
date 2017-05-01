@@ -17,12 +17,16 @@ func main() {
 	password := tui.NewEntry()
 
 	form := tui.NewGrid(0, 0)
-
 	form.AppendRow(tui.NewLabel("User"), tui.NewLabel("Password"))
 	form.AppendRow(user, password)
 
+	status := tui.NewStatusBar("Ready.")
+
 	login := tui.NewButton("[Login]")
 	login.SetFocused(true)
+	login.OnActivated(func(b *tui.Button) {
+		status.SetText("Logged in.")
+	})
 
 	register := tui.NewButton("[Register]")
 
@@ -47,20 +51,14 @@ func main() {
 	)
 	content := tui.NewHBox(tui.NewSpacer(), wrapper, tui.NewSpacer())
 
-	status := tui.NewStatusBar("Ready.")
-	login.OnActivated(func(b *tui.Button) {
-		status.SetText("Logged in.")
-	})
-
 	root := tui.NewVBox(
 		content,
 		status,
 	)
 
 	ui := tui.New(root)
-	ui.SetKeybinding(tui.KeyEsc, func() {
-		ui.Quit()
-	})
+	ui.SetKeybinding(tui.KeyEsc, func() { ui.Quit() })
+
 	if err := ui.Run(); err != nil {
 		panic(err)
 	}

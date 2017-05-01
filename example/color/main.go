@@ -1,13 +1,14 @@
 package main
 
 import (
-	tui "github.com/marcusolsson/tui-go"
+	"github.com/marcusolsson/tui-go"
 )
 
 func main() {
 	l := tui.NewList()
 	l.SetFocused(true)
 	l.AddItems("First row", "Second row", "Third row", "Fourth row", "Fifth row", "Sixth row")
+	l.SetSelected(0)
 
 	root := tui.NewVBox(l)
 
@@ -18,9 +19,8 @@ func main() {
 
 	ui := tui.New(root)
 	ui.SetTheme(t)
-	ui.SetKeybinding(tui.KeyEsc, func() {
-		ui.Quit()
-	})
+	ui.SetKeybinding(tui.KeyEsc, func() { ui.Quit() })
+
 	if err := ui.Run(); err != nil {
 		panic(err)
 	}
