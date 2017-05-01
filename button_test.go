@@ -1,57 +1,8 @@
 package tui
 
 import (
-	"image"
 	"testing"
 )
-
-var buttonSizeTests = []struct {
-	setup       func() *Button
-	minSizeHint image.Point
-	sizeHint    image.Point
-	size        image.Point
-}{
-	{
-		setup: func() *Button {
-			return NewButton("")
-		},
-		minSizeHint: image.Point{1, 1},
-		sizeHint:    image.Point{1, 1},
-		size:        image.Point{100, 100},
-	},
-	{
-		setup: func() *Button {
-			return NewButton("test")
-		},
-		minSizeHint: image.Point{1, 1},
-		sizeHint:    image.Point{4, 1},
-		size:        image.Point{100, 100},
-	},
-	{
-		setup: func() *Button {
-			return NewButton("あäa")
-		},
-		minSizeHint: image.Point{1, 1},
-		sizeHint:    image.Point{4, 1},
-		size:        image.Point{100, 100},
-	},
-}
-
-func TestButton_Size(t *testing.T) {
-	for _, tt := range buttonSizeTests {
-		t.Run("", func(t *testing.T) {
-			b := tt.setup()
-			b.Resize(image.Point{100, 100})
-
-			if got := b.Size(); got != tt.size {
-				t.Errorf("b.Size() = %s; want = %s", got, tt.size)
-			}
-			if got := b.SizeHint(); got != tt.sizeHint {
-				t.Errorf("b.SizeHint() = %s; want = %s", got, tt.sizeHint)
-			}
-		})
-	}
-}
 
 func TestButton_OnActivated(t *testing.T) {
 	btn := NewButton("test")

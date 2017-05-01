@@ -5,90 +5,14 @@ import (
 	"testing"
 )
 
-var drawVBoxTests = []struct {
-	test  string
-	setup func() *Box
-	want  string
-}{
-	{
-		test: "Empty box",
-		setup: func() *Box {
-			b := NewVBox()
-			b.SetBorder(true)
-			return b
-		},
-		want: `
-┌────────┐
-│........│
-│........│
-│........│
-└────────┘
-`,
-	},
-	{
-		test: "Box containing one widget",
-		setup: func() *Box {
-			b := NewVBox(
-				NewLabel("test"),
-			)
-			b.SetBorder(true)
-			return b
-		},
-		want: `
-┌────────┐
-│test....│
-│........│
-│........│
-└────────┘
-`,
-	},
-	{
-		test: "Box containing multiple widget",
-		setup: func() *Box {
-			b := NewVBox(
-				NewLabel("test"),
-				NewLabel("foo"),
-			)
-			b.SetBorder(true)
-			return b
-		},
-		want: `
-┌────────┐
-│test....│
-│........│
-│foo.....│
-└────────┘
-`,
-	},
-}
-
-func TestVBox_Draw(t *testing.T) {
-	for _, tt := range drawVBoxTests {
-		tt := tt
-		t.Run(tt.test, func(t *testing.T) {
-			surface := newTestSurface(10, 5)
-			painter := NewPainter(surface, NewTheme())
-
-			b := tt.setup()
-
-			b.Resize(surface.size)
-			b.Draw(painter)
-
-			if surface.String() != tt.want {
-				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
-			}
-		})
-	}
-}
-
-var drawHBoxTests = []struct {
+var drawBoxTests = []struct {
 	test  string
 	size  image.Point
 	setup func() *Box
 	want  string
 }{
 	{
-		test: "Empty box",
+		test: "Empty horizontal box",
 		setup: func() *Box {
 			b := NewHBox()
 			b.SetBorder(true)
@@ -103,11 +27,9 @@ var drawHBoxTests = []struct {
 `,
 	},
 	{
-		test: "Box containing one widget",
+		test: "Horizontal box containing one widget",
 		setup: func() *Box {
-			b := NewHBox(
-				NewLabel("test"),
-			)
+			b := NewHBox(NewLabel("test"))
 			b.SetBorder(true)
 			return b
 		},
@@ -120,12 +42,9 @@ var drawHBoxTests = []struct {
 `,
 	},
 	{
-		test: "Box containing multiple widgets",
+		test: "Horizontal box containing multiple widgets",
 		setup: func() *Box {
-			b := NewHBox(
-				NewLabel("test"),
-				NewLabel("foo"),
-			)
+			b := NewHBox(NewLabel("test"), NewLabel("foo"))
 			b.SetBorder(true)
 			return b
 		},
@@ -138,19 +57,58 @@ var drawHBoxTests = []struct {
 `,
 	},
 	{
-		test: "Nested boxes expands equally",
+		test: "Empty vertical box",
+		setup: func() *Box {
+			b := NewVBox()
+			b.SetBorder(true)
+			return b
+		},
+		want: `
+┌────────┐
+│........│
+│........│
+│........│
+└────────┘
+`,
+	},
+	{
+		test: "Vertical box containing one widget",
+		setup: func() *Box {
+			b := NewVBox(NewLabel("test"))
+			b.SetBorder(true)
+			return b
+		},
+		want: `
+┌────────┐
+│test....│
+│........│
+│........│
+└────────┘
+`,
+	},
+	{
+		test: "Vertical box containing multiple widgets",
+		setup: func() *Box {
+			b := NewVBox(NewLabel("test"), NewLabel("foo"))
+			b.SetBorder(true)
+			return b
+		},
+		want: `
+┌────────┐
+│test....│
+│........│
+│foo.....│
+└────────┘
+`,
+	},
+	{
+		test: "Horizontally centered box",
 		size: image.Point{32, 5},
 		setup: func() *Box {
-			nested := NewVBox(
-				NewLabel("test"),
-			)
+			nested := NewVBox(NewLabel("test"))
 			nested.SetBorder(true)
 
-			b := NewHBox(
-				NewSpacer(),
-				nested,
-				NewSpacer(),
-			)
+			b := NewHBox(NewSpacer(), nested, NewSpacer())
 			b.SetBorder(true)
 			return b
 		},
@@ -166,22 +124,16 @@ var drawHBoxTests = []struct {
 		test: "Two columns",
 		size: image.Point{32, 10},
 		setup: func() *Box {
-			first := NewVBox(
-				NewLabel("test"),
-			)
+			first := NewVBox(NewLabel("test"))
 			first.SetBorder(true)
 
-			second := NewVBox(
-				NewLabel("test"),
-			)
+			second := NewVBox(NewLabel("test"))
 			second.SetBorder(true)
 
-			b := NewHBox(
-				first,
-				second,
-			)
-			b.SetBorder(true)
-			return b
+			third := NewHBox(first, second)
+			third.SetBorder(true)
+
+			return third
 		},
 		want: `
 ┌──────────────────────────────┐
@@ -218,6 +170,7 @@ var drawHBoxTests = []struct {
 
 			b := NewVBox(row0, row1)
 			b.SetBorder(true)
+
 			return b
 		},
 		want: `
@@ -246,7 +199,7 @@ var drawHBoxTests = []struct {
 `,
 	},
 	{
-		test: "Combined",
+		test: "Maximum/Preferred/Preferred",
 		size: image.Point{32, 24},
 		setup: func() *Box {
 			edit0 := NewLabel("")
@@ -269,6 +222,7 @@ var drawHBoxTests = []struct {
 
 			b := NewVBox(row0, row1, row2)
 			b.SetBorder(true)
+
 			return b
 		},
 		want: `
@@ -300,8 +254,8 @@ var drawHBoxTests = []struct {
 	},
 }
 
-func TestHBox_Draw(t *testing.T) {
-	for _, tt := range drawHBoxTests {
+func TestBox_Draw(t *testing.T) {
+	for _, tt := range drawBoxTests {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
 			var surface *testSurface
@@ -323,31 +277,3 @@ func TestHBox_Draw(t *testing.T) {
 		})
 	}
 }
-
-type dummyWidget struct {
-	minSizeHint image.Point
-	sizeHint    image.Point
-	size        image.Point
-	sizePolicyX SizePolicy
-	sizePolicyY SizePolicy
-}
-
-func (w *dummyWidget) MinSizeHint() image.Point {
-	return w.minSizeHint
-}
-func (w *dummyWidget) Size() image.Point {
-	return w.size
-}
-func (w *dummyWidget) SizeHint() image.Point {
-	return w.sizeHint
-}
-func (w *dummyWidget) SizePolicy() (SizePolicy, SizePolicy) {
-	return w.sizePolicyX, w.sizePolicyY
-}
-func (w *dummyWidget) Resize(size image.Point) {
-	w.size = size
-}
-
-// Not used
-func (w *dummyWidget) Draw(p *Painter)  {}
-func (w *dummyWidget) OnEvent(ev Event) {}

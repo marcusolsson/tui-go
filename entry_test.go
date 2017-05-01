@@ -5,41 +5,6 @@ import (
 	"testing"
 )
 
-var entrySizeTests = []struct {
-	test        string
-	setup       func() *Entry
-	minSizeHint image.Point
-	sizeHint    image.Point
-	size        image.Point
-}{
-	{
-		test: "Entry default size",
-		setup: func() *Entry {
-			return NewEntry()
-		},
-		minSizeHint: image.Point{1, 1},
-		sizeHint:    image.Point{10, 1},
-		size:        image.Point{100, 100},
-	},
-}
-
-func TestEntry_Size(t *testing.T) {
-	for _, tt := range entrySizeTests {
-		e := tt.setup()
-		e.Resize(image.Point{100, 100})
-
-		if got := e.Size(); got != tt.size {
-			t.Errorf("e.Size() = %s; want = %s", got, tt.size)
-		}
-		if got := e.SizeHint(); got != tt.sizeHint {
-			t.Errorf("e.SizeHint() = %s; want = %s", got, tt.sizeHint)
-		}
-		if got := e.MinSizeHint(); got != tt.minSizeHint {
-			t.Errorf("e.MinSizeHint() = %s; want = %s", got, tt.minSizeHint)
-		}
-	}
-}
-
 var drawEntryTests = []struct {
 	test  string
 	size  image.Point
@@ -48,21 +13,18 @@ var drawEntryTests = []struct {
 }{
 	{
 		test: "Empty entry",
-		size: image.Point{15, 5},
+		size: image.Point{15, 2},
 		setup: func() *Entry {
 			return NewEntry()
 		},
 		want: `
                
 ...............
-...............
-...............
-...............
 `,
 	},
 	{
 		test: "Entry with text",
-		size: image.Point{15, 5},
+		size: image.Point{15, 2},
 		setup: func() *Entry {
 			e := NewEntry()
 			e.SetText("test")
@@ -71,14 +33,11 @@ var drawEntryTests = []struct {
 		want: `
 test           
 ...............
-...............
-...............
-...............
 `,
 	},
 	{
 		test: "Scrolling entry",
-		size: image.Point{15, 5},
+		size: image.Point{15, 2},
 		setup: func() *Entry {
 			e := NewEntry()
 			e.SetText("Lorem ipsum dolor sit amet")
@@ -87,14 +46,11 @@ test
 		want: `
  dolor sit amet
 ...............
-...............
-...............
-...............
 `,
 	},
 	{
 		test: "Scrolling entry when focused",
-		size: image.Point{15, 5},
+		size: image.Point{15, 2},
 		setup: func() *Entry {
 			e := NewEntry()
 			e.SetText("Lorem ipsum dolor sit amet")
@@ -103,9 +59,6 @@ test
 		},
 		want: `
 dolor sit amet 
-...............
-...............
-...............
 ...............
 `,
 	},
@@ -127,7 +80,6 @@ func TestEntry_Draw(t *testing.T) {
 
 			b.Resize(surface.size)
 			b.Draw(painter)
-
 			if surface.String() != tt.want {
 				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
 			}
@@ -263,13 +215,12 @@ var layoutEntryTests = []struct {
 
 			b := NewHBox(e1, e2)
 			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
 
 			return b
 		},
 		want: `
 ┌──────────────────┐
-│0123456789foo89bar│
+│56789foo3456789bar│
 │..................│
 │..................│
 └──────────────────┘
@@ -288,13 +239,12 @@ var layoutEntryTests = []struct {
 
 			b := NewHBox(e1, e2)
 			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
 
 			return b
 		},
 		want: `
 ┌──────────────────┐
-│89foo0123456789bar│
+│3456789foo56789bar│
 │..................│
 │..................│
 └──────────────────┘
@@ -319,7 +269,7 @@ var layoutEntryTests = []struct {
 		},
 		want: `
 ┌──────────────────┐
-│foobar            │
+│foo       bar     │
 │..................│
 │..................│
 └──────────────────┘
@@ -329,22 +279,21 @@ var layoutEntryTests = []struct {
 		test: "Expanding/Preferred",
 		setup: func() *Box {
 			e1 := NewEntry()
-			e1.SetSizePolicy(Expanding, Preferred)
 			e1.SetText("foo")
+			e1.SetSizePolicy(Expanding, Preferred)
 
 			e2 := NewEntry()
-			e2.SetSizePolicy(Preferred, Preferred)
 			e2.SetText("bar")
+			e2.SetSizePolicy(Preferred, Preferred)
 
 			b := NewHBox(e1, e2)
 			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
 
 			return b
 		},
 		want: `
 ┌──────────────────┐
-│foo            bar│
+│foo     bar       │
 │..................│
 │..................│
 └──────────────────┘
@@ -353,8 +302,6 @@ var layoutEntryTests = []struct {
 }
 
 func TestEntry_Layout(t *testing.T) {
-	t.Skip("enable when layout engine is working correctly")
-
 	for _, tt := range layoutEntryTests {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
