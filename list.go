@@ -30,7 +30,6 @@ func (l *List) Draw(p *Painter) {
 		if i == l.selected-l.pos {
 			style += ".selected"
 		}
-
 		p.WithStyle(style, func(p *Painter) {
 			p.FillRect(0, i, l.Size().X, 1)
 			p.DrawText(0, i, item)
@@ -50,11 +49,7 @@ func (l *List) SizeHint() image.Point {
 }
 
 func (l *List) OnEvent(ev Event) {
-	if !l.focused {
-		return
-	}
-
-	if ev.Type != EventKey {
+	if !l.IsFocused() || ev.Type != EventKey {
 		return
 	}
 

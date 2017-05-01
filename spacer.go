@@ -6,7 +6,7 @@ var _ Widget = &Spacer{}
 
 // Spacer is a widget to fill out space.
 type Spacer struct {
-	size image.Point
+	WidgetBase
 }
 
 // NewSpacer returns a new Spacer.
@@ -14,34 +14,17 @@ func NewSpacer() *Spacer {
 	return &Spacer{}
 }
 
-// Draw draws the spacer.
-func (s *Spacer) Draw(p *Painter) {
-}
-
-// Size returns the size of the spacer.
-func (s *Spacer) Size() image.Point {
-	return s.size
-}
-
 // MinSizeHint returns the minimum size the widget is allowed to be.
 func (s *Spacer) MinSizeHint() image.Point {
-	return image.Point{}
+	return image.ZP
 }
 
 // SizeHint returns the recommended size for the spacer.
 func (s *Spacer) SizeHint() image.Point {
-	return image.Point{}
+	return image.ZP
 }
 
 // SizePolicy returns the default layout behavior.
 func (s *Spacer) SizePolicy() (SizePolicy, SizePolicy) {
 	return Expanding, Expanding
-}
-
-// Resize updates the size of the spacer.
-func (s *Spacer) Resize(size image.Point) {
-	s.size = size
-}
-
-func (s *Spacer) OnEvent(_ Event) {
 }

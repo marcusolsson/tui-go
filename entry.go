@@ -27,17 +27,17 @@ func NewEntry() *Entry {
 
 // Draw draws the entry.
 func (e *Entry) Draw(p *Painter) {
-	s := e.Size()
-
 	style := "entry"
 	if e.IsFocused() {
 		style += ".focused"
 	}
-
 	p.WithStyle(style, func(p *Painter) {
-		tw := stringWidth(e.text)
+		s := e.Size()
 
+		tw := stringWidth(e.text)
 		offx := tw - s.X
+
+		// Make room for cursor.
 		if e.IsFocused() {
 			offx++
 		}
@@ -63,11 +63,7 @@ func (e *Entry) SizeHint() image.Point {
 
 // OnEvent handles terminal events.
 func (e *Entry) OnEvent(ev Event) {
-	if !e.IsFocused() {
-		return
-	}
-
-	if ev.Type != EventKey {
+	if !e.IsFocused() || ev.Type != EventKey {
 		return
 	}
 
@@ -77,13 +73,11 @@ func (e *Entry) OnEvent(ev Event) {
 			if e.onSubmit != nil {
 				e.onSubmit(e)
 			}
-			return
 		case KeySpace:
 			e.text = e.text + string(' ')
 			if e.onTextChange != nil {
 				e.onTextChange(e)
 			}
-			return
 		case KeyBackspace2:
 			if len(e.text) > 0 {
 				e.text = trimRightLen(e.text, 1)
@@ -91,13 +85,13 @@ func (e *Entry) OnEvent(ev Event) {
 					e.onTextChange(e)
 				}
 			}
-			return
 		}
-	} else {
-		e.text = e.text + string(ev.Ch)
-		if e.onTextChange != nil {
-			e.onTextChange(e)
-		}
+		return
+	}
+
+	e.text = e.text + string(ev.Ch)
+	if e.onTextChange != nil {
+		e.onTextChange(e)
 	}
 }
 

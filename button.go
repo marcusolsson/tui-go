@@ -26,17 +26,14 @@ func NewButton(text string) *Button {
 
 // Draw draws the button.
 func (b *Button) Draw(p *Painter) {
-	s := b.Size()
-
 	style := "button"
 	if b.IsFocused() {
 		style += ".focused"
 	}
-
 	p.WithStyle(style, func(p *Painter) {
 		lines := strings.Split(b.text, "\n")
 		for i, line := range lines {
-			p.FillRect(0, i, s.X, 1)
+			p.FillRect(0, i, b.Size().X, 1)
 			p.DrawText(0, i, line)
 		}
 	})
@@ -62,19 +59,11 @@ func (b *Button) SizeHint() image.Point {
 
 // OnEvent handles terminal events.
 func (b *Button) OnEvent(ev Event) {
-	if !b.IsFocused() {
+	if !b.IsFocused() || ev.Type != EventKey {
 		return
 	}
-
-	if ev.Type != EventKey {
-		return
-	}
-
-	switch ev.Key {
-	case KeyEnter:
-		if b.onActivated != nil {
-			b.onActivated(b)
-		}
+	if ev.Key == KeyEnter && b.onActivated != nil {
+		b.onActivated(b)
 	}
 }
 

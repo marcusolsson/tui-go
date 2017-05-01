@@ -31,7 +31,6 @@ func (l *Label) Draw(p *Painter) {
 	if l.wordWrap {
 		lines = strings.Split(wordwrap.WrapString(l.text, uint(l.Size().X)), "\n")
 	}
-
 	for i, line := range lines {
 		p.DrawText(0, i, line)
 	}

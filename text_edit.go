@@ -25,14 +25,12 @@ func NewTextEdit() *TextEdit {
 
 // Draw draws the entry.
 func (e *TextEdit) Draw(p *Painter) {
-	s := e.Size()
-
 	style := "entry"
 	if e.IsFocused() {
 		style += ".focused"
 	}
-
 	p.WithStyle(style, func(p *Painter) {
+		s := e.Size()
 		lines := strings.Split(wordwrap.WrapString(e.text, uint(s.X)), "\n")
 		for i, line := range lines {
 			p.FillRect(0, i, s.X, 1)
@@ -58,11 +56,7 @@ func (e *TextEdit) SizeHint() image.Point {
 
 // OnEvent handles terminal events.
 func (e *TextEdit) OnEvent(ev Event) {
-	if !e.IsFocused() {
-		return
-	}
-
-	if ev.Type != EventKey {
+	if !e.IsFocused() || ev.Type != EventKey {
 		return
 	}
 
@@ -70,13 +64,11 @@ func (e *TextEdit) OnEvent(ev Event) {
 		switch ev.Key {
 		case KeyEnter:
 			e.text = e.text + "\n"
-			return
 		case KeySpace:
 			e.text = e.text + string(' ')
 			if e.onTextChange != nil {
 				e.onTextChange(e)
 			}
-			return
 		case KeyBackspace2:
 			if len(e.text) > 0 {
 				e.text = trimRightLen(e.text, 1)
@@ -84,13 +76,13 @@ func (e *TextEdit) OnEvent(ev Event) {
 					e.onTextChange(e)
 				}
 			}
-			return
 		}
-	} else {
-		e.text = e.text + string(ev.Ch)
-		if e.onTextChange != nil {
-			e.onTextChange(e)
-		}
+		return
+	}
+
+	e.text = e.text + string(ev.Ch)
+	if e.onTextChange != nil {
+		e.onTextChange(e)
 	}
 }
 
