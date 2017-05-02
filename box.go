@@ -187,22 +187,22 @@ func doLayout(ws []Widget, space int, a Alignment) []int {
 	remaining := space
 
 	// Distribute MinSizeHint
-	// for {
-	// 	var changed bool
-	// 	for i, sz := range sizes {
-	// 		if sz < dim(a, ws[i].MinSizeHint()) {
-	// 			sizes[i] = sz + 1
-	// 			remaining--
-	// 			if remaining <= 0 {
-	// 				goto Resize
-	// 			}
-	// 			changed = true
-	// 		}
-	// 	}
-	// 	if !changed {
-	// 		break
-	// 	}
-	// }
+	for {
+		var changed bool
+		for i, sz := range sizes {
+			if sz < dim(a, ws[i].MinSizeHint()) {
+				sizes[i] = sz + 1
+				remaining--
+				if remaining <= 0 {
+					goto Resize
+				}
+				changed = true
+			}
+		}
+		if !changed {
+			break
+		}
+	}
 
 	// Distribute Minimum
 	for {
@@ -261,7 +261,7 @@ func doLayout(ws []Widget, space int, a Alignment) []int {
 		}
 	}
 
-	// Distribute Expanding
+	// Distribute remaining space
 	for {
 		min := math.MaxInt8
 		for i, s := range sizes {
@@ -289,24 +289,6 @@ func doLayout(ws []Widget, space int, a Alignment) []int {
 			break
 		}
 	}
-	// Distribute Preferred after Expanding was given a shot
-	// for {
-	// 	var changed bool
-	// 	for i, sz := range sizes {
-	// 		p := alignedSizePolicy(a, ws[i])
-	// 		if p == Preferred {
-	// 			sizes[i] = sz + 1
-	// 			remaining--
-	// 			if remaining <= 0 {
-	// 				goto Resize
-	// 			}
-	// 			changed = true
-	// 		}
-	// 	}
-	// 	if !changed {
-	// 		break
-	// 	}
-	// }
 
 Resize:
 
