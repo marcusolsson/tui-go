@@ -48,7 +48,7 @@ func main() {
 	browser.SetSizePolicy(tui.Preferred, tui.Expanding)
 
 	urlEntry := tui.NewEntry()
-	urlEntry.SetFocused(true)
+	urlEntry.SetText("https://httpbin.org/get")
 
 	urlBox := tui.NewHBox(urlEntry)
 	urlBox.SetTitle("URL")
