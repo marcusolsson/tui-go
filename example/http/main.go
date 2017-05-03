@@ -1,19 +1,40 @@
 package main
 
 import (
+	"net/http"
+
+	"strings"
+
+	"sort"
+
+	"io/ioutil"
+
 	"github.com/marcusolsson/tui-go"
+)
+
+var (
+	method  = "GET"
+	params  = "x=2&y=3"
+	payload = `{"id": 12}`
+	headers = "User-Agent: myBrowser"
 )
 
 func main() {
 	reqParamsEdit := tui.NewTextEdit()
-	reqParamsEdit.SetText("x=2")
+	reqParamsEdit.SetText(params)
+	reqParamsEdit.OnTextChanged(func(e *tui.TextEdit) {
+		params = e.Text()
+	})
 
 	reqParams := tui.NewVBox(reqParamsEdit)
 	reqParams.SetTitle("URL Params")
 	reqParams.SetBorder(true)
 
 	reqMethodEntry := tui.NewEntry()
-	reqMethodEntry.SetText("GET")
+	reqMethodEntry.SetText(method)
+	reqMethodEntry.OnChanged(func(e *tui.Entry) {
+		method = e.Text()
+	})
 
 	reqMethod := tui.NewVBox(reqMethodEntry)
 	reqMethod.SetTitle("Request method")
@@ -21,27 +42,33 @@ func main() {
 	reqMethod.SetSizePolicy(tui.Preferred, tui.Maximum)
 
 	reqDataEdit := tui.NewTextEdit()
-	reqDataEdit.SetText(`{"id": 12}`)
+	reqDataEdit.SetText(payload)
+	reqDataEdit.OnTextChanged(func(e *tui.TextEdit) {
+		payload = e.Text()
+	})
 
 	reqData := tui.NewVBox(reqDataEdit)
 	reqData.SetTitle("Request body")
 	reqData.SetBorder(true)
 
 	reqHeadEdit := tui.NewTextEdit()
-	reqHeadEdit.SetText("User-Agent: myBrowser")
+	reqHeadEdit.SetText(headers)
+	reqHeadEdit.OnTextChanged(func(e *tui.TextEdit) {
+		headers = e.Text()
+	})
 
 	reqHead := tui.NewVBox(reqHeadEdit)
 	reqHead.SetTitle("Request headers")
 	reqHead.SetBorder(true)
 
-	respHeadLbl := tui.NewLabel("HTTP/1.1 200 OK")
+	respHeadLbl := tui.NewLabel("")
 	respHeadLbl.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	respHead := tui.NewVBox(respHeadLbl)
 	respHead.SetTitle("Response headers")
 	respHead.SetBorder(true)
 
-	respBodyLbl := tui.NewLabel("{\n  \"args\": {\n    \"x\": 2\n  }\n}")
+	respBodyLbl := tui.NewLabel("")
 	respBodyLbl.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	respBody := tui.NewVBox(respBodyLbl)
@@ -57,6 +84,36 @@ func main() {
 
 	urlEntry := tui.NewEntry()
 	urlEntry.SetText("https://httpbin.org/get")
+	urlEntry.OnSubmit(func(e *tui.Entry) {
+		req, err := http.NewRequest(method, e.Text(), strings.NewReader(payload))
+		if err != nil {
+			return
+		}
+		req.URL.RawQuery = params
+
+		for _, h := range strings.Split(headers, "\n") {
+			kv := strings.Split(h, ":")
+			req.Header.Set(kv[0], kv[1])
+		}
+
+		resp, err := http.DefaultClient.Do(req)
+		if err != nil {
+			return
+		}
+		defer resp.Body.Close()
+
+		var headers []string
+		for k, v := range resp.Header {
+			headers = append(headers, k+": "+strings.Join(v, ";"))
+
+		}
+		sort.Strings(headers)
+
+		respHeadLbl.SetText(strings.Join(headers, "\n"))
+
+		b, _ := ioutil.ReadAll(resp.Body)
+		respBodyLbl.SetText(string(b))
+	})
 
 	urlBox := tui.NewHBox(urlEntry)
 	urlBox.SetTitle("URL")
