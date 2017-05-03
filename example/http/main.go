@@ -93,7 +93,9 @@ func main() {
 
 		for _, h := range strings.Split(headers, "\n") {
 			kv := strings.Split(h, ":")
-			req.Header.Set(kv[0], kv[1])
+			if len(kv) == 2 {
+				req.Header.Set(kv[0], kv[1])
+			}
 		}
 
 		resp, err := http.DefaultClient.Do(req)
