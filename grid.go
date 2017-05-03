@@ -9,7 +9,7 @@ var _ Widget = &Grid{}
 
 // Grid is a widget that lays out widgets in a grid.
 type Grid struct {
-	size image.Point
+	WidgetBase
 
 	rows, cols int
 
@@ -19,9 +19,6 @@ type Grid struct {
 	hasBorder bool
 
 	cells map[image.Point]Widget
-
-	sizePolicyX SizePolicy
-	sizePolicyY SizePolicy
 
 	columnStretch map[int]int
 	rowStretch    map[int]int
@@ -100,11 +97,6 @@ func (g *Grid) Draw(p *Painter) {
 	}
 }
 
-// Size returns the size of the grid.
-func (g *Grid) Size() image.Point {
-	return g.size
-}
-
 // MinSizeHint returns the minimum size the widget is allowed to be.
 func (g *Grid) MinSizeHint() image.Point {
 	if g.cols == 0 || g.rows == 0 {
@@ -151,11 +143,6 @@ func (g *Grid) SizeHint() image.Point {
 	}
 
 	return image.Point{width, height}
-}
-
-// SizePolicy returns the default layout behavior.
-func (g *Grid) SizePolicy() (SizePolicy, SizePolicy) {
-	return g.sizePolicyX, g.sizePolicyY
 }
 
 func (g *Grid) Resize(size image.Point) {
@@ -278,106 +265,6 @@ func (g *Grid) rowcol(i int, a Alignment) []Widget {
 		}
 	}
 	return cells
-}
-
-// Resize updates the size of the grid.
-func (g *Grid) Resize2(size image.Point) {
-	hpol, vpol := g.SizePolicy()
-
-	switch hpol {
-	case Preferred:
-		fallthrough
-	case Minimum:
-		g.size.X = g.SizeHint().X
-	case Expanding:
-		g.size.X = size.X
-	}
-
-	switch vpol {
-	case Preferred:
-		fallthrough
-	case Minimum:
-		g.size.Y = g.SizeHint().Y
-	case Expanding:
-		g.size.Y = size.Y
-	}
-
-	inner := g.size
-
-	if g.hasBorder {
-		inner.X = g.size.X - (g.cols + 1)
-		inner.Y = g.size.Y - (g.rows + 1)
-	}
-
-	g.rowHeights = g.distributeRowHeight(inner)
-	g.colWidths = g.distributeColumnWidth(inner)
-
-	// Resize children.
-	for pos, w := range g.cells {
-		w.Resize(image.Point{g.colWidths[pos.X], g.rowHeights[pos.Y]})
-	}
-}
-
-func (g *Grid) distributeColumnWidth(available image.Point) []int {
-	columns := make([]int, g.cols)
-
-	// Distribute minimum space.
-	for i := 0; i < g.cols; i++ {
-		columns[i] = g.minColumnWidth(i)
-	}
-
-	var used int
-	for _, w := range columns {
-		used += w
-	}
-
-	// Distribute remaining space (if any).
-	extra := available.X - used
-
-	// Distribute preferred space
-K:
-	for extra > 0 {
-		starting := extra
-		for i, w := range columns {
-			hint := g.columnWidth(i)
-			if w < hint {
-				columns[i] = w + 1
-				extra--
-
-				if extra == 0 {
-					break K
-				}
-			}
-		}
-		if starting == extra {
-			break K
-		}
-	}
-
-	// Distribute surplus space.
-L:
-	for extra > 0 {
-		starting := extra
-		for i, w := range columns {
-			if s, ok := g.columnStretch[i]; ok && s > 0 {
-				if extra > s {
-					columns[i] = w + s
-					extra -= s
-				} else {
-					columns[i] = w + extra
-					extra -= extra
-				}
-				if extra == 0 {
-					break L
-				}
-			}
-		}
-		if starting == extra {
-			break L
-		}
-	}
-
-	return columns
 }
 
 func (g *Grid) distributeRowHeight(available image.Point) []int {
@@ -533,12 +420,6 @@ func (g *Grid) SetCell(pos image.Point, w Widget) {
 // SetBorder sets whether the border is visible or not.
 func (g *Grid) SetBorder(enabled bool) {
 	g.hasBorder = enabled
-}
-
-// SetSizePolicy sets the size policy for each axis.
-func (g *Grid) SetSizePolicy(horizontal, vertical SizePolicy) {
-	g.sizePolicyX = horizontal
-	g.sizePolicyY = vertical
 }
 
 // AppendRow adds a new row at the end.

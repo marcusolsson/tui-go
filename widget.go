@@ -20,6 +20,7 @@ type Widget interface {
 	SizePolicy() (SizePolicy, SizePolicy)
 	Resize(size image.Point)
 	OnEvent(ev Event)
+	SetFocused(bool)
 }
 
 type WidgetBase struct {

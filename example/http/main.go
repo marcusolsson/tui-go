@@ -7,22 +7,30 @@ import (
 func main() {
 	reqParamsEdit := tui.NewTextEdit()
 	reqParamsEdit.SetText("x=2")
-	reqParamsEdit.SetFocused(true)
 
 	reqParams := tui.NewVBox(reqParamsEdit)
 	reqParams.SetTitle("URL Params")
 	reqParams.SetBorder(true)
 
-	reqMethod := tui.NewVBox(tui.NewLabel("GET"))
+	reqMethodEntry := tui.NewEntry()
+	reqMethodEntry.SetText("GET")
+
+	reqMethod := tui.NewVBox(reqMethodEntry)
 	reqMethod.SetTitle("Request method")
 	reqMethod.SetBorder(true)
 	reqMethod.SetSizePolicy(tui.Preferred, tui.Maximum)
 
-	reqData := tui.NewVBox(tui.NewLabel(`{"id": 12}`))
+	reqDataEdit := tui.NewTextEdit()
+	reqDataEdit.SetText(`{"id": 12}`)
+
+	reqData := tui.NewVBox(reqDataEdit)
 	reqData.SetTitle("Request body")
 	reqData.SetBorder(true)
 
-	reqHead := tui.NewVBox(tui.NewLabel("User-Agent: myBrowser"))
+	reqHeadEdit := tui.NewTextEdit()
+	reqHeadEdit.SetText("User-Agent: myBrowser")
+
+	reqHead := tui.NewVBox(reqHeadEdit)
 	reqHead.SetTitle("Request headers")
 	reqHead.SetBorder(true)
 
@@ -55,6 +63,8 @@ func main() {
 	urlBox.SetBorder(true)
 
 	root := tui.NewVBox(urlBox, browser)
+
+	tui.DefaultFocusChain.Set(urlEntry, reqParamsEdit, reqMethodEntry, reqDataEdit, reqHeadEdit)
 
 	ui := tui.New(root)
 	ui.SetKeybinding(tui.KeyEsc, func() { ui.Quit() })

@@ -55,3 +55,7 @@ func (p *Padder) Resize(size image.Point) {
 func (p *Padder) OnEvent(ev Event) {
 	p.widget.OnEvent(ev)
 }
+
+func (p *Padder) SetFocused(f bool) {
+	p.widget.SetFocused(f)
+}

@@ -23,7 +23,6 @@ func main() {
 	status := tui.NewStatusBar("Ready.")
 
 	login := tui.NewButton("[Login]")
-	login.SetFocused(true)
 	login.OnActivated(func(b *tui.Button) {
 		status.SetText("Logged in.")
 	})
@@ -55,6 +54,8 @@ func main() {
 		content,
 		status,
 	)
+
+	tui.DefaultFocusChain.Set(user, password, login, register)
 
 	ui := tui.New(root)
 	ui.SetKeybinding(tui.KeyEsc, func() { ui.Quit() })

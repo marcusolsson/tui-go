@@ -17,6 +17,8 @@ type tcellUI struct {
 	quit chan struct{}
 
 	screen tcell.Screen
+
+	kbFocus *KbFocusController
 }
 
 func newTcellUI(root Widget) (*tcellUI, error) {
@@ -36,11 +38,16 @@ func newTcellUI(root Widget) (*tcellUI, error) {
 		keybindings: make([]*Keybinding, 0),
 		quit:        make(chan struct{}, 1),
 		screen:      screen,
+		kbFocus:     &KbFocusController{chain: DefaultFocusChain},
 	}, nil
 }
 
 func (ui *tcellUI) SetTheme(p *Theme) {
 	ui.Painter.Theme = p
+}
+
+func (ui *tcellUI) SetFocusChain(chain FocusChain) {
+	ui.kbFocus.chain = chain
 }
 
 func (ui *tcellUI) SetKeybinding(k interface{}, fn func()) {
@@ -60,6 +67,11 @@ func (ui *tcellUI) SetKeybinding(k interface{}, fn func()) {
 func (ui *tcellUI) Run() error {
 	if err := ui.screen.Init(); err != nil {
 		return err
+	}
+
+	if w := ui.kbFocus.chain.FocusDefault(); w != nil {
+		w.SetFocused(true)
+		ui.kbFocus.focusedWidget = w
 	}
 
 	ui.screen.SetStyle(tcell.StyleDefault)
@@ -98,6 +110,7 @@ func (ui *tcellUI) notify(ev Event) {
 			b.Handler()
 		}
 	}
+	ui.kbFocus.OnEvent(ev)
 	ui.Root.OnEvent(ev)
 }
 
