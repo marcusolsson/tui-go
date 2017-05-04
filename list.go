@@ -101,6 +101,12 @@ func (l *List) AddItems(items ...string) {
 	l.items = append(l.items, items...)
 }
 
+func (l *List) Clear() {
+       l.items = []string{}
+       l.pos = 0
+       l.selected = -1
+}
+
 func (l *List) SetSelected(i int) {
 	l.selected = i
 }
