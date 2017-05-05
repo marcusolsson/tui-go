@@ -101,7 +101,7 @@ func (l *List) AddItems(items ...string) {
 	l.items = append(l.items, items...)
 }
 
-func (l *List) Clear() {
+func (l *List) RemoveItems() {
        l.items = []string{}
        l.pos = 0
        l.selected = -1
