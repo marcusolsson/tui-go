@@ -20,6 +20,7 @@ const (
 	KeyEnter
 	KeySpace
 	KeyTab
+	KeyBacktab
 	KeyEsc
 	KeyBackspace
 	KeyBackspace2
@@ -29,8 +30,19 @@ const (
 	KeyArrowRight
 )
 
+type ModMask int16
+
+const (
+	ModShift ModMask = 1 << iota
+	ModCtrl
+	ModAlt
+	ModMeta
+	ModNone ModMask = 0
+)
+
 type Event struct {
-	Type EventType
-	Key  Key
-	Ch   rune
+	Type      EventType
+	Key       Key
+	Ch        rune
+	Modifiers ModMask
 }

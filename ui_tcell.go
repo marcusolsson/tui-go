@@ -118,9 +118,10 @@ func convertTcellEvent(tev tcell.Event) Event {
 	switch tev := tev.(type) {
 	case *tcell.EventKey:
 		return Event{
-			Type: EventKey,
-			Key:  convertTcellEventKey(tev.Key()),
-			Ch:   tev.Rune(),
+			Type:      EventKey,
+			Key:       convertTcellEventKey(tev.Key()),
+			Ch:        tev.Rune(),
+			Modifiers: ModMask(tev.Modifiers()),
 		}
 	default:
 		return Event{}
@@ -133,6 +134,8 @@ func convertTcellEventKey(key tcell.Key) Key {
 		return KeyEnter
 	case tcell.KeyTab:
 		return KeyTab
+	case tcell.KeyBacktab:
+		return KeyBacktab
 	case tcell.KeyEsc:
 		return KeyEsc
 	case tcell.KeyBackspace:

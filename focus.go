@@ -13,13 +13,20 @@ type KbFocusController struct {
 }
 
 func (c *KbFocusController) OnEvent(e Event) {
-	if c.chain == nil {
+	if e.Type != EventKey || c.chain == nil {
 		return
 	}
-	if e.Type == EventKey && e.Key == KeyTab {
+	switch e.Key {
+	case KeyTab:
 		if c.focusedWidget != nil {
 			c.focusedWidget.SetFocused(false)
 			c.focusedWidget = c.chain.FocusNext(c.focusedWidget)
+			c.focusedWidget.SetFocused(true)
+		}
+	case KeyBacktab:
+		if c.focusedWidget != nil {
+			c.focusedWidget.SetFocused(false)
+			c.focusedWidget = c.chain.FocusPrev(c.focusedWidget)
 			c.focusedWidget.SetFocused(true)
 		}
 	}

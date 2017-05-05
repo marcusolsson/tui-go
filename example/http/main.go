@@ -1,13 +1,10 @@
 package main
 
 import (
-	"net/http"
-
-	"strings"
-
-	"sort"
-
 	"io/ioutil"
+	"net/http"
+	"sort"
+	"strings"
 
 	"github.com/marcusolsson/tui-go"
 )
