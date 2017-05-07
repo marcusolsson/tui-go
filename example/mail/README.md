@@ -1,3 +1,3 @@
 # mail
 
-![Screenshot](mail/screenshot.png)
+![Screenshot](screenshot.png)

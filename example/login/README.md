@@ -1,3 +1,3 @@
 # login
 
-![Screenshot](login/screenshot.png)
+![Screenshot](screenshot.png)

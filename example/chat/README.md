@@ -1,3 +1,3 @@
 # chat
 
-![Screenshot](chat/screenshot.png)
+![Screenshot](screenshot.png)

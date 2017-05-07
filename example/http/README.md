@@ -1,3 +1,3 @@
 # http
 
-![Screenshot](http/screenshot.png)
+![Screenshot](screenshot.png)

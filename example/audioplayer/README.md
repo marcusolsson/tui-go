@@ -1,3 +1,3 @@
 # audioplayer
 
-![Screenshot](audioplayer/screenshot.png)
+![Screenshot](screenshot.png)
