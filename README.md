@@ -10,7 +10,7 @@ A UI library for terminal applications.
 
 tui (pronounced _tooey_) provides a higher-level programming model for building rich terminal applications. It lets you build layout-based user interfaces that (should) gracefully handle resizing for you.
 
-![Example](docs/example.png)
+![Screenshot](example/chat/screenshot.png)
 
 ## Status
 
@@ -34,6 +34,8 @@ If you want to know what it is like to build terminal applications with tui-go, 
 
 The documentation is rather bare at the moment due to me changing the API pretty frequently. You can however explore the API in its current form at [godoc.org](https://godoc.org/github.com/marcusolsson/tui-go).
 
+For now, the best way to learn tui-go is to study and learn from the [examples](example).
+
 ## Contributing
 
 Feel free to submit pull requests, but consider letting me know by posting an issue first to make sure that your contributions will outlive any major refactoring in the near future.
@@ -44,13 +46,7 @@ Please post any feature requests you might have. Smaller requests might end up b
 
 tui-go is mainly influenced by [Qt](https://www.qt.io/) and offers a similar programming model that has been adapted to Go and the terminal.
 
-Following Go projects are related to tui-go but offers different approaches for creating terminal applications.
-
-- [termbox-go](https://github.com/nsf/termbox-go) is used by tui-go for drawing to the terminal.
-- [gocui](https://github.com/jroimartin/gocui) is a more minimalistic library for creating console user interfaces.
-- [termui](https://github.com/gizak/termui) focuses on building terminal dashboards.
-
-If you want a better overview of the alternatives for creating terminal applications, check out [this article](https://appliedgo.net/tui/) by [AppliedGo](https://appliedgo.net/).
+For an overview of the alternatives for writing terminal user interfaces, check out [this article](https://appliedgo.net/tui/) by [AppliedGo](https://appliedgo.net/).
 
 ## License
 
