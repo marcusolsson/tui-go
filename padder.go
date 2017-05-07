@@ -52,9 +52,8 @@ func (p *Padder) Resize(size image.Point) {
 	p.widget.Resize(size.Sub(p.padding.Mul(2)))
 }
 
-// OnEvent handles an event and propagates it the widget.
-func (p *Padder) OnEvent(ev Event) {
-	p.widget.OnEvent(ev)
+func (p *Padder) OnKeyEvent(ev KeyEvent) {
+	p.widget.OnKeyEvent(ev)
 }
 
 // SetFocused set the focus on the widget.

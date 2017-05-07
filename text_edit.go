@@ -18,7 +18,7 @@ type TextEdit struct {
 	onTextChange func(*TextEdit)
 }
 
-// TextEdit returns a new TextEdit.
+// NewTextEdit returns a new TextEdit.
 func NewTextEdit() *TextEdit {
 	return &TextEdit{}
 }
@@ -54,9 +54,9 @@ func (e *TextEdit) SizeHint() image.Point {
 	return image.Point{max, e.heightForWidth(max)}
 }
 
-// OnEvent handles terminal events.
-func (e *TextEdit) OnEvent(ev Event) {
-	if !e.IsFocused() || ev.Type != EventKey {
+// OnKeyEvent handles terminal events.
+func (e *TextEdit) OnKeyEvent(ev KeyEvent) {
+	if !e.IsFocused() {
 		return
 	}
 
@@ -80,7 +80,7 @@ func (e *TextEdit) OnEvent(ev Event) {
 		return
 	}
 
-	e.text = e.text + string(ev.Ch)
+	e.text = e.text + string(ev.Rune)
 	if e.onTextChange != nil {
 		e.onTextChange(e)
 	}

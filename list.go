@@ -48,8 +48,9 @@ func (l *List) SizeHint() image.Point {
 	return image.Point{width, len(l.items)}
 }
 
-func (l *List) OnEvent(ev Event) {
-	if !l.IsFocused() || ev.Type != EventKey {
+// OnKeyEvent handles terminal events.
+func (l *List) OnKeyEvent(ev KeyEvent) {
+	if !l.IsFocused() {
 		return
 	}
 
@@ -64,7 +65,7 @@ func (l *List) OnEvent(ev Event) {
 		}
 	}
 
-	switch ev.Ch {
+	switch ev.Rune {
 	case 'k':
 		l.moveUp()
 	case 'j':

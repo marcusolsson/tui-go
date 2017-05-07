@@ -405,10 +405,10 @@ func (g *Grid) minColumnWidth(i int) int {
 	return result
 }
 
-// OnEvent handles terminal events.
-func (g *Grid) OnEvent(ev Event) {
+// OnKeyEvent handles key events.
+func (g *Grid) OnKeyEvent(ev KeyEvent) {
 	for _, w := range g.cells {
-		w.OnEvent(ev)
+		w.OnKeyEvent(ev)
 	}
 }
 
