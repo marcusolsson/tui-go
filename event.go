@@ -1,17 +1,6 @@
 package tui
 
-type EventType int
-
-const (
-	EventUnknown EventType = iota
-	EventKey
-	EventResize
-	EventMouse
-	EventError
-	EventInterrupt
-	EventRaw
-	EventNone
-)
+import "image"
 
 type Key int
 
@@ -30,19 +19,15 @@ const (
 	KeyArrowRight
 )
 
-type ModMask int16
-
-const (
-	ModShift ModMask = 1 << iota
-	ModCtrl
-	ModAlt
-	ModMeta
-	ModNone ModMask = 0
-)
-
-type Event struct {
-	Type      EventType
-	Key       Key
-	Ch        rune
-	Modifiers ModMask
+type KeyEvent struct {
+	Key  Key
+	Rune rune
 }
+
+type MouseEvent struct {
+	Pos image.Point
+}
+
+type PaintEvent struct{}
+
+type Event interface{}

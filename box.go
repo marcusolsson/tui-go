@@ -165,10 +165,10 @@ func (b *Box) SizeHint() image.Point {
 	return sizeHint
 }
 
-// OnEvent handles an event and propagates it to all children.
-func (b *Box) OnEvent(ev Event) {
+// OnKeyEvent handles an event and propagates it to all children.
+func (b *Box) OnKeyEvent(ev KeyEvent) {
 	for _, child := range b.children {
-		child.OnEvent(ev)
+		child.OnKeyEvent(ev)
 	}
 }
 

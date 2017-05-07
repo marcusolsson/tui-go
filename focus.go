@@ -12,8 +12,8 @@ type KbFocusController struct {
 	chain FocusChain
 }
 
-func (c *KbFocusController) OnEvent(e Event) {
-	if e.Type != EventKey || c.chain == nil {
+func (c *KbFocusController) OnKeyEvent(e KeyEvent) {
+	if c.chain == nil {
 		return
 	}
 	switch e.Key {

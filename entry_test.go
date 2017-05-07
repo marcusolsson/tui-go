@@ -98,13 +98,12 @@ func TestEntry_OnChanged(t *testing.T) {
 		}
 	})
 
-	ev := Event{
-		Type: EventKey,
-		Ch:   't',
+	ev := KeyEvent{
+		Rune: 't',
 	}
 
 	t.Run("When entry is not focused", func(t *testing.T) {
-		e.OnEvent(ev)
+		e.OnKeyEvent(ev)
 		if invoked {
 			t.Errorf("entry should not be submitted")
 		}
@@ -114,7 +113,7 @@ func TestEntry_OnChanged(t *testing.T) {
 	e.SetFocused(true)
 
 	t.Run("When entry is focused", func(t *testing.T) {
-		e.OnEvent(ev)
+		e.OnKeyEvent(ev)
 		if !invoked {
 			t.Errorf("entry should be submitted")
 		}
@@ -129,13 +128,12 @@ func TestEntry_OnSubmit(t *testing.T) {
 		invoked = true
 	})
 
-	ev := Event{
-		Type: EventKey,
-		Key:  KeyEnter,
+	ev := KeyEvent{
+		Key: KeyEnter,
 	}
 
 	t.Run("When entry is not focused", func(t *testing.T) {
-		e.OnEvent(ev)
+		e.OnKeyEvent(ev)
 		if invoked {
 			t.Errorf("entry should not be submitted")
 		}
@@ -145,7 +143,7 @@ func TestEntry_OnSubmit(t *testing.T) {
 	e.SetFocused(true)
 
 	t.Run("When entry is focused", func(t *testing.T) {
-		e.OnEvent(ev)
+		e.OnKeyEvent(ev)
 		if !invoked {
 			t.Errorf("button should be submitted")
 		}

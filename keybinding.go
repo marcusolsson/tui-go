@@ -1,11 +1,12 @@
 package tui
 
 type Keybinding struct {
-	Key     Key
-	Ch      rune
+	Key  Key
+	Rune rune
+
 	Handler func()
 }
 
-func (b *Keybinding) Match(ev Event) bool {
-	return (b.Key == ev.Key) && (b.Ch == ev.Ch)
+func (b *Keybinding) Match(ev KeyEvent) bool {
+	return b.Key == ev.Key && b.Rune == ev.Rune
 }

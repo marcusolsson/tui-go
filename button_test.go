@@ -12,13 +12,12 @@ func TestButton_OnActivated(t *testing.T) {
 		invoked = true
 	})
 
-	ev := Event{
-		Type: EventKey,
-		Key:  KeyEnter,
+	ev := KeyEvent{
+		Key: KeyEnter,
 	}
 
 	t.Run("When button is not focused", func(t *testing.T) {
-		btn.OnEvent(ev)
+		btn.OnKeyEvent(ev)
 		if invoked {
 			t.Errorf("button should not be activated")
 		}
@@ -28,7 +27,7 @@ func TestButton_OnActivated(t *testing.T) {
 	btn.SetFocused(true)
 
 	t.Run("When button is focused", func(t *testing.T) {
-		btn.OnEvent(ev)
+		btn.OnKeyEvent(ev)
 		if !invoked {
 			t.Errorf("button should be activated")
 		}
