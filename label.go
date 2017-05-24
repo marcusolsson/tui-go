@@ -15,6 +15,9 @@ type Label struct {
 
 	text     string
 	wordWrap bool
+
+	// cache the result of SizeHint() (see #14)
+	cacheSizeHint *image.Point
 }
 
 // NewLabel returns a new Label.
@@ -43,6 +46,9 @@ func (l *Label) MinSizeHint() image.Point {
 
 // SizeHint returns the recommended size for the label.
 func (l *Label) SizeHint() image.Point {
+	if l.cacheSizeHint != nil {
+		return *l.cacheSizeHint
+	}
 	var max int
 	lines := strings.Split(l.text, "\n")
 	for _, line := range lines {
@@ -50,7 +56,9 @@ func (l *Label) SizeHint() image.Point {
 			max = w
 		}
 	}
-	return image.Point{max, l.heightForWidth(max)}
+	sizeHint := image.Point{max, l.heightForWidth(max)}
+	l.cacheSizeHint = &sizeHint
+	return sizeHint
 }
 
 func (l *Label) heightForWidth(w int) int {
@@ -59,6 +67,7 @@ func (l *Label) heightForWidth(w int) int {
 
 // SetText sets the text content of the label.
 func (l *Label) SetText(text string) {
+	l.cacheSizeHint = nil
 	l.text = text
 }
 
