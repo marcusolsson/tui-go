@@ -42,6 +42,13 @@ Feel free to submit pull requests, but consider letting me know by posting an is
 
 Please post any feature requests you might have. Smaller requests might end up being implemented rather quickly and larger ones will be considered for the road map.
 
+### Contributors
+
+- Doug Reese (@dougreese)
+- Yann Malet (@yml)
+- Pontus Leitzler (@leitzler)
+- Johan Sageryd (@jsageryd)
+
 ## Related projects
 
 tui-go is mainly influenced by [Qt](https://www.qt.io/) and offers a similar programming model that has been adapted to Go and the terminal.
