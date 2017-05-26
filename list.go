@@ -127,6 +127,10 @@ func (l *List) RemoveItem(i int) {
 	// Shrink items by one.
 	l.items[len(l.items)-1] = ""
 	l.items = l.items[:len(l.items)-1]
+
+	if l.onSelectionChanged != nil {
+		l.onSelectionChanged(l)
+	}
 }
 
 func (l *List) Length() int {
