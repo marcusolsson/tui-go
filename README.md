@@ -44,10 +44,10 @@ Please post any feature requests you might have. Smaller requests might end up b
 
 ### Contributors
 
-- Doug Reese (@dougreese)
-- Yann Malet (@yml)
-- Pontus Leitzler (@leitzler)
-- Johan Sageryd (@jsageryd)
+- Doug Reese ([@dougreese](https://github.com/dougreese))
+- Yann Malet ([@yml](https://github.com/yml))
+- Pontus Leitzler ([@leitzler](https://github.com/leitzler))
+- Johan Sageryd ([@jsageryd](https://github.com/jsageryd))
 
 ## Related projects
 
