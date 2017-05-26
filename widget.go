@@ -21,6 +21,7 @@ type Widget interface {
 	Resize(size image.Point)
 	OnEvent(ev Event)
 	SetFocused(bool)
+	IsFocused() bool
 }
 
 type WidgetBase struct {
