@@ -44,10 +44,11 @@ Please post any feature requests you might have. Smaller requests might end up b
 
 ### Contributors
 
+- Marcus Olsson ([@marcusolsson](https://github.com/marcusolsson))
 - Doug Reese ([@dougreese](https://github.com/dougreese))
-- Yann Malet ([@yml](https://github.com/yml))
 - Pontus Leitzler ([@leitzler](https://github.com/leitzler))
 - Johan Sageryd ([@jsageryd](https://github.com/jsageryd))
+- Yann Malet ([@yml](https://github.com/yml))
 
 ## Related projects
 
