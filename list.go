@@ -110,6 +110,29 @@ func (l *List) RemoveItems() {
 	}
 }
 
+func (l *List) RemoveItem(i int) {
+	// Adjust pos and selected before removing.
+	if l.pos >= len(l.items) {
+		l.pos--
+	}
+	if l.selected == i {
+		l.selected = -1
+	} else if l.selected > i {
+		l.selected--
+	}
+
+	// Copy items following i to position i.
+	copy(l.items[i:], l.items[i+1:])
+
+	// Shrink items by one.
+	l.items[len(l.items)-1] = ""
+	l.items = l.items[:len(l.items)-1]
+}
+
+func (l *List) Length() int {
+	return len(l.items)
+}
+
 func (l *List) SetSelected(i int) {
 	l.selected = i
 }
