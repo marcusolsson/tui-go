@@ -54,6 +54,7 @@ func (b *Box) SetBorder(enabled bool) {
 	b.border = enabled
 }
 
+// SetTitle sets the title of the box.
 func (b *Box) SetTitle(title string) {
 	b.title = title
 }
@@ -63,36 +64,53 @@ func (b *Box) Alignment() Alignment {
 	return b.alignment
 }
 
+// IsFocused return true if one of the children is focused.
+func (b *Box) IsFocused() bool {
+	for _, w := range b.children {
+		if w.IsFocused() {
+			return true
+		}
+	}
+	return false
+}
+
 // Draw recursively draws the children it contains.
 func (b *Box) Draw(p *Painter) {
+	style := "box"
+	if b.IsFocused() {
+		style += ".focused"
+	}
+
 	sz := b.Size()
 
-	if b.border {
-		p.DrawRect(0, 0, sz.X, sz.Y)
-		p.WithMask(image.Rect(2, 0, sz.X-3, 0)).DrawText(2, 0, b.title)
+	p.WithStyle(style, func(p *Painter) {
+		if b.border {
+			p.DrawRect(0, 0, sz.X, sz.Y)
+			p.WithMask(image.Rect(2, 0, sz.X-3, 0)).DrawText(2, 0, b.title)
 
-		p.Translate(1, 1)
-		defer p.Restore()
-	}
-
-	var off image.Point
-	for _, child := range b.children {
-		switch b.Alignment() {
-		case Horizontal:
-			p.Translate(off.X, 0)
-		case Vertical:
-			p.Translate(0, off.Y)
+			p.Translate(1, 1)
+			defer p.Restore()
 		}
 
-		child.Draw(p.WithMask(image.Rectangle{
-			Min: image.ZP,
-			Max: child.Size().Sub(image.Point{1, 1}),
-		}))
+		var off image.Point
+		for _, child := range b.children {
+			switch b.Alignment() {
+			case Horizontal:
+				p.Translate(off.X, 0)
+			case Vertical:
+				p.Translate(0, off.Y)
+			}
 
-		p.Restore()
+			child.Draw(p.WithMask(image.Rectangle{
+				Min: image.ZP,
+				Max: child.Size().Sub(image.Point{1, 1}),
+			}))
 
-		off = off.Add(child.Size())
-	}
+			p.Restore()
+
+			off = off.Add(child.Size())
+		}
+	})
 }
 
 // MinSizeHint returns the minimum size for the layout.
