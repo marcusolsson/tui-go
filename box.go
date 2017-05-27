@@ -83,34 +83,34 @@ func (b *Box) Draw(p *Painter) {
 
 	sz := b.Size()
 
-	p.WithStyle(style, func(p *Painter) {
-		if b.border {
+	if b.border {
+		p.WithStyle(style, func(p *Painter) {
 			p.DrawRect(0, 0, sz.X, sz.Y)
 			p.WithMask(image.Rect(2, 0, sz.X-3, 0)).DrawText(2, 0, b.title)
+		})
 
-			p.Translate(1, 1)
-			defer p.Restore()
+		p.Translate(1, 1)
+		defer p.Restore()
+	}
+
+	var off image.Point
+	for _, child := range b.children {
+		switch b.Alignment() {
+		case Horizontal:
+			p.Translate(off.X, 0)
+		case Vertical:
+			p.Translate(0, off.Y)
 		}
 
-		var off image.Point
-		for _, child := range b.children {
-			switch b.Alignment() {
-			case Horizontal:
-				p.Translate(off.X, 0)
-			case Vertical:
-				p.Translate(0, off.Y)
-			}
+		child.Draw(p.WithMask(image.Rectangle{
+			Min: image.ZP,
+			Max: child.Size().Sub(image.Point{1, 1}),
+		}))
 
-			child.Draw(p.WithMask(image.Rectangle{
-				Min: image.ZP,
-				Max: child.Size().Sub(image.Point{1, 1}),
-			}))
+		p.Restore()
 
-			p.Restore()
-
-			off = off.Add(child.Size())
-		}
-	})
+		off = off.Add(child.Size())
+	}
 }
 
 // MinSizeHint returns the minimum size for the layout.
