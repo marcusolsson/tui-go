@@ -29,7 +29,7 @@ var DefaultTheme = &Theme{
 		"list.item.selected":  {ColorWhite, ColorBlue},
 		"table.cell.selected": {ColorWhite, ColorBlue},
 		"button.focused":      {ColorWhite, ColorBlue},
-		"box.focused":         {ColorYellow, ColorDefault},
+		"box.focused":         {ColorDefault, ColorDefault},
 	},
 }
 
