@@ -277,3 +277,17 @@ func TestBox_Draw(t *testing.T) {
 		})
 	}
 }
+
+func TestBox_IsFocused(t *testing.T) {
+	btn := NewButton("Test box focus")
+	box := NewVBox(btn)
+	want := false
+	if box.IsFocused() != want {
+		t.Errorf("got = \n%t\n\nwant = \n%t", box.IsFocused(), want)
+	}
+	btn.SetFocused(true)
+	want = true
+	if box.IsFocused() != want {
+		t.Errorf("got = \n%t\n\nwant = \n%t", box.IsFocused(), want)
+	}
+}
