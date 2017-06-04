@@ -67,16 +67,11 @@ func (e *Entry) OnKeyEvent(ev KeyEvent) {
 		return
 	}
 
-	if ev.Key != 0 {
+	if ev.Key != KeyRune {
 		switch ev.Key {
 		case KeyEnter:
 			if e.onSubmit != nil {
 				e.onSubmit(e)
-			}
-		case KeySpace:
-			e.text = e.text + string(' ')
-			if e.onTextChange != nil {
-				e.onTextChange(e)
 			}
 		case KeyBackspace2:
 			if len(e.text) > 0 {

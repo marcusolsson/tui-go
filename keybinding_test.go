@@ -8,13 +8,17 @@ func TestKeybinding_Match(t *testing.T) {
 		Event   KeyEvent
 		Match   bool
 	}{
-		{Keybinding{Rune: 'a'}, KeyEvent{Rune: 'a'}, true},
-		{Keybinding{Rune: 'a'}, KeyEvent{Rune: 'l'}, false},
-		{Keybinding{Key: KeyEnter}, KeyEvent{Rune: 'l'}, false},
-		{Keybinding{Key: KeyEnter}, KeyEvent{Key: KeyEnter}, true},
+		{Keybinding{Sequence: "a"}, KeyEvent{Key: KeyRune, Rune: 'a'}, true},
+		{Keybinding{Sequence: "a"}, KeyEvent{Key: KeyRune, Rune: 'l'}, false},
+		{Keybinding{Sequence: "Enter"}, KeyEvent{Key: KeyRune, Rune: 'l'}, false},
+		{Keybinding{Sequence: "Enter"}, KeyEvent{Key: KeyEnter}, true},
+		{Keybinding{Sequence: "Ctrl+Space"}, KeyEvent{Key: KeyCtrlSpace, Modifiers: ModCtrl}, true},
 	} {
-		if got := tt.Binding.Match(tt.Event); got != tt.Match {
-			t.Errorf("got = %v; want = %v", got, tt.Match)
-		}
+		tt := tt
+		t.Run(tt.Binding.Sequence, func(t *testing.T) {
+			if got := tt.Binding.Match(tt.Event); got != tt.Match {
+				t.Errorf("got = %v; want = %v", got, tt.Match)
+			}
+		})
 	}
 }
