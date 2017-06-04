@@ -11,8 +11,8 @@ var Repaint = func() {}
 var _ UI = &tcellUI{}
 
 type tcellUI struct {
-	Painter *Painter
-	Root    Widget
+	painter *Painter
+	root    Widget
 
 	keybindings []*Keybinding
 
@@ -37,8 +37,8 @@ func newTcellUI(root Widget) (*tcellUI, error) {
 	p := NewPainter(s, DefaultTheme)
 
 	return &tcellUI{
-		Painter:     p,
-		Root:        root,
+		painter:     p,
+		root:        root,
 		keybindings: make([]*Keybinding, 0),
 		quit:        make(chan struct{}, 1),
 		screen:      screen,
@@ -47,8 +47,12 @@ func newTcellUI(root Widget) (*tcellUI, error) {
 	}, nil
 }
 
+func (ui *tcellUI) SetWidget(w Widget) {
+	ui.root = w
+}
+
 func (ui *tcellUI) SetTheme(p *Theme) {
-	ui.Painter.Theme = p
+	ui.painter.Theme = p
 }
 
 func (ui *tcellUI) SetFocusChain(chain FocusChain) {
@@ -121,10 +125,10 @@ func (ui *tcellUI) handleEvent(ev Event) {
 			}
 		}
 		ui.kbFocus.OnKeyEvent(e)
-		ui.Root.OnKeyEvent(e)
-		ui.Painter.Repaint(ui.Root)
+		ui.root.OnKeyEvent(e)
+		ui.painter.Repaint(ui.root)
 	case PaintEvent:
-		ui.Painter.Repaint(ui.Root)
+		ui.painter.Repaint(ui.root)
 	}
 }
 

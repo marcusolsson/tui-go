@@ -1,6 +1,7 @@
 package tui
 
 type UI interface {
+	SetWidget(w Widget)
 	SetTheme(p *Theme)
 	SetKeybinding(k interface{}, fn func())
 	SetFocusChain(ch FocusChain)
