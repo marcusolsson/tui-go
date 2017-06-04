@@ -59,16 +59,19 @@ func (ui *tcellUI) SetFocusChain(chain FocusChain) {
 	ui.kbFocus.chain = chain
 }
 
-func (ui *tcellUI) SetKeybinding(k interface{}, fn func()) {
+func (ui *tcellUI) SetKeybinding(k interface{}, m ModMask, fn func()) {
 	kb := new(Keybinding)
-
+	kb.Handler = fn
 	switch key := k.(type) {
 	case rune:
 		kb.Rune = key
 	case Key:
 		kb.Key = key
 	}
-	kb.Handler = fn
+
+	if m != ModNone {
+		kb.Mod = m
+	}
 
 	ui.keybindings = append(ui.keybindings, kb)
 }
