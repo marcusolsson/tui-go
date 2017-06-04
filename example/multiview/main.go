@@ -16,12 +16,12 @@ func main() {
 	root := tui.NewVBox(views[0])
 
 	ui := tui.New(root)
-	ui.SetKeybinding(tui.KeyEsc, func() { ui.Quit() })
-	ui.SetKeybinding(tui.KeyArrowLeft, func() {
+	ui.SetKeybinding("Esc", func() { ui.Quit() })
+	ui.SetKeybinding("Left", func() {
 		currentView = clamp(currentView-1, 0, len(views)-1)
 		ui.SetWidget(views[currentView])
 	})
-	ui.SetKeybinding(tui.KeyArrowRight, func() {
+	ui.SetKeybinding("Right", func() {
 		currentView = clamp(currentView+1, 0, len(views)-1)
 		ui.SetWidget(views[currentView])
 	})
