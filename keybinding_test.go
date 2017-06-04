@@ -10,6 +10,8 @@ func TestKeybinding_Match(t *testing.T) {
 	}{
 		{Keybinding{Rune: 'a'}, KeyEvent{Rune: 'a'}, true},
 		{Keybinding{Rune: 'a'}, KeyEvent{Rune: 'l'}, false},
+		{Keybinding{Rune: KeyCtrlN, Mod: ModCtrl}, KeyEvent{Rune: KeyCtrlN, Mod: ModCtrl}, true},
+		{Keybinding{Rune: 'n', Mod: ModCtrl}, KeyEvent{Rune: KeyCtrlN, Mod: ModCtrl}, false},
 		{Keybinding{Key: KeyEnter}, KeyEvent{Rune: 'l'}, false},
 		{Keybinding{Key: KeyEnter}, KeyEvent{Key: KeyEnter}, true},
 	} {

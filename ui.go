@@ -2,7 +2,7 @@ package tui
 
 type UI interface {
 	SetTheme(p *Theme)
-	SetKeybinding(k interface{}, fn func())
+	SetKeybinding(k interface{}, m ModMask, fn func())
 	SetFocusChain(ch FocusChain)
 	Run() error
 	Quit()
