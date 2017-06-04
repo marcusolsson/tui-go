@@ -3,7 +3,7 @@ package tui
 type UI interface {
 	SetWidget(w Widget)
 	SetTheme(p *Theme)
-	SetKeybinding(k interface{}, fn func())
+	SetKeybinding(seq string, fn func())
 	SetFocusChain(ch FocusChain)
 	Run() error
 	Quit()

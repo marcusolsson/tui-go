@@ -60,15 +60,10 @@ func (e *TextEdit) OnKeyEvent(ev KeyEvent) {
 		return
 	}
 
-	if ev.Key != 0 {
+	if ev.Key != KeyRune {
 		switch ev.Key {
 		case KeyEnter:
 			e.text = e.text + "\n"
-		case KeySpace:
-			e.text = e.text + string(' ')
-			if e.onTextChange != nil {
-				e.onTextChange(e)
-			}
 		case KeyBackspace2:
 			if len(e.text) > 0 {
 				e.text = trimRightLen(e.text, 1)

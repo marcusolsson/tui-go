@@ -67,9 +67,7 @@ func main() {
 	root := tui.NewHBox(sidebar, chat)
 
 	ui := tui.New(root)
-	ui.SetKeybinding(tui.KeyEsc, func() { ui.Quit() })
-	ui.SetKeybinding(tui.KeyArrowUp, func() { input.SetFocused(true) })
-	ui.SetKeybinding(tui.KeyArrowDown, func() { input.SetFocused(false) })
+	ui.SetKeybinding("Esc", func() { ui.Quit() })
 
 	if err := ui.Run(); err != nil {
 		panic(err)

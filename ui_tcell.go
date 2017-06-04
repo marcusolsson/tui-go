@@ -59,18 +59,11 @@ func (ui *tcellUI) SetFocusChain(chain FocusChain) {
 	ui.kbFocus.chain = chain
 }
 
-func (ui *tcellUI) SetKeybinding(k interface{}, fn func()) {
-	kb := new(Keybinding)
-
-	switch key := k.(type) {
-	case rune:
-		kb.Rune = key
-	case Key:
-		kb.Key = key
-	}
-	kb.Handler = fn
-
-	ui.keybindings = append(ui.keybindings, kb)
+func (ui *tcellUI) SetKeybinding(seq string, fn func()) {
+	ui.keybindings = append(ui.keybindings, &Keybinding{
+		Sequence: seq,
+		Handler:  fn,
+	})
 }
 
 func (ui *tcellUI) Run() error {
@@ -134,8 +127,9 @@ func (ui *tcellUI) handleEvent(ev Event) {
 
 func (ui *tcellUI) handleKeyEvent(tev *tcell.EventKey) {
 	ui.eventQueue <- KeyEvent{
-		Key:  convertTcellEventKey(tev.Key()),
-		Rune: tev.Rune(),
+		Key:       Key(tev.Key()),
+		Rune:      tev.Rune(),
+		Modifiers: ModMask(tev.Modifiers()),
 	}
 }
 
@@ -183,27 +177,6 @@ func (s *tcellSurface) End() {
 func (s *tcellSurface) Size() image.Point {
 	w, h := s.screen.Size()
 	return image.Point{w, h}
-}
-
-var tcellKeyMap = map[tcell.Key]Key{
-	tcell.KeyEnter:      KeyEnter,
-	tcell.KeyTab:        KeyTab,
-	tcell.KeyBacktab:    KeyBacktab,
-	tcell.KeyEsc:        KeyEsc,
-	tcell.KeyBackspace:  KeyBackspace,
-	tcell.KeyBackspace2: KeyBackspace2,
-	tcell.KeyUp:         KeyArrowUp,
-	tcell.KeyDown:       KeyArrowDown,
-	tcell.KeyLeft:       KeyArrowLeft,
-	tcell.KeyRight:      KeyArrowRight,
-}
-
-func convertTcellEventKey(key tcell.Key) Key {
-	k, ok := tcellKeyMap[key]
-	if !ok {
-		return KeyUnknown
-	}
-	return k
 }
 
 func convertColor(col Color, fg bool) tcell.Color {

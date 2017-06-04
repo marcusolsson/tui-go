@@ -15,7 +15,7 @@ func main() {
 	root := tui.NewVBox(buffer, status)
 
 	ui := tui.New(root)
-	ui.SetKeybinding(tui.KeyEsc, func() { ui.Quit() })
+	ui.SetKeybinding("Esc", func() { ui.Quit() })
 
 	if err := ui.Run(); err != nil {
 		panic(err)

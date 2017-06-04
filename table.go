@@ -92,9 +92,9 @@ func (t *Table) Draw(p *Painter) {
 // OnKeyEvent handles an event and propagates it to all children.
 func (t *Table) OnKeyEvent(ev KeyEvent) {
 	switch ev.Key {
-	case KeyArrowUp:
+	case KeyUp:
 		t.moveUp()
-	case KeyArrowDown:
+	case KeyDown:
 		t.moveDown()
 	case KeyEnter:
 		if t.onItemActivated != nil {

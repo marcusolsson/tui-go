@@ -99,13 +99,14 @@ func TestEntry_OnChanged(t *testing.T) {
 	})
 
 	ev := KeyEvent{
+		Key:  KeyRune,
 		Rune: 't',
 	}
 
 	t.Run("When entry is not focused", func(t *testing.T) {
 		e.OnKeyEvent(ev)
 		if invoked {
-			t.Errorf("entry should not be submitted")
+			t.Errorf("entry should not receive key events")
 		}
 	})
 
@@ -115,7 +116,7 @@ func TestEntry_OnChanged(t *testing.T) {
 	t.Run("When entry is focused", func(t *testing.T) {
 		e.OnKeyEvent(ev)
 		if !invoked {
-			t.Errorf("entry should be submitted")
+			t.Errorf("entry should receive key events")
 		}
 	})
 }

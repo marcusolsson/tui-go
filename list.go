@@ -55,9 +55,9 @@ func (l *List) OnKeyEvent(ev KeyEvent) {
 	}
 
 	switch ev.Key {
-	case KeyArrowUp:
+	case KeyUp:
 		l.moveUp()
-	case KeyArrowDown:
+	case KeyDown:
 		l.moveDown()
 	case KeyEnter:
 		if l.onItemActivated != nil {
