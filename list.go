@@ -146,6 +146,14 @@ func (l *List) Selected() int {
 	return l.selected
 }
 
+// Select calls SetSelected and the OnSelectionChanged function.
+func (l *List) Select(i int) {
+	l.SetSelected(i)
+	if l.onSelectionChanged != nil {
+		l.onSelectionChanged(l)
+	}
+}
+
 func (l *List) SelectedItem() string {
 	return l.items[l.selected]
 }
