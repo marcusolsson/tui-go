@@ -139,7 +139,9 @@ func (t *Table) Selected() int {
 // Select calls SetSelected and the OnSelectionChanged function.
 func (t *Table) Select(i int) {
 	t.SetSelected(i)
-	t.onSelectionChanged(t)
+	if t.onSelectionChanged != nil {
+		t.onSelectionChanged(t)
+	}
 }
 
 // OnItemActivated sets the function that is called when an item was activated.
