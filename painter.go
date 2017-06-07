@@ -148,6 +148,11 @@ func (p *Painter) RestoreStyle() {
 }
 
 func (p *Painter) WithStyle(n string, fn func(*Painter)) {
+	if !p.Theme.HasStyle(n) {
+		fn(p)
+		return
+	}
+
 	p.SetStyle(p.Theme.Style(n))
 	fn(p)
 	p.RestoreStyle()

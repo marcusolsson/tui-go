@@ -72,17 +72,26 @@ func (t *Table) Draw(p *Painter) {
 				style += ".selected"
 			}
 
-			pos := image.Point{i, j}
-			wp := t.mapCellToLocal(pos)
+			p.WithStyle(style, func(p *Painter) {
+				pos := image.Point{i, j}
+				wp := t.mapCellToLocal(pos)
+				width := t.colWidths[i]
 
-			if w, ok := t.cells[pos]; ok {
 				p.Translate(wp.X, wp.Y)
-				w.Draw(p.WithMask(image.Rectangle{
-					Min: image.ZP,
-					Max: w.Size().Sub(image.Point{1, 1}),
-				}))
-				p.Restore()
-			}
+				defer p.Restore()
+
+				if w, ok := t.cells[pos]; ok {
+					size := w.Size()
+					size.X = width
+
+					p.FillRect(0, 0, size.X, size.Y)
+
+					w.Draw(p.WithMask(image.Rectangle{
+						Min: image.ZP,
+						Max: size.Sub(image.Point{1, 1}),
+					}))
+				}
+			})
 		}
 	}
 }

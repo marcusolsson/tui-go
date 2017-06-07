@@ -49,3 +49,8 @@ func (p *Theme) Style(name string) Style {
 	}
 	return Style{ColorDefault, ColorDefault}
 }
+
+func (p *Theme) HasStyle(name string) bool {
+	_, ok := p.styles[name]
+	return ok
+}
