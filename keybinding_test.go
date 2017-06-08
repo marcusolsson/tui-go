@@ -4,20 +4,20 @@ import "testing"
 
 func TestKeybinding_Match(t *testing.T) {
 	for _, tt := range []struct {
-		Binding Keybinding
-		Event   KeyEvent
-		Match   bool
+		binding keybinding
+		event   KeyEvent
+		match   bool
 	}{
-		{Keybinding{Sequence: "a"}, KeyEvent{Key: KeyRune, Rune: 'a'}, true},
-		{Keybinding{Sequence: "a"}, KeyEvent{Key: KeyRune, Rune: 'l'}, false},
-		{Keybinding{Sequence: "Enter"}, KeyEvent{Key: KeyRune, Rune: 'l'}, false},
-		{Keybinding{Sequence: "Enter"}, KeyEvent{Key: KeyEnter}, true},
-		{Keybinding{Sequence: "Ctrl+Space"}, KeyEvent{Key: KeyCtrlSpace, Modifiers: ModCtrl}, true},
+		{keybinding{sequence: "a"}, KeyEvent{Key: KeyRune, Rune: 'a'}, true},
+		{keybinding{sequence: "a"}, KeyEvent{Key: KeyRune, Rune: 'l'}, false},
+		{keybinding{sequence: "Enter"}, KeyEvent{Key: KeyRune, Rune: 'l'}, false},
+		{keybinding{sequence: "Enter"}, KeyEvent{Key: KeyEnter}, true},
+		{keybinding{sequence: "Ctrl+Space"}, KeyEvent{Key: KeyCtrlSpace, Modifiers: ModCtrl}, true},
 	} {
 		tt := tt
-		t.Run(tt.Binding.Sequence, func(t *testing.T) {
-			if got := tt.Binding.Match(tt.Event); got != tt.Match {
-				t.Errorf("got = %v; want = %v", got, tt.Match)
+		t.Run(tt.binding.sequence, func(t *testing.T) {
+			if got := tt.binding.match(tt.event); got != tt.match {
+				t.Errorf("got = %v; want = %v", got, tt.match)
 			}
 		})
 	}

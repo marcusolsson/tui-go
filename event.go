@@ -270,6 +270,6 @@ type MouseEvent struct {
 	Pos image.Point
 }
 
-type PaintEvent struct{}
+type paintEvent struct{}
 
-type Event interface{}
+type event interface{}

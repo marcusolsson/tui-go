@@ -6,13 +6,13 @@ type FocusChain interface {
 	FocusDefault() Widget
 }
 
-type KbFocusController struct {
+type kbFocusController struct {
 	focusedWidget Widget
 
 	chain FocusChain
 }
 
-func (c *KbFocusController) OnKeyEvent(e KeyEvent) {
+func (c *kbFocusController) OnKeyEvent(e KeyEvent) {
 	if c.chain == nil {
 		return
 	}

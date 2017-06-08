@@ -4,11 +4,11 @@ import (
 	"strings"
 )
 
-type Keybinding struct {
-	Sequence string
-	Handler  func()
+type keybinding struct {
+	sequence string
+	handler  func()
 }
 
-func (b *Keybinding) Match(ev KeyEvent) bool {
-	return strings.ToLower(b.Sequence) == strings.ToLower(ev.Name())
+func (b *keybinding) match(ev KeyEvent) bool {
+	return strings.ToLower(b.sequence) == strings.ToLower(ev.Name())
 }

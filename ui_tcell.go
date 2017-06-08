@@ -14,15 +14,15 @@ type tcellUI struct {
 	painter *Painter
 	root    Widget
 
-	keybindings []*Keybinding
+	keybindings []*keybinding
 
 	quit chan struct{}
 
 	screen tcell.Screen
 
-	kbFocus *KbFocusController
+	kbFocus *kbFocusController
 
-	eventQueue chan Event
+	eventQueue chan event
 }
 
 func newTcellUI(root Widget) (*tcellUI, error) {
@@ -39,11 +39,11 @@ func newTcellUI(root Widget) (*tcellUI, error) {
 	return &tcellUI{
 		painter:     p,
 		root:        root,
-		keybindings: make([]*Keybinding, 0),
+		keybindings: make([]*keybinding, 0),
 		quit:        make(chan struct{}, 1),
 		screen:      screen,
-		kbFocus:     &KbFocusController{chain: DefaultFocusChain},
-		eventQueue:  make(chan Event, 1),
+		kbFocus:     &kbFocusController{chain: DefaultFocusChain},
+		eventQueue:  make(chan event, 1),
 	}, nil
 }
 
@@ -51,8 +51,8 @@ func (ui *tcellUI) SetWidget(w Widget) {
 	ui.root = w
 }
 
-func (ui *tcellUI) SetTheme(p *Theme) {
-	ui.painter.Theme = p
+func (ui *tcellUI) SetTheme(t *Theme) {
+	ui.painter.theme = t
 }
 
 func (ui *tcellUI) SetFocusChain(chain FocusChain) {
@@ -60,9 +60,9 @@ func (ui *tcellUI) SetFocusChain(chain FocusChain) {
 }
 
 func (ui *tcellUI) SetKeybinding(seq string, fn func()) {
-	ui.keybindings = append(ui.keybindings, &Keybinding{
-		Sequence: seq,
-		Handler:  fn,
+	ui.keybindings = append(ui.keybindings, &keybinding{
+		sequence: seq,
+		handler:  fn,
 	})
 }
 
@@ -81,7 +81,7 @@ func (ui *tcellUI) Run() error {
 	ui.screen.Clear()
 
 	Repaint = func() {
-		ui.eventQueue <- PaintEvent{}
+		ui.eventQueue <- paintEvent{}
 	}
 
 	go func() {
@@ -109,18 +109,18 @@ func (ui *tcellUI) Run() error {
 	}
 }
 
-func (ui *tcellUI) handleEvent(ev Event) {
+func (ui *tcellUI) handleEvent(ev event) {
 	switch e := ev.(type) {
 	case KeyEvent:
 		for _, b := range ui.keybindings {
-			if b.Match(e) {
-				b.Handler()
+			if b.match(e) {
+				b.handler()
 			}
 		}
 		ui.kbFocus.OnKeyEvent(e)
 		ui.root.OnKeyEvent(e)
 		ui.painter.Repaint(ui.root)
-	case PaintEvent:
+	case paintEvent:
 		ui.painter.Repaint(ui.root)
 	}
 }
@@ -139,7 +139,7 @@ func (ui *tcellUI) handleMouseEvent(ev *tcell.EventMouse) {
 }
 
 func (ui *tcellUI) handleResizeEvent(ev *tcell.EventResize) {
-	ui.eventQueue <- PaintEvent{}
+	ui.eventQueue <- paintEvent{}
 }
 
 // Quit signals to the UI to start shutting down.

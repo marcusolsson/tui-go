@@ -15,7 +15,7 @@ type Surface interface {
 
 // Painter provides operations to paint on a surface.
 type Painter struct {
-	Theme *Theme
+	theme *Theme
 
 	// Surface to paint on.
 	surface Surface
@@ -32,7 +32,7 @@ type Painter struct {
 // NewPainter returns a new instance of Painter.
 func NewPainter(s Surface, p *Theme) *Painter {
 	return &Painter{
-		Theme:   p,
+		theme:   p,
 		surface: s,
 		style:   p.Style("normal"),
 	}
@@ -144,16 +144,16 @@ func (p *Painter) SetStyle(s Style) {
 }
 
 func (p *Painter) RestoreStyle() {
-	p.SetStyle(p.Theme.Style("normal"))
+	p.SetStyle(p.theme.Style("normal"))
 }
 
 func (p *Painter) WithStyle(n string, fn func(*Painter)) {
-	if !p.Theme.HasStyle(n) {
+	if !p.theme.HasStyle(n) {
 		fn(p)
 		return
 	}
 
-	p.SetStyle(p.Theme.Style(n))
+	p.SetStyle(p.theme.Style(n))
 	fn(p)
 	p.RestoreStyle()
 }
