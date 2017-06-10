@@ -6,8 +6,10 @@ import (
 	"strings"
 )
 
+// ModMask is a mask of modifier keys.
 type ModMask int16
 
+// Modifiers that can be sent with a KeyEvent or a MouseEvent.
 const (
 	ModShift ModMask = 1 << iota
 	ModCtrl
@@ -16,12 +18,14 @@ const (
 	ModNone ModMask = 0
 )
 
+// KeyEvent represents a key press.
 type KeyEvent struct {
 	Key       Key
 	Rune      rune
 	Modifiers ModMask
 }
 
+// Name returns a user-friendly description of the key press.
 func (ev *KeyEvent) Name() string {
 	s := ""
 	m := []string{}
@@ -55,8 +59,11 @@ func (ev *KeyEvent) Name() string {
 	return s
 }
 
+// Key represents both normal and special keys. For normal letters, KeyRune is
+// used together with the Rune field in the KeyEvent.
 type Key int16
 
+// These are named keys that can be handled.
 const (
 	KeyRune Key = iota + 256
 	KeyUp
@@ -147,6 +154,7 @@ const (
 	KeyF64
 )
 
+// These are the supported control keys.
 const (
 	KeyCtrlSpace Key = iota
 	KeyCtrlA
@@ -182,6 +190,7 @@ const (
 	KeyCtrlUnderscore
 )
 
+// These are the defined ASCII values for key codes.
 const (
 	KeyNUL Key = iota
 	KeySOH
@@ -218,6 +227,7 @@ const (
 	KeyDEL Key = 0x7F
 )
 
+// These are aliases for other keys.
 const (
 	KeyBackspace  = KeyBS
 	KeyTab        = KeyTAB
@@ -266,6 +276,8 @@ var keyNames = map[Key]string{
 	KeyCtrlZ:      "Ctrl-Z",
 }
 
+// MouseEvent represents the event where a mouse button was pressed or
+// released.
 type MouseEvent struct {
 	Pos image.Point
 }

@@ -97,7 +97,7 @@ func (g *Grid) Draw(p *Painter) {
 	}
 }
 
-// MinSizeHint returns the minimum size the widget is allowed to be.
+// MinSizeHint returns the minimum size hint for the grid.
 func (g *Grid) MinSizeHint() image.Point {
 	if g.cols == 0 || g.rows == 0 {
 		return image.Point{}
@@ -121,7 +121,7 @@ func (g *Grid) MinSizeHint() image.Point {
 	return image.Point{width, height}
 }
 
-// SizeHint returns the recommended size for the grid.
+// SizeHint returns the recommended size hint for the grid.
 func (g *Grid) SizeHint() image.Point {
 	if g.cols == 0 || g.rows == 0 {
 		return image.Point{}
@@ -145,6 +145,12 @@ func (g *Grid) SizeHint() image.Point {
 	return image.Point{width, height}
 }
 
+// Resize recursively updates the size of the Grid and all the widgets it
+// contains. This is a potentially expensive operation and should be invoked
+// with restraint.
+//
+// Resize is called by the layout engine and is not intended to be used by end
+// users.
 func (g *Grid) Resize(size image.Point) {
 	g.size = size
 	inner := g.size

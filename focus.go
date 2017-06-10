@@ -1,5 +1,6 @@
 package tui
 
+// FocusChain enables custom focus traversal when Tab or Backtab is pressed.
 type FocusChain interface {
 	FocusNext(w Widget) Widget
 	FocusPrev(w Widget) Widget
@@ -32,18 +33,24 @@ func (c *kbFocusController) OnKeyEvent(e KeyEvent) {
 	}
 }
 
+// DefaultFocusChain is the default focus chain.
 var DefaultFocusChain = &SimpleFocusChain{
 	widgets: make([]Widget, 0),
 }
 
+// SimpleFocusChain represents a ring of widgets where focus is loops to the
+// first widget when it reaches the end.
 type SimpleFocusChain struct {
 	widgets []Widget
 }
 
+// Set sets the widgets in the focus chain. Widgets will received focus in the
+// order widgets were passed.
 func (c *SimpleFocusChain) Set(ws ...Widget) {
 	c.widgets = ws
 }
 
+// FocusNext returns the widget in the ring that is after the given widget.
 func (c *SimpleFocusChain) FocusNext(current Widget) Widget {
 	for i, w := range c.widgets {
 		if w != current {
@@ -57,6 +64,7 @@ func (c *SimpleFocusChain) FocusNext(current Widget) Widget {
 	return nil
 }
 
+// FocusPrev returns the widget in the ring that is before the given widget.
 func (c *SimpleFocusChain) FocusPrev(current Widget) Widget {
 	for i, w := range c.widgets {
 		if w != current {
@@ -70,6 +78,8 @@ func (c *SimpleFocusChain) FocusPrev(current Widget) Widget {
 	return nil
 }
 
+// FocusDefault returns the default widget for when there is no widget
+// currently focused.
 func (c *SimpleFocusChain) FocusDefault() Widget {
 	if len(c.widgets) == 0 {
 		return nil

@@ -16,7 +16,9 @@ const (
 	Vertical
 )
 
-// Box is a layout for placing widgets.
+// Box is a layout for placing widgets either horizontally or vertically. If
+// horizontally, all widgets with have the same height. If vertically, they
+// will all have the same width.
 type Box struct {
 	WidgetBase
 
@@ -28,7 +30,7 @@ type Box struct {
 	alignment Alignment
 }
 
-// NewVBox returns a new vertical Box.
+// NewVBox returns a new vertically aligned Box.
 func NewVBox(c ...Widget) *Box {
 	return &Box{
 		children:  c,
@@ -36,7 +38,7 @@ func NewVBox(c ...Widget) *Box {
 	}
 }
 
-// NewHBox returns a new horizontal Box.
+// NewHBox returns a new horizontally aligned Box.
 func NewHBox(c ...Widget) *Box {
 	return &Box{
 		children:  c,
@@ -44,7 +46,7 @@ func NewHBox(c ...Widget) *Box {
 	}
 }
 
-// Append adds a new widget to the layout.
+// Append adds the given widget at the end of the Box.
 func (b *Box) Append(w Widget) {
 	b.children = append(b.children, w)
 }
@@ -59,7 +61,7 @@ func (b *Box) SetTitle(title string) {
 	b.title = title
 }
 
-// Alignment returns the currently set alignment or the Box.
+// Alignment returns the current alignment of the Box.
 func (b *Box) Alignment() Alignment {
 	return b.alignment
 }
@@ -74,7 +76,7 @@ func (b *Box) IsFocused() bool {
 	return false
 }
 
-// Draw recursively draws the children it contains.
+// Draw recursively draws the widgets it contains.
 func (b *Box) Draw(p *Painter) {
 	style := "box"
 	if b.IsFocused() {
@@ -113,7 +115,7 @@ func (b *Box) Draw(p *Painter) {
 	}
 }
 
-// MinSizeHint returns the minimum size for the layout.
+// MinSizeHint returns the minimum size hint for the layout.
 func (b *Box) MinSizeHint() image.Point {
 	var minSize image.Point
 
@@ -139,7 +141,7 @@ func (b *Box) MinSizeHint() image.Point {
 	return minSize
 }
 
-// SizeHint returns the recommended size for the layout.
+// SizeHint returns the recommended size hint for the layout.
 func (b *Box) SizeHint() image.Point {
 	var sizeHint image.Point
 
@@ -172,7 +174,12 @@ func (b *Box) OnKeyEvent(ev KeyEvent) {
 	}
 }
 
-// Resize updates the size of the layout.
+// Resize recursively updates the size of the Box and all the widgets it
+// contains. This is a potentially expensive operation and should be invoked
+// with restraint.
+//
+// Resize is called by the layout engine and is not intended to be used by end
+// users.
 func (b *Box) Resize(size image.Point) {
 	b.size = size
 	inner := b.size

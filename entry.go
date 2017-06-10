@@ -9,8 +9,8 @@ import (
 
 var _ Widget = &Entry{}
 
-// Entry is a one-line text editor. It lets the user supply your application
-// with text, e.g. to input user and password information.
+// Entry is a one-line text editor. It lets the user supply the application
+// with text, e.g., to input user and password information.
 type Entry struct {
 	WidgetBase
 
@@ -56,12 +56,12 @@ func (e *Entry) Draw(p *Painter) {
 	})
 }
 
-// SizeHint returns the recommended size for the entry.
+// SizeHint returns the recommended size hint for the entry.
 func (e *Entry) SizeHint() image.Point {
 	return image.Point{10, 1}
 }
 
-// OnKeyEvent handles terminal events.
+// OnKeyEvent handles key events.
 func (e *Entry) OnKeyEvent(ev KeyEvent) {
 	if !e.IsFocused() {
 		return

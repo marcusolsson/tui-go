@@ -8,7 +8,7 @@ import (
 var _ Widget = &Button{}
 
 // Button is a widget that can be activated to perform some action, or to
-// answer a question. It displays a label that can be activated.
+// answer a question.
 type Button struct {
 	WidgetBase
 
@@ -17,7 +17,7 @@ type Button struct {
 	onActivated func(*Button)
 }
 
-// NewButton returns a new Button with the specified label.
+// NewButton returns a new Button with the given text as the label.
 func NewButton(text string) *Button {
 	return &Button{
 		text: text,
@@ -39,7 +39,7 @@ func (b *Button) Draw(p *Painter) {
 	})
 }
 
-// SizeHint returns the recommended size for the button.
+// SizeHint returns the recommended size hint for the button.
 func (b *Button) SizeHint() image.Point {
 	if len(b.text) == 0 {
 		return b.MinSizeHint()
@@ -57,7 +57,7 @@ func (b *Button) SizeHint() image.Point {
 	return size
 }
 
-// OnKeyEvent handles terminal events.
+// OnKeyEvent handles keys events.
 func (b *Button) OnKeyEvent(ev KeyEvent) {
 	if !b.IsFocused() {
 		return
@@ -67,7 +67,7 @@ func (b *Button) OnKeyEvent(ev KeyEvent) {
 	}
 }
 
-// OnActivated sets a function to be run whenever the button is activated.
+// OnActivated allows a custom function to be run whenever the button is activated.
 func (b *Button) OnActivated(fn func(b *Button)) {
 	b.onActivated = fn
 }
