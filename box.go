@@ -17,7 +17,7 @@ const (
 )
 
 // Box is a layout for placing widgets either horizontally or vertically. If
-// horizontally, all widgets with have the same height. If vertically, they
+// horizontally, all widgets will have the same height. If vertically, they
 // will all have the same width.
 type Box struct {
 	WidgetBase
