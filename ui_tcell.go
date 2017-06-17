@@ -120,6 +120,9 @@ func (ui *tcellUI) handleEvent(ev event) {
 		ui.kbFocus.OnKeyEvent(e)
 		ui.root.OnKeyEvent(e)
 		ui.painter.Repaint(ui.root)
+	case callbackEvent:
+		e.cbFn()
+		ui.painter.Repaint(ui.root)
 	case paintEvent:
 		ui.painter.Repaint(ui.root)
 	}
@@ -146,6 +149,10 @@ func (ui *tcellUI) handleResizeEvent(ev *tcell.EventResize) {
 func (ui *tcellUI) Quit() {
 	ui.screen.Fini()
 	ui.quit <- struct{}{}
+}
+
+func (ui *tcellUI) QueueUpdate(fn func()) {
+	ui.eventQueue <- callbackEvent{fn}
 }
 
 var _ Surface = &tcellSurface{}

@@ -284,4 +284,10 @@ type MouseEvent struct {
 
 type paintEvent struct{}
 
+// callbackEvent holds a user-defined function which has been submitted
+// to be called on the render thread.
+type callbackEvent struct {
+	cbFn func()
+}
+
 type event interface{}
