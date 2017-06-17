@@ -47,17 +47,6 @@ func main() {
 	status := tui.NewStatusBar("")
 	status.SetPermanentText(`VOLUME 68%`)
 
-	library.OnItemActivated(func(t *tui.Table) {
-		p.play(songs[t.Selected()-1], func(curr, max int) {
-			progress.SetCurrent(curr)
-			progress.SetMax(max)
-
-			status.SetText(fmt.Sprintf("%s / %s", time.Duration(curr)*time.Second, time.Duration(max)*time.Second))
-
-			tui.Repaint()
-		})
-	})
-
 	root := tui.NewVBox(
 		library,
 		tui.NewSpacer(),
@@ -66,6 +55,17 @@ func main() {
 	)
 
 	ui := tui.New(root)
+
+	library.OnItemActivated(func(t *tui.Table) {
+		p.play(songs[t.Selected()-1], func(curr, max int) {
+			ui.QueueUpdate(func() {
+				progress.SetCurrent(curr)
+				progress.SetMax(max)
+
+				status.SetText(fmt.Sprintf("%s / %s", time.Duration(curr)*time.Second, time.Duration(max)*time.Second))
+			})
+		})
+	})
 	ui.SetKeybinding("Esc", func() { ui.Quit() })
 	ui.SetKeybinding("q", func() { ui.Quit() })
 
