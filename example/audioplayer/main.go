@@ -58,7 +58,7 @@ func main() {
 
 	library.OnItemActivated(func(t *tui.Table) {
 		p.play(songs[t.Selected()-1], func(curr, max int) {
-			ui.QueueUpdate(func() {
+			ui.Update(func() {
 				progress.SetCurrent(curr)
 				progress.SetMax(max)
 

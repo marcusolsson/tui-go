@@ -6,7 +6,7 @@ type UI interface {
 	SetKeybinding(seq string, fn func())
 	SetFocusChain(ch FocusChain)
 	Run() error
-	QueueUpdate(fn func())
+	Update(fn func())
 	Quit()
 }
 
