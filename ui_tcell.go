@@ -151,7 +151,18 @@ func (ui *tcellUI) Quit() {
 	ui.quit <- struct{}{}
 }
 
-func (ui *tcellUI) QueueUpdate(fn func()) {
+// Schedule an update of the UI, running the given
+// function in the UI goroutine.
+//
+// Use this to update the UI in response to external events,
+// like a timer tick.
+// This method should be used any time you call methods
+// to change UI objects after the first call to `UI.Run()`;
+// changes invoked outside of either this callback or the
+// other event handler callbacks may appear to work, but
+// is likely a race condition.  (Run your program with
+// `go run -race` or `go install -race` to detect this!)
+func (ui *tcellUI) Update(fn func()) {
 	ui.eventQueue <- callbackEvent{fn}
 }
 
