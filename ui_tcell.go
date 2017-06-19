@@ -6,8 +6,6 @@ import (
 	"github.com/gdamore/tcell"
 )
 
-var Repaint = func() {}
-
 var _ UI = &tcellUI{}
 
 type tcellUI struct {
@@ -80,10 +78,6 @@ func (ui *tcellUI) Run() error {
 	ui.screen.EnableMouse()
 	ui.screen.Clear()
 
-	Repaint = func() {
-		ui.eventQueue <- paintEvent{}
-	}
-
 	go func() {
 		for {
 			switch ev := ui.screen.PollEvent().(type) {
@@ -96,8 +90,6 @@ func (ui *tcellUI) Run() error {
 			}
 		}
 	}()
-
-	Repaint()
 
 	for {
 		select {
