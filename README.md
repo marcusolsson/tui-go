@@ -46,8 +46,10 @@ Please post any feature requests you might have. Smaller requests might end up b
 
 - Marcus Olsson ([@marcusolsson](https://github.com/marcusolsson))
 - Doug Reese ([@dougreese](https://github.com/dougreese))
-- Pontus Leitzler ([@leitzler](https://github.com/leitzler))
+- Eric Myhre ([@heavenlyhash](https://github.com/heavenlyhash))
+- Gonzalo Serrano ([@gonzaloserrano](https://github.com/gonzaloserrano))
 - Johan Sageryd ([@jsageryd](https://github.com/jsageryd))
+- Pontus Leitzler ([@leitzler](https://github.com/leitzler))
 - Yann Malet ([@yml](https://github.com/yml))
 
 ## Related projects
