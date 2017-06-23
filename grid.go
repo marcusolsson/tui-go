@@ -89,8 +89,8 @@ func (g *Grid) Draw(p *Painter) {
 				p.Translate(wp.X, wp.Y)
 				w.Draw(p.WithMask(image.Rectangle{
 					Min: image.ZP,
-					Max: w.Size().Sub(image.Point{1, 1}),
-				}))
+					Max: w.Size(),
+				}.Sub(image.Point{1, 1})))
 				p.Restore()
 			}
 		}
@@ -172,11 +172,21 @@ func (g *Grid) layoutChildren(size image.Point) {
 
 func (g *Grid) doLayout(space int, a Alignment) []int {
 	var sizes []int
+	var stretch map[int]int
 
 	if a == Horizontal {
 		sizes = make([]int, g.cols)
+		stretch = g.columnStretch
 	} else if a == Vertical {
 		sizes = make([]int, g.rows)
+		stretch = g.rowStretch
+	}
+
+	var nonZeroStretchFactors int
+	for _, s := range stretch {
+		if s > 0 {
+			nonZeroStretchFactors++
+		}
 	}
 
 	remaining := space
@@ -185,6 +195,10 @@ func (g *Grid) doLayout(space int, a Alignment) []int {
 	for {
 		var changed bool
 		for i, sz := range sizes {
+			if stretch[i] > 0 {
+				continue
+			}
+
 			ws := g.rowcol(i, a)
 			var sizeHint int
 			for _, w := range ws {
@@ -211,6 +225,10 @@ func (g *Grid) doLayout(space int, a Alignment) []int {
 	for {
 		var changed bool
 		for i, sz := range sizes {
+			if stretch[i] > 0 {
+				continue
+			}
+
 			ws := g.rowcol(i, a)
 			var sizeHint int
 			for _, w := range ws {
@@ -237,20 +255,37 @@ func (g *Grid) doLayout(space int, a Alignment) []int {
 	// Distribute remaining space
 	for {
 		var changed bool
-		min := math.MaxInt8
-		for _, sz := range sizes {
-			if sz < min {
-				min = sz
-			}
-		}
-		for i, sz := range sizes {
-			if sz == min {
-				sizes[i] = sz + 1
-				remaining--
-				if remaining <= 0 {
-					goto Resize
+		if nonZeroStretchFactors == 0 {
+			min := math.MaxInt8
+			for _, sz := range sizes {
+				if sz < min {
+					min = sz
 				}
-				changed = true
+			}
+			for i, sz := range sizes {
+				if sz == min {
+					sizes[i] = sz + 1
+					remaining--
+					if remaining <= 0 {
+						goto Resize
+					}
+					changed = true
+				}
+			}
+		} else {
+			for i, sz := range sizes {
+				s := stretch[i]
+				if s > 0 {
+					if remaining-s < 0 {
+						s = remaining
+					}
+					sizes[i] = sz + s
+					remaining -= s
+					if remaining <= 0 {
+						goto Resize
+					}
+					changed = true
+				}
 			}
 		}
 		if !changed {
