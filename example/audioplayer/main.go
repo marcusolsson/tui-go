@@ -28,7 +28,7 @@ func main() {
 	library := tui.NewTable(0, 0)
 	library.SetColumnStretch(0, 1)
 	library.SetColumnStretch(1, 1)
-	library.SetColumnStretch(2, 2)
+	library.SetColumnStretch(2, 4)
 
 	library.AppendRow(
 		tui.NewLabel("ARTIST"),
