@@ -291,3 +291,137 @@ func TestBox_IsFocused(t *testing.T) {
 		t.Errorf("got = \n%t\n\nwant = \n%t", box.IsFocused(), want)
 	}
 }
+
+var insertWidgetTests = []struct {
+	test  string
+	size  image.Point
+	setup func() *Box
+	index int
+	want  string
+}{
+	{
+		test:  "Insert at beginning of box",
+		index: 0,
+		want: `
+┌──────────────────┐
+│Insertion.........│
+│..................│
+│Test 0............│
+│..................│
+│Test 1............│
+│..................│
+│Test 2............│
+│..................│
+└──────────────────┘
+`,
+	},
+	{
+		test:  "Insert in the middle",
+		index: 1,
+		want: `
+┌──────────────────┐
+│Test 0............│
+│..................│
+│Insertion.........│
+│..................│
+│Test 1............│
+│..................│
+│Test 2............│
+│..................│
+└──────────────────┘
+`,
+	},
+	{
+		test:  "Slice index out of range",
+		index: 5,
+		want: `
+┌──────────────────┐
+│Test 0............│
+│..................│
+│..................│
+│Test 1............│
+│..................│
+│..................│
+│Test 2............│
+│..................│
+└──────────────────┘
+`,
+	},
+	{
+		test:  "Append widget",
+		index: 3,
+		want: `
+┌──────────────────┐
+│Test 0............│
+│..................│
+│Test 1............│
+│..................│
+│Test 2............│
+│..................│
+│Insertion.........│
+│..................│
+└──────────────────┘
+`,
+	},
+}
+
+func TestBox_Insert(t *testing.T) {
+	for _, tt := range insertWidgetTests {
+		tt := tt
+		t.Run(tt.test, func(t *testing.T) {
+			var surface *testSurface
+			surface = newTestSurface(20, 10)
+			painter := NewPainter(surface, NewTheme())
+
+			label0 := NewLabel("Test 0")
+			label1 := NewLabel("Test 1")
+			label2 := NewLabel("Test 2")
+
+			b := NewVBox(label0, label1, label2)
+
+			insertLabel := NewLabel("Insertion")
+			b.Insert(tt.index, insertLabel)
+
+			b.SetBorder(true)
+			b.Resize(surface.size)
+			b.Draw(painter)
+			if surface.String() != tt.want {
+				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			}
+		})
+	}
+}
+
+func TestBox_Prepend(t *testing.T) {
+	want := `
+┌──────────────────┐
+│Prepend...........│
+│..................│
+│Test 0............│
+│..................│
+│Test 1............│
+│..................│
+│Test 2............│
+│..................│
+└──────────────────┘
+`
+	var surface *testSurface
+	surface = newTestSurface(20, 10)
+	painter := NewPainter(surface, NewTheme())
+
+	label0 := NewLabel("Test 0")
+	label1 := NewLabel("Test 1")
+	label2 := NewLabel("Test 2")
+
+	b := NewVBox(label0, label1, label2)
+
+	label := NewLabel("Prepend")
+	b.Prepend(label)
+
+	b.SetBorder(true)
+	b.Resize(surface.size)
+	b.Draw(painter)
+	if surface.String() != want {
+		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	}
+}
