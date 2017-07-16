@@ -158,9 +158,10 @@ func (p *Painter) WithStyle(n string, fn func(*Painter)) {
 	p.RestoreStyle()
 }
 
-func (p *Painter) WithMask(r image.Rectangle) *Painter {
+func (p *Painter) WithMask(r image.Rectangle, fn func(*Painter)) {
 	p.mask = r
-	return p
+	fn(p)
+	p.mask = image.ZR
 }
 
 func (p *Painter) mapLocalToWorld(point image.Point) image.Point {

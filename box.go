@@ -88,7 +88,9 @@ func (b *Box) Draw(p *Painter) {
 	if b.border {
 		p.WithStyle(style, func(p *Painter) {
 			p.DrawRect(0, 0, sz.X, sz.Y)
-			p.WithMask(image.Rect(2, 0, sz.X-3, 0)).DrawText(2, 0, b.title)
+			p.WithMask(image.Rect(2, 0, sz.X-3, 0), func(p *Painter) {
+				p.DrawText(2, 0, b.title)
+			})
 		})
 
 		p.Translate(1, 1)
@@ -104,10 +106,12 @@ func (b *Box) Draw(p *Painter) {
 			p.Translate(0, off.Y)
 		}
 
-		child.Draw(p.WithMask(image.Rectangle{
+		p.WithMask(image.Rectangle{
 			Min: image.ZP,
 			Max: child.Size().Sub(image.Point{1, 1}),
-		}))
+		}, func(p *Painter) {
+			child.Draw(p)
+		})
 
 		p.Restore()
 

@@ -87,10 +87,12 @@ func (g *Grid) Draw(p *Painter) {
 
 			if w, ok := g.cells[pos]; ok {
 				p.Translate(wp.X, wp.Y)
-				w.Draw(p.WithMask(image.Rectangle{
+				p.WithMask(image.Rectangle{
 					Min: image.ZP,
 					Max: w.Size(),
-				}.Sub(image.Point{1, 1})))
+				}.Sub(image.Point{1, 1}), func(p *Painter) {
+					w.Draw(p)
+				})
 				p.Restore()
 			}
 		}
