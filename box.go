@@ -51,6 +51,22 @@ func (b *Box) Append(w Widget) {
 	b.children = append(b.children, w)
 }
 
+// Prepend adds the given widget at the start of the Box.
+func (b *Box) Prepend(w Widget) {
+	b.children = append([]Widget{w}, b.children...)
+}
+
+// Insert adds the widget into the Box at a given index.
+func (b *Box) Insert(i int, w Widget) {
+	if len(b.children) < i {
+		return
+	}
+
+	b.children = append(b.children, nil)
+	copy(b.children[i+1:], b.children[i:])
+	b.children[i] = w
+}
+
 // SetBorder sets whether the border is visible or not.
 func (b *Box) SetBorder(enabled bool) {
 	b.border = enabled
