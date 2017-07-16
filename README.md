@@ -60,6 +60,7 @@ Please post any feature requests you might have. Smaller requests might end up b
 - Marcus Olsson ([@marcusolsson](https://github.com/marcusolsson))
 - Doug Reese ([@dougreese](https://github.com/dougreese))
 - Eric Myhre ([@heavenlyhash](https://github.com/heavenlyhash))
+- Fenimore [@fenimore](https://github.com/fenimore)
 - Gonzalo Serrano ([@gonzaloserrano](https://github.com/gonzaloserrano))
 - Johan Sageryd ([@jsageryd](https://github.com/jsageryd))
 - Pontus Leitzler ([@leitzler](https://github.com/leitzler))
