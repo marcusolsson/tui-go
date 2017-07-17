@@ -168,7 +168,9 @@ func (s *tcellSurface) SetCell(x, y int, ch rune, style Style) {
 	st := tcell.StyleDefault.Normal().
 		Foreground(convertColor(style.Fg, false)).
 		Background(convertColor(style.Bg, false)).
-		Reverse(style.Reverse)
+		Reverse(style.Reverse).
+		Bold(style.Bold).
+		Underline(style.Underline)
 
 	s.screen.SetContent(x, y, ch, nil, st)
 }

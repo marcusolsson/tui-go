@@ -18,6 +18,9 @@ type Style struct {
 	Fg      Color
 	Bg      Color
 	Reverse bool
+
+	Bold      bool
+	Underline bool
 }
 
 type Theme struct {
