@@ -15,8 +15,9 @@ const (
 )
 
 type Style struct {
-	Fg Color
-	Bg Color
+	Fg      Color
+	Bg      Color
+	Reverse bool
 }
 
 type Theme struct {
@@ -25,11 +26,10 @@ type Theme struct {
 
 var DefaultTheme = &Theme{
 	styles: map[string]Style{
-		"normal":              {ColorDefault, ColorDefault},
-		"list.item.selected":  {ColorWhite, ColorBlue},
-		"table.cell.selected": {ColorWhite, ColorBlue},
-		"button.focused":      {ColorWhite, ColorBlue},
-		"box.focused":         {ColorDefault, ColorDefault},
+		"list.item.selected":  {Reverse: true},
+		"table.cell.selected": {Reverse: true},
+		"button.focused":      {Reverse: true},
+		"box.focused":         {Reverse: true},
 	},
 }
 
@@ -47,7 +47,7 @@ func (p *Theme) Style(name string) Style {
 	if c, ok := p.styles[name]; ok {
 		return c
 	}
-	return Style{ColorDefault, ColorDefault}
+	return Style{Fg: ColorDefault, Bg: ColorDefault}
 }
 
 func (p *Theme) HasStyle(name string) bool {

@@ -167,7 +167,8 @@ type tcellSurface struct {
 func (s *tcellSurface) SetCell(x, y int, ch rune, style Style) {
 	st := tcell.StyleDefault.Normal().
 		Foreground(convertColor(style.Fg, false)).
-		Background(convertColor(style.Bg, false))
+		Background(convertColor(style.Bg, false)).
+		Reverse(style.Reverse)
 
 	s.screen.SetContent(x, y, ch, nil, st)
 }
