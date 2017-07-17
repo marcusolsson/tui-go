@@ -102,8 +102,10 @@ func (b *Box) Draw(p *Painter) {
 	sz := b.Size()
 
 	if b.border {
-		p.WithStyle(style, func(p *Painter) {
+		p.WithStyle(style+".border", func(p *Painter) {
 			p.DrawRect(0, 0, sz.X, sz.Y)
+		})
+		p.WithStyle(style, func(p *Painter) {
 			p.WithMask(image.Rect(2, 0, sz.X-3, 0), func(p *Painter) {
 				p.DrawText(2, 0, b.title)
 			})
