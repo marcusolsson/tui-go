@@ -2,9 +2,6 @@ package tui
 
 import (
 	"image"
-	"strings"
-
-	wordwrap "github.com/mitchellh/go-wordwrap"
 )
 
 var _ Widget = &Entry{}
@@ -110,8 +107,4 @@ func (e *Entry) SetText(text string) {
 // Text returns the text content of the entry.
 func (e *Entry) Text() string {
 	return e.text
-}
-
-func (e *Entry) heightForWidth(w int) int {
-	return len(strings.Split(wordwrap.WrapString(e.text, uint(w)), "\n"))
 }

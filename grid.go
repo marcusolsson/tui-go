@@ -310,68 +310,6 @@ func (g *Grid) rowcol(i int, a Alignment) []Widget {
 	return cells
 }
 
-func (g *Grid) distributeRowHeight(available image.Point) []int {
-	rows := make([]int, g.rows)
-
-	// Distribute minimum space.
-	for i := 0; i < g.rows; i++ {
-		rows[i] = g.minRowHeight(i)
-	}
-
-	var used int
-	for _, h := range rows {
-		used += h
-	}
-
-	// Distribute remaining space (if any).
-	extra := available.Y - used
-
-	// Distribute preferred space
-K:
-	for extra > 0 {
-		starting := extra
-		for i, h := range rows {
-			hint := g.rowHeight(i)
-			if h < hint {
-				rows[i] = h + 1
-				extra--
-
-				if extra == 0 {
-					break K
-				}
-			}
-		}
-		if starting == extra {
-			break K
-		}
-	}
-
-	// Distribute surplus space.
-L:
-	for extra > 0 {
-		starting := extra
-		for i, h := range rows {
-			if s, ok := g.rowStretch[i]; ok && s > 0 {
-				if extra > s {
-					rows[i] = h + s
-					extra -= s
-				} else {
-					rows[i] = h + extra
-					extra -= extra
-				}
-				if extra == 0 {
-					break L
-				}
-			}
-		}
-		if starting == extra {
-			break L
-		}
-	}
-
-	return rows
-}
-
 func (g *Grid) mapCellToLocal(p image.Point) image.Point {
 	var lx, ly int
 

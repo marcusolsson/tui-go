@@ -369,8 +369,7 @@ func TestBox_Insert(t *testing.T) {
 	for _, tt := range insertWidgetTests {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
-			var surface *testSurface
-			surface = newTestSurface(20, 10)
+			surface := newTestSurface(20, 10)
 			painter := NewPainter(surface, NewTheme())
 
 			label0 := NewLabel("Test 0")
@@ -405,8 +404,7 @@ func TestBox_Prepend(t *testing.T) {
 │..................│
 └──────────────────┘
 `
-	var surface *testSurface
-	surface = newTestSurface(20, 10)
+	surface := newTestSurface(20, 10)
 	painter := NewPainter(surface, NewTheme())
 
 	label0 := NewLabel("Test 0")
