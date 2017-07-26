@@ -4,6 +4,7 @@ go:
     - 1.8
     - tip
 install:
+    - go get -t -v ./...
     - go get honnef.co/go/tools/cmd/megacheck
 script:
     - go vet ./...
