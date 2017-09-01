@@ -179,6 +179,10 @@ func (s *tcellSurface) SetCursor(x, y int) {
 	s.screen.ShowCursor(x, y)
 }
 
+func (s *tcellSurface) HideCursor() {
+	s.screen.HideCursor()
+}
+
 func (s *tcellSurface) Begin() {
 	s.screen.Clear()
 }
