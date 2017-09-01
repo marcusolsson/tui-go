@@ -36,6 +36,10 @@ func (s *testSurface) SetCursor(x, y int) {
 	s.cursor = image.Point{x, y}
 }
 
+func (s *testSurface) HideCursor() {
+	s.cursor = image.Point{}
+}
+
 func (s *testSurface) Begin() {
 	s.cells = make(map[image.Point]testCell)
 }
