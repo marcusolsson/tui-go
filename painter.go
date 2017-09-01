@@ -8,6 +8,7 @@ import (
 type Surface interface {
 	SetCell(x, y int, ch rune, s Style)
 	SetCursor(x, y int)
+	HideCursor()
 	Begin()
 	End()
 	Size() image.Point
@@ -64,6 +65,7 @@ func (p *Painter) End() {
 func (p *Painter) Repaint(w Widget) {
 	p.Begin()
 	w.Resize(p.surface.Size())
+	p.surface.HideCursor()
 	w.Draw(p)
 	p.End()
 }
