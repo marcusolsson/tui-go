@@ -22,9 +22,7 @@ func TestMask_Full(t *testing.T) {
 		})
 	})
 
-	var want string
-
-	want = `
+	want := `
 ██████████
 ██████████
 ██████████
@@ -57,9 +55,7 @@ func TestMask_Inset(t *testing.T) {
 		})
 	})
 
-	var want string
-
-	want = `
+	want := `
 ..........
 .████████.
 .████████.
@@ -92,9 +88,7 @@ func TestMask_FirstCell(t *testing.T) {
 		})
 	})
 
-	var want string
-
-	want = `
+	want := `
 █.........
 ..........
 ..........
@@ -127,9 +121,7 @@ func TestMask_LastCell(t *testing.T) {
 		})
 	})
 
-	var want string
-
-	want = `
+	want := `
 ..........
 ..........
 ..........
