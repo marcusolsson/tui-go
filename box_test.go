@@ -264,12 +264,9 @@ func TestBox_Draw(t *testing.T) {
 			} else {
 				surface = newTestSurface(tt.size.X, tt.size.Y)
 			}
+
 			painter := NewPainter(surface, NewTheme())
-
-			b := tt.setup()
-
-			b.Resize(surface.size)
-			b.Draw(painter)
+			painter.Repaint(tt.setup())
 
 			if surface.String() != tt.want {
 				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
@@ -382,8 +379,9 @@ func TestBox_Insert(t *testing.T) {
 			b.Insert(tt.index, insertLabel)
 
 			b.SetBorder(true)
-			b.Resize(surface.size)
-			b.Draw(painter)
+
+			painter.Repaint(b)
+
 			if surface.String() != tt.want {
 				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
 			}
@@ -417,8 +415,9 @@ func TestBox_Prepend(t *testing.T) {
 	b.Prepend(label)
 
 	b.SetBorder(true)
-	b.Resize(surface.size)
-	b.Draw(painter)
+
+	painter.Repaint(b)
+
 	if surface.String() != want {
 		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
 	}

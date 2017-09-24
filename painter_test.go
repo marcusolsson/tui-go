@@ -9,8 +9,7 @@ import (
 func TestMask_Full(t *testing.T) {
 	surface := newTestSurface(10, 10)
 
-	p := Painter{surface: surface}
-
+	p := NewPainter(surface, NewTheme())
 	p.WithMask(image.Rect(0, 0, 10, 10), func(p *Painter) {
 		p.WithMask(image.Rect(0, 0, 10, 10), func(p *Painter) {
 			sz := p.surface.Size()
@@ -42,8 +41,7 @@ func TestMask_Full(t *testing.T) {
 func TestMask_Inset(t *testing.T) {
 	surface := newTestSurface(10, 10)
 
-	p := Painter{surface: surface}
-
+	p := NewPainter(surface, NewTheme())
 	p.WithMask(image.Rect(0, 0, 10, 10), func(p *Painter) {
 		p.WithMask(image.Rect(1, 1, 9, 9), func(p *Painter) {
 			sz := p.surface.Size()
@@ -75,8 +73,7 @@ func TestMask_Inset(t *testing.T) {
 func TestMask_FirstCell(t *testing.T) {
 	surface := newTestSurface(10, 10)
 
-	p := Painter{surface: surface}
-
+	p := NewPainter(surface, NewTheme())
 	p.WithMask(image.Rect(0, 0, 10, 10), func(p *Painter) {
 		p.WithMask(image.Rect(0, 0, 1, 1), func(p *Painter) {
 			sz := p.surface.Size()
@@ -108,8 +105,7 @@ func TestMask_FirstCell(t *testing.T) {
 func TestMask_LastCell(t *testing.T) {
 	surface := newTestSurface(10, 10)
 
-	p := Painter{surface: surface}
-
+	p := NewPainter(surface, NewTheme())
 	p.WithMask(image.Rect(0, 0, 10, 10), func(p *Painter) {
 		p.WithMask(image.Rect(9, 9, 10, 10), func(p *Painter) {
 			sz := p.surface.Size()
@@ -132,6 +128,38 @@ func TestMask_LastCell(t *testing.T) {
 ..........
 ..........
 .........█
+`
+	if surface.String() != want {
+		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	}
+}
+
+func TestMask_MaskWithinEmptyMaskIsHidden(t *testing.T) {
+	surface := newTestSurface(10, 10)
+
+	p := NewPainter(surface, NewTheme())
+	p.WithMask(image.Rect(0, 0, 0, 0), func(p *Painter) {
+		p.WithMask(image.Rect(1, 1, 9, 9), func(p *Painter) {
+			sz := p.surface.Size()
+			for x := 0; x < sz.X; x++ {
+				for y := 0; y < sz.Y; y++ {
+					p.DrawRune(x, y, '█')
+				}
+			}
+		})
+	})
+
+	want := `
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........
 `
 	if surface.String() != want {
 		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)

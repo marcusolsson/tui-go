@@ -12,8 +12,7 @@ func TestList_Draw(t *testing.T) {
 
 	l := NewList()
 	l.AddItems("foo", "bar")
-	l.Resize(surface.size)
-	l.Draw(painter)
+	painter.Repaint(l)
 
 	want := `
 foo       
@@ -24,7 +23,7 @@ bar
 `
 
 	if surface.String() != want {
-		t.Error(pretty.Diff(surface.String(), want))
+		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
 	}
 }
 
@@ -35,8 +34,8 @@ func TestList_RemoveItem(t *testing.T) {
 	l := NewList()
 	l.AddItems("one", "two", "three", "four", "five")
 	l.SetSelected(1)
-	l.Resize(surface.size)
-	l.Draw(painter)
+
+	painter.Repaint(l)
 
 	want := `
 one  
@@ -46,13 +45,13 @@ three
 
 	// Make sure okay before removing any items.
 	if surface.String() != want {
-		t.Error(pretty.Diff(surface.String(), want))
-		return
+		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
 	}
 
 	// Remove a visible item.
 	l.RemoveItem(2)
-	l.Draw(painter)
+
+	painter.Repaint(l)
 
 	want = `
 one  
@@ -67,10 +66,11 @@ four
 
 	// Remove an item not visible.
 	l.RemoveItem(3)
-	l.Draw(painter)
+
+	painter.Repaint(l)
 
 	if surface.String() != want {
-		t.Error(pretty.Diff(surface.String(), want))
+		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
 	}
 
 	// Selected item should not have changed.

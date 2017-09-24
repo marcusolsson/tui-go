@@ -95,12 +95,9 @@ wrap......
 func TestLabel_Draw(t *testing.T) {
 	for _, tt := range drawLabelTests {
 		surface := newTestSurface(10, 5)
+
 		painter := NewPainter(surface, NewTheme())
-
-		b := tt.setup()
-
-		b.Resize(surface.size)
-		b.Draw(painter)
+		painter.Repaint(tt.setup())
 
 		if surface.String() != tt.want {
 			t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
