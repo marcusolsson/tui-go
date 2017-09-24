@@ -36,6 +36,10 @@ func NewPainter(s Surface, p *Theme) *Painter {
 		theme:   p,
 		surface: s,
 		style:   p.Style("normal"),
+		mask: image.Rectangle{
+			Min: image.ZP,
+			Max: s.Size(),
+		},
 	}
 }
 
@@ -63,9 +67,15 @@ func (p *Painter) End() {
 
 // Repaint clears the surface, draws the scene and flushes it.
 func (p *Painter) Repaint(w Widget) {
+	p.mask = image.Rectangle{
+		Min: image.ZP,
+		Max: p.surface.Size(),
+	}
+
+	p.surface.HideCursor()
+
 	p.Begin()
 	w.Resize(p.surface.Size())
-	p.surface.HideCursor()
 	w.Draw(p)
 	p.End()
 }
@@ -79,10 +89,6 @@ func (p *Painter) DrawCursor(x, y int) {
 // DrawRune paints a rune at the given coordinate.
 func (p *Painter) DrawRune(x, y int, r rune) {
 	wp := p.mapLocalToWorld(image.Point{x, y})
-
-	if p.mask == image.ZR {
-		p.surface.SetCell(wp.X, wp.Y, r, p.style)
-	}
 	if (p.mask.Min.X <= wp.X) && (wp.X < p.mask.Max.X) && (p.mask.Min.Y <= wp.Y) && (wp.Y < p.mask.Max.Y) {
 		p.surface.SetCell(wp.X, wp.Y, r, p.style)
 	}
@@ -168,19 +174,13 @@ func (p *Painter) WithStyle(n string, fn func(*Painter)) {
 
 // WithMask masks a painter to restrict painting within the given rectangle.
 func (p *Painter) WithMask(r image.Rectangle, fn func(*Painter)) {
-
 	tmp := p.mask
 	defer func() { p.mask = tmp }()
-	world := image.Rectangle{
+
+	p.mask = p.mask.Intersect(image.Rectangle{
 		Min: p.mapLocalToWorld(r.Min),
 		Max: p.mapLocalToWorld(r.Max),
-	}
-
-	if p.mask != image.ZR {
-		p.mask = p.mask.Intersect(world)
-	} else {
-		p.mask = world
-	}
+	})
 
 	fn(p)
 }

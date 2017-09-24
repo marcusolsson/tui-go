@@ -206,11 +206,7 @@ func TestGrid_Draw(t *testing.T) {
 		t.Run(tt.test, func(t *testing.T) {
 			surface := newTestSurface(tt.size.X, tt.size.Y)
 			painter := NewPainter(surface, NewTheme())
-
-			g := tt.setup()
-
-			g.Resize(surface.size)
-			g.Draw(painter)
+			painter.Repaint(tt.setup())
 
 			if surface.String() != tt.want {
 				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)

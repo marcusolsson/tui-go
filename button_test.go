@@ -39,8 +39,7 @@ func TestButton_Draw(t *testing.T) {
 	painter := NewPainter(surface, NewTheme())
 
 	btn := NewButton("test")
-	btn.Resize(surface.size)
-	btn.Draw(painter)
+	painter.Repaint(btn)
 
 	want := `
 test      

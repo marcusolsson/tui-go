@@ -39,12 +39,9 @@ func TestTextEdit_Draw(t *testing.T) {
 			} else {
 				surface = newTestSurface(tt.size.X, tt.size.Y)
 			}
+
 			painter := NewPainter(surface, NewTheme())
-
-			b := tt.setup()
-
-			b.Resize(surface.size)
-			b.Draw(painter)
+			painter.Repaint(tt.setup())
 
 			if surface.String() != tt.want {
 				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
