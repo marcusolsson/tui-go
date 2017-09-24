@@ -88,7 +88,7 @@ func (t *Table) Draw(p *Painter) {
 					p.WithMask(image.Rectangle{
 						Min: image.ZP,
 						Max: size,
-					}.Sub(image.Point{1, 1}), func(p *Painter) {
+					}, func(p *Painter) {
 						w.Draw(p)
 					})
 				}

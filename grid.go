@@ -90,7 +90,7 @@ func (g *Grid) Draw(p *Painter) {
 				p.WithMask(image.Rectangle{
 					Min: image.ZP,
 					Max: w.Size(),
-				}.Sub(image.Point{1, 1}), func(p *Painter) {
+				}, func(p *Painter) {
 					w.Draw(p)
 				})
 				p.Restore()

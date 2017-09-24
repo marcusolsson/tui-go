@@ -77,15 +77,14 @@ func (p *Painter) DrawCursor(x, y int) {
 
 // DrawRune paints a rune at the given coordinate.
 func (p *Painter) DrawRune(x, y int, r rune) {
-	// If a mask is set, only draw if the mask contains the coordinate.
-	if p.mask != image.ZR {
-		if (x < p.mask.Min.X) || (x > p.mask.Max.X) ||
-			(y < p.mask.Min.Y) || (y > p.mask.Max.Y) {
-			return
-		}
-	}
 	wp := p.mapLocalToWorld(image.Point{x, y})
-	p.surface.SetCell(wp.X, wp.Y, r, p.style)
+
+	if p.mask == image.ZR {
+		p.surface.SetCell(wp.X, wp.Y, r, p.style)
+	}
+	if (p.mask.Min.X <= wp.X) && (wp.X < p.mask.Max.X) && (p.mask.Min.Y <= wp.Y) && (wp.Y < p.mask.Max.Y) {
+		p.surface.SetCell(wp.X, wp.Y, r, p.style)
+	}
 }
 
 // DrawText paints a string starting at the given coordinate.
@@ -161,9 +160,21 @@ func (p *Painter) WithStyle(n string, fn func(*Painter)) {
 }
 
 func (p *Painter) WithMask(r image.Rectangle, fn func(*Painter)) {
-	p.mask = r
+
+	tmp := p.mask
+	defer func() { p.mask = tmp }()
+	world := image.Rectangle{
+		Min: p.mapLocalToWorld(r.Min),
+		Max: p.mapLocalToWorld(r.Max),
+	}
+
+	if p.mask != image.ZR {
+		p.mask = p.mask.Intersect(world)
+	} else {
+		p.mask = world
+	}
+
 	fn(p)
-	p.mask = image.ZR
 }
 
 func (p *Painter) mapLocalToWorld(point image.Point) image.Point {
