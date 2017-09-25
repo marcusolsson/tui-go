@@ -86,6 +86,7 @@ func (l *Label) SetWordWrap(enabled bool) {
 	l.wordWrap = enabled
 }
 
+// SetStyleName sets the identifier used for custom styling.
 func (l *Label) SetStyleName(style string) {
 	l.styleName = style
 }

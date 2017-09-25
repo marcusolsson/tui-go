@@ -52,6 +52,7 @@ func (p *Padder) Resize(size image.Point) {
 	p.widget.Resize(size.Sub(p.padding.Mul(2)))
 }
 
+// OnKeyEvent handles key events.
 func (p *Padder) OnKeyEvent(ev KeyEvent) {
 	p.widget.OnKeyEvent(ev)
 }

@@ -46,10 +46,12 @@ func (p *Progress) SizeHint() image.Point {
 	return image.Point{p.max, 1}
 }
 
+// SetCurrent sets the current progress.
 func (p *Progress) SetCurrent(c int) {
 	p.current = c
 }
 
+// SetMax sets the maximum progress.
 func (p *Progress) SetMax(m int) {
 	p.max = m
 }

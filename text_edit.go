@@ -54,7 +54,7 @@ func (e *TextEdit) SizeHint() image.Point {
 	return image.Point{max, e.heightForWidth(max)}
 }
 
-// OnKeyEvent handles terminal events.
+// OnKeyEvent handles key events.
 func (e *TextEdit) OnKeyEvent(ev KeyEvent) {
 	if !e.IsFocused() {
 		return

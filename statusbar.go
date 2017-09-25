@@ -41,10 +41,12 @@ func (b *StatusBar) SizePolicy() (SizePolicy, SizePolicy) {
 	return Preferred, Maximum
 }
 
+// SetText sets the text content of the status bar.
 func (b *StatusBar) SetText(text string) {
 	b.text = text
 }
 
+// SetPermanentText sets the permanent text of the status bar.
 func (b *StatusBar) SetPermanentText(text string) {
 	b.permText = text
 }

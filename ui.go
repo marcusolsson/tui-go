@@ -1,5 +1,6 @@
 package tui
 
+// UI defines the operations needed by the underlying engine.
 type UI interface {
 	SetWidget(w Widget)
 	SetTheme(p *Theme)
@@ -10,6 +11,7 @@ type UI interface {
 	Quit()
 }
 
+// New returns a new UI with a root widget.
 func New(root Widget) UI {
 	tcellui, _ := newTcellUI(root)
 	return tcellui
