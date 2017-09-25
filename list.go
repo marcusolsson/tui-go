@@ -98,10 +98,12 @@ func (l *List) moveDown() {
 	}
 }
 
+// AddItems appends items to the end of the list.
 func (l *List) AddItems(items ...string) {
 	l.items = append(l.items, items...)
 }
 
+// RemoveItems clears all the items from the list.
 func (l *List) RemoveItems() {
 	l.items = []string{}
 	l.pos = 0
@@ -111,6 +113,7 @@ func (l *List) RemoveItems() {
 	}
 }
 
+// RemoveItem removes the item at the given position.
 func (l *List) RemoveItem(i int) {
 	// Adjust pos and selected before removing.
 	if l.pos >= len(l.items) {
@@ -134,14 +137,17 @@ func (l *List) RemoveItem(i int) {
 	}
 }
 
+// Length returns the number of items in the list.
 func (l *List) Length() int {
 	return len(l.items)
 }
 
+// SetSelected sets the currently selected item.
 func (l *List) SetSelected(i int) {
 	l.selected = i
 }
 
+// Selected returns the index of the currently selected item.
 func (l *List) Selected() int {
 	return l.selected
 }
@@ -154,14 +160,17 @@ func (l *List) Select(i int) {
 	}
 }
 
+// SelectedItem returns the currently selected item.
 func (l *List) SelectedItem() string {
 	return l.items[l.selected]
 }
 
+// OnItemActivated gets called when activated (through pressing KeyEnter).
 func (l *List) OnItemActivated(fn func(*List)) {
 	l.onItemActivated = fn
 }
 
+// OnSelectionChanged gets called whenever a new item is selected.
 func (l *List) OnSelectionChanged(fn func(*List)) {
 	l.onSelectionChanged = fn
 }
