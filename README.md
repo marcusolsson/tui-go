@@ -64,7 +64,7 @@ Please post any feature requests you might have. Smaller requests might end up b
 - Fenimore Love ([@fenimore](https://github.com/fenimore))
 - Gonzalo Serrano ([@gonzaloserrano](https://github.com/gonzaloserrano))
 - Johan Sageryd ([@jsageryd](https://github.com/jsageryd))
-- Nick Lanng ([@nicklanng])(https://github.com/nicklanng))
+- Nick Lanng ([@nicklanng](https://github.com/nicklanng))
 - Pontus Leitzler ([@leitzler](https://github.com/leitzler))
 - Yann Malet ([@yml](https://github.com/yml))
 
