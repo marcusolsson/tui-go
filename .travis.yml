@@ -1,12 +1,15 @@
 language: go
 sudo: false
 go:
-    - 1.8
+    - 1.8.3
+    - 1.9
     - tip
 install:
     - go get -t -v ./...
+    - go get github.com/golang/lint/golint
     - go get honnef.co/go/tools/cmd/megacheck
 script:
-    - go vet ./...
     - go test -v -race ./...
+    - go vet ./...
+    - golint -set_exit_status
     - megacheck ./...
