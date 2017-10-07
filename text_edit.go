@@ -3,8 +3,6 @@ package tui
 import (
 	"image"
 	"strings"
-
-	wordwrap "github.com/mitchellh/go-wordwrap"
 )
 
 var _ Widget = &TextEdit{}
@@ -13,7 +11,8 @@ var _ Widget = &TextEdit{}
 type TextEdit struct {
 	WidgetBase
 
-	text string
+	text   RuneBuffer
+	offset int
 
 	onTextChange func(*TextEdit)
 }
@@ -31,13 +30,15 @@ func (e *TextEdit) Draw(p *Painter) {
 	}
 	p.WithStyle(style, func(p *Painter) {
 		s := e.Size()
-		lines := strings.Split(wordwrap.WrapString(e.text, uint(s.X)), "\n")
+
+		lines := e.text.SplitByLine(s.X)
 		for i, line := range lines {
 			p.FillRect(0, i, s.X, 1)
 			p.DrawText(0, i, line)
 		}
 		if e.IsFocused() {
-			p.DrawCursor(stringWidth(lines[len(lines)-1]), len(lines)-1)
+			pos := e.text.CursorPos(s.X)
+			p.DrawCursor(pos.X, pos.Y)
 		}
 	})
 }
@@ -45,13 +46,13 @@ func (e *TextEdit) Draw(p *Painter) {
 // SizeHint returns the recommended size for the entry.
 func (e *TextEdit) SizeHint() image.Point {
 	var max int
-	lines := strings.Split(e.text, "\n")
+	lines := strings.Split(e.text.String(), "\n")
 	for _, line := range lines {
 		if w := stringWidth(line); w > max {
 			max = w
 		}
 	}
-	return image.Point{max, e.heightForWidth(max)}
+	return image.Point{max, e.text.heightForWidth(max)}
 }
 
 // OnKeyEvent handles key events.
@@ -63,19 +64,54 @@ func (e *TextEdit) OnKeyEvent(ev KeyEvent) {
 	if ev.Key != KeyRune {
 		switch ev.Key {
 		case KeyEnter:
-			e.text = e.text + "\n"
+			e.text.WriteRune('\n')
 		case KeyBackspace2:
-			if len(e.text) > 0 {
-				e.text = trimRightLen(e.text, 1)
-				if e.onTextChange != nil {
-					e.onTextChange(e)
-				}
+			e.text.Backspace()
+			if e.offset > 0 && !e.isTextRemaining() {
+				e.offset--
 			}
+			if e.onTextChange != nil {
+				e.onTextChange(e)
+			}
+		case KeyDelete, KeyCtrlD:
+			e.text.Delete()
+			if e.onTextChange != nil {
+				e.onTextChange(e)
+			}
+		case KeyLeft, KeyCtrlB:
+			e.text.MoveBackward()
+			if e.offset > 0 {
+				e.offset--
+			}
+		case KeyRight, KeyCtrlF:
+			e.text.MoveForward()
+
+			screenWidth := e.Size().X
+			isCursorTooFar := e.text.CursorPos(screenWidth).X >= screenWidth
+			isTextLeft := (e.text.Width() - e.offset) > (screenWidth - 1)
+
+			if isCursorTooFar && isTextLeft {
+				e.offset++
+			}
+		case KeyHome, KeyCtrlA:
+			e.text.MoveToLineStart()
+			e.offset = 0
+		case KeyEnd, KeyCtrlE:
+			e.text.MoveToLineEnd()
+			left := e.text.Width() - (e.Size().X - 1)
+			if left >= 0 {
+				e.offset = left
+			}
+		case KeyCtrlK:
+			e.text.Kill()
 		}
 		return
 	}
 
-	e.text = e.text + string(ev.Rune)
+	e.text.WriteRune(ev.Rune)
+	if e.text.CursorPos(e.Size().X).X >= e.Size().X {
+		e.offset++
+	}
 	if e.onTextChange != nil {
 		e.onTextChange(e)
 	}
@@ -89,14 +125,19 @@ func (e *TextEdit) OnTextChanged(fn func(entry *TextEdit)) {
 
 // SetText sets the text content of the entry.
 func (e *TextEdit) SetText(text string) {
-	e.text = text
+	e.text.Set([]rune(text))
 }
 
 // Text returns the text content of the entry.
 func (e *TextEdit) Text() string {
-	return e.text
+	return e.text.String()
 }
 
-func (e *TextEdit) heightForWidth(w int) int {
-	return len(strings.Split(wordwrap.WrapString(e.text, uint(w)), "\n"))
+// SetWordWrap sets whether the text should wrap or not.
+func (e *TextEdit) SetWordWrap(enabled bool) {
+	e.text.wordwrap = enabled
+}
+
+func (e *TextEdit) isTextRemaining() bool {
+	return e.text.Width()-e.offset > e.Size().X
 }

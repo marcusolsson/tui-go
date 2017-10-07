@@ -41,6 +41,7 @@ test
 		setup: func() *Entry {
 			e := NewEntry()
 			e.SetText("Lorem ipsum dolor sit amet")
+			e.offset = 11
 			return e
 		},
 		want: `
@@ -55,6 +56,7 @@ test
 			e := NewEntry()
 			e.SetText("Lorem ipsum dolor sit amet")
 			e.SetFocused(true)
+			e.offset = 12
 			return e
 		},
 		want: `
@@ -180,10 +182,12 @@ var layoutEntryTests = []struct {
 			e1 := NewEntry()
 			e1.SetSizePolicy(Preferred, Preferred)
 			e1.SetText("0123456789foo")
+			e1.offset = 4
 
 			e2 := NewEntry()
 			e2.SetSizePolicy(Preferred, Preferred)
 			e2.SetText("0123456789bar")
+			e2.offset = 4
 
 			b := NewHBox(e1, e2)
 			b.SetBorder(true)
@@ -205,10 +209,12 @@ var layoutEntryTests = []struct {
 			e1 := NewEntry()
 			e1.SetSizePolicy(Preferred, Preferred)
 			e1.SetText("0123456789foo")
+			e1.offset = 5
 
 			e2 := NewEntry()
 			e2.SetSizePolicy(Minimum, Preferred)
 			e2.SetText("0123456789bar")
+			e2.offset = 3
 
 			b := NewHBox(e1, e2)
 			b.SetBorder(true)
@@ -229,10 +235,12 @@ var layoutEntryTests = []struct {
 			e1 := NewEntry()
 			e1.SetSizePolicy(Minimum, Preferred)
 			e1.SetText("0123456789foo")
+			e1.offset = 3
 
 			e2 := NewEntry()
 			e2.SetSizePolicy(Preferred, Preferred)
 			e2.SetText("0123456789bar")
+			e2.offset = 5
 
 			b := NewHBox(e1, e2)
 			b.SetBorder(true)
@@ -310,5 +318,236 @@ func TestEntry_Layout(t *testing.T) {
 				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
 			}
 		})
+	}
+}
+
+func TestEntry_OnEvent(t *testing.T) {
+	e := NewEntry()
+	e.SetText("Lorem ipsum")
+	e.SetFocused(true)
+
+	surface := newTestSurface(4, 1)
+	painter := NewPainter(surface, NewTheme())
+	painter.Repaint(e)
+
+	want := `
+Lore
+`
+	if e.offset != 0 {
+		t.Errorf("offset = %d; want = %d", e.offset, 0)
+	}
+	if surface.String() != want {
+		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	}
+
+	e.OnKeyEvent(KeyEvent{Key: KeyRight})
+	painter.Repaint(e)
+
+	want = `
+orem
+`
+	if e.offset != 1 {
+		t.Errorf("offset = %d; want = %d", e.offset, 1)
+	}
+	if surface.String() != want {
+		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	}
+
+	e.OnKeyEvent(KeyEvent{Key: KeyLeft})
+	e.OnKeyEvent(KeyEvent{Key: KeyLeft})
+	painter.Repaint(e)
+
+	want = `
+Lore
+`
+	if e.offset != 0 {
+		t.Errorf("offset = %d; want = %d", e.offset, 0)
+	}
+	if surface.String() != want {
+		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	}
+
+	repeatKeyEvent(e, KeyEvent{Key: KeyRight}, 20)
+	painter.Repaint(e)
+
+	want = `
+sum 
+`
+	if e.offset != 8 {
+		t.Errorf("offset = %d; want = %d", e.offset, 8)
+	}
+	if surface.String() != want {
+		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	}
+}
+
+func TestEntry_MoveToStartAndEnd(t *testing.T) {
+	t.Run("Given an entry with too long text", func(t *testing.T) {
+		e := NewEntry()
+		e.SetText("Lorem ipsum")
+		e.SetFocused(true)
+		e.offset = 6
+
+		surface := newTestSurface(5, 1)
+		painter := NewPainter(surface, NewTheme())
+
+		t.Run("When cursor is moved to the start", func(t *testing.T) {
+			repeatKeyEvent(e, KeyEvent{Key: KeyCtrlA}, 1)
+			painter.Repaint(e)
+
+			want := "\nLorem\n"
+
+			if got := e.text.CursorPos(5); got.X != 0 {
+				t.Errorf("cursor position should be %d, but was %d", 0, got.X)
+			}
+			if e.offset != 0 {
+				t.Errorf("offset should be %d, but was %d", 0, e.offset)
+			}
+			if surface.String() != want {
+				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
+			}
+		})
+		t.Run("When cursor is moved to the end", func(t *testing.T) {
+			repeatKeyEvent(e, KeyEvent{Key: KeyCtrlE}, 1)
+			painter.Repaint(e)
+
+			want := "\npsum \n"
+
+			if got := e.text.CursorPos(5); got.X != 11 {
+				t.Errorf("cursor position should be %d, but was %d", 11, got.X)
+			}
+			if e.offset != 7 {
+				t.Errorf("offset should be %d, but was %d", 7, e.offset)
+			}
+			if surface.String() != want {
+				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
+			}
+		})
+	})
+}
+func TestEntry_OnKeyBackspaceEvent(t *testing.T) {
+	t.Run("Given an entry with too long text", func(t *testing.T) {
+		e := NewEntry()
+		e.SetText("Lorem ipsum")
+		e.SetFocused(true)
+		e.offset = 6
+
+		surface := newTestSurface(5, 1)
+		painter := NewPainter(surface, NewTheme())
+
+		t.Run("When cursor is moved to the middle", func(t *testing.T) {
+			repeatKeyEvent(e, KeyEvent{Key: KeyLeft}, 2)
+			painter.Repaint(e)
+
+			want := "\nm ips\n"
+
+			if got := e.text.CursorPos(5); got.X != 9 {
+				t.Errorf("cursor position should be %d, but was %d", 9, got.X)
+			}
+			if e.offset != 4 {
+				t.Errorf("offset should be %d, but was %d", 4, e.offset)
+			}
+			if surface.String() != want {
+				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
+			}
+		})
+		t.Run("When character in the middle is deleted", func(t *testing.T) {
+			repeatKeyEvent(e, KeyEvent{Key: KeyBackspace2}, 1)
+			painter.Repaint(e)
+
+			want := "\nm ipu\n"
+
+			if e.offset != 4 {
+				t.Errorf("offset should be %d, but was %d", 4, e.offset)
+			}
+			if surface.String() != want {
+				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
+			}
+		})
+		t.Run("When cursor is moved to the end", func(t *testing.T) {
+			repeatKeyEvent(e, KeyEvent{Key: KeyRight}, 6)
+			painter.Repaint(e)
+
+			want := "\nipum \n"
+
+			if e.offset != 6 {
+				t.Errorf("offset should be %d, but was %d", 6, e.offset)
+			}
+			if surface.String() != want {
+				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
+			}
+		})
+		t.Run("When last character is deleted", func(t *testing.T) {
+			repeatKeyEvent(e, KeyEvent{Key: KeyBackspace2}, 1)
+			painter.Repaint(e)
+
+			want := "\n ipu \n"
+
+			if e.offset != 5 {
+				t.Errorf("offset should be %d, but was %d", 5, e.offset)
+			}
+			if surface.String() != want {
+				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
+			}
+		})
+		t.Run("When all characters are deleted", func(t *testing.T) {
+			repeatKeyEvent(e, KeyEvent{Key: KeyBackspace2}, 9)
+			painter.Repaint(e)
+
+			want := "\n     \n"
+
+			if e.offset != 0 {
+				t.Errorf("offset should be %d, but was %d", 0, e.offset)
+			}
+			if surface.String() != want {
+				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
+			}
+		})
+		t.Run("When deleting an empty text", func(t *testing.T) {
+			repeatKeyEvent(e, KeyEvent{Key: KeyBackspace2}, 1)
+			painter.Repaint(e)
+
+			want := "\n     \n"
+
+			if e.offset != 0 {
+				t.Errorf("offset should be %d, but was %d", 0, e.offset)
+			}
+			if surface.String() != want {
+				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
+			}
+		})
+	})
+}
+
+func TestIsTextRemaining(t *testing.T) {
+	for _, tt := range []struct {
+		text   string
+		offset int
+		width  int
+		want   bool
+	}{
+		{"Lorem ipsum", 0, 11, false},
+		{"Lorem ipsum", 1, 11, false},
+		{"Lorem ipsum", 0, 10, true},
+		{"Lorem ipsum", 5, 5, true},
+	} {
+		t.Run("", func(t *testing.T) {
+			e := NewEntry()
+			e.SetText(tt.text)
+			e.SetFocused(true)
+			e.Resize(image.Pt(tt.width, 1))
+
+			e.offset = tt.offset
+
+			if e.isTextRemaining() != tt.want {
+				t.Fatalf("want = %v; got = %v", tt.want, e.isTextRemaining())
+			}
+		})
+	}
+}
+
+func repeatKeyEvent(e *Entry, ev KeyEvent, n int) {
+	for i := 0; i < n; i++ {
+		e.OnKeyEvent(ev)
 	}
 }
