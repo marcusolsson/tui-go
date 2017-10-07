@@ -252,6 +252,38 @@ var drawBoxTests = []struct {
 └──────────────────────────────┘
 `,
 	},
+	{
+		test: "Box with title",
+		setup: func() *Box {
+			b := NewVBox(NewLabel("test"))
+			b.SetTitle("Title")
+			b.SetBorder(true)
+			return b
+		},
+		want: `
+┌Title───┐
+│test....│
+│........│
+│........│
+└────────┘
+`,
+	},
+	{
+		test: "Box with very long title",
+		setup: func() *Box {
+			b := NewVBox(NewLabel("test"))
+			b.SetTitle("Very long title")
+			b.SetBorder(true)
+			return b
+		},
+		want: `
+┌Very lon┐
+│test....│
+│........│
+│........│
+└────────┘
+`,
+	},
 }
 
 func TestBox_Draw(t *testing.T) {
