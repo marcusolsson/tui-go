@@ -17,6 +17,7 @@ var drawTextEditTests = []struct {
 		setup: func() *TextEdit {
 			e := NewTextEdit()
 			e.SetText("Lorem ipsum dolor sit amet")
+			e.SetWordWrap(true)
 			return e
 		},
 		want: `
