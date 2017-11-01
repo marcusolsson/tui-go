@@ -417,6 +417,11 @@ func (g *Grid) AppendRow(row ...Widget) {
 	}
 }
 
+// RemoveRows removes all the rows added to the grid.
+func (g *Grid) RemoveRows() {
+	g.rows = 0
+}
+
 // SetColumnStretch sets the stretch factor for a given column. If stretch > 0,
 // the column will expand to fill up available space. If multiple columns have
 // a stretch factor > 0, stretch determines how much space the column get in
