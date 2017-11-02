@@ -154,6 +154,22 @@ func (t *Table) Select(i int) {
 	}
 }
 
+// RemoveRow removes specific row from the table
+func (t *Table) RemoveRow(index int) {
+	t.Grid.RemoveRow(index)
+	if t.selected == index {
+		t.selected = -1
+	} else if t.selected > index {
+		t.selected--
+	}
+}
+
+// RemoveRows removes all the rows added to the table.
+func (t *Table) RemoveRows() {
+	t.Grid.RemoveRows()
+	t.selected = -1
+}
+
 // OnItemActivated sets the function that is called when an item was activated.
 func (t *Table) OnItemActivated(fn func(*Table)) {
 	t.onItemActivated = fn
