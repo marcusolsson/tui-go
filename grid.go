@@ -417,6 +417,28 @@ func (g *Grid) AppendRow(row ...Widget) {
 	}
 }
 
+// RemoveRow removes the row ( at index ) from the grid
+func (g *Grid) RemoveRow(index int) {
+	if index < g.rows {
+		g.rows--
+		for i := index; i <= g.rows; i++ {
+			for j := 0; j < g.cols; j++ {
+				if i == g.rows {
+					delete(g.cells, image.Point{j, g.rows})
+				} else {
+					g.cells[image.Point{j, i}] = g.cells[image.Point{j, i + 1}]
+				}
+			}
+		}
+	}
+}
+
+// RemoveRows will remove all the rows in grid
+func (g *Grid) RemoveRows() {
+	g.rows = 0
+	g.cells = make(map[image.Point]Widget)
+}
+
 // SetColumnStretch sets the stretch factor for a given column. If stretch > 0,
 // the column will expand to fill up available space. If multiple columns have
 // a stretch factor > 0, stretch determines how much space the column get in
