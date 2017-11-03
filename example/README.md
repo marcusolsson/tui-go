@@ -29,3 +29,11 @@ Demonstrates a both vertically, and horizontally centered login box with text en
 ### mail
 
 A basic interface for a mail client. An inbox shows the mails you've received and a view for displaying mail content.
+
+### multiview
+
+Demonstrates switching between views to support multiple tabs/pages.
+
+### scroll
+
+Demonstrates the use of a scroll area to provide a scrolling view of an underlying widget.
