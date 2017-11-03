@@ -46,29 +46,6 @@ If you want to know what it is like to build terminal applications with tui-go, 
 
 Documentation is available at [godoc.org](https://godoc.org/github.com/marcusolsson/tui-go).
 
-## Contributing
-
-If you're using tui-go for your application, please let me know what works well for you, and _especially_ what doesn't (bug reports are greatly appreciated!).
-
-Pull requests are very much welcome! Check out the [current issues](https://github.com/marcusolsson/tui-go/issues) to find out how you can help. If you do find anything interesting, please assign yourself to that issue so that others know you're working on it. If you want to contribute a feature not currently not listed, please create a new issue with a description of what you want to do. 
-
-Please post any feature requests you might have. Smaller requests might end up being implemented rather quickly and larger ones will be considered for the road map.
-
-### Contributors
-
-- Marcus Olsson ([@marcusolsson](https://github.com/marcusolsson))
-- Calvin Behling ([@TripleDogDare](https://github.com/TripleDogDare))
-- cornfeedhobo ([@cornfeedhobo](https://github.com/cornfeedhobo))
-- Davor Kapsa ([@dvrkps](https://github.com/dvrkps))
-- Doug Reese ([@dougreese](https://github.com/dougreese))
-- Eric Myhre ([@heavenlyhash](https://github.com/heavenlyhash))
-- Fenimore Love ([@fenimore](https://github.com/fenimore))
-- Gonzalo Serrano ([@gonzaloserrano](https://github.com/gonzaloserrano))
-- Johan Sageryd ([@jsageryd](https://github.com/jsageryd))
-- Nick Lanng ([@nicklanng](https://github.com/nicklanng))
-- Pontus Leitzler ([@leitzler](https://github.com/leitzler))
-- Yann Malet ([@yml](https://github.com/yml))
-
 ## Related projects
 
 tui-go is mainly influenced by [Qt](https://www.qt.io/) and offers a similar programming model that has been adapted to Go and the terminal.
