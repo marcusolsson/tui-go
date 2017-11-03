@@ -58,6 +58,8 @@ Please post any feature requests you might have. Smaller requests might end up b
 
 - Marcus Olsson ([@marcusolsson](https://github.com/marcusolsson))
 - Calvin Behling ([@TripleDogDare](https://github.com/TripleDogDare))
+- cornfeedhobo ([@cornfeedhobo](https://github.com/cornfeedhobo))
+- Davor Kapsa ([@dvrkps](https://github.com/dvrkps))
 - Doug Reese ([@dougreese](https://github.com/dougreese))
 - Eric Myhre ([@heavenlyhash](https://github.com/heavenlyhash))
 - Fenimore Love ([@fenimore](https://github.com/fenimore))
