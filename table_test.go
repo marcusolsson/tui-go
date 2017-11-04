@@ -42,6 +42,68 @@ var drawTableTests = []struct {
 └──────────────────────────────┘
 `,
 	},
+	{
+		test: "Remove a row from table",
+		size: image.Point{20, 10},
+		setup: func() *Box {
+			table := NewTable(0, 0)
+			table.AppendRow(NewLabel("A"), NewLabel("apple"))
+			table.AppendRow(NewLabel("B"), NewLabel("box"))
+			table.AppendRow(NewLabel("C"), NewLabel("cat"))
+			table.AppendRow(NewLabel("D"), NewLabel("dog"))
+			table.SetBorder(true)
+
+			table.RemoveRow(1)
+
+			box := NewHBox(table)
+			box.SetBorder(true)
+
+			return box
+		},
+		want: `
+┌──────────────────┐
+│┌────────┬───────┐│
+││A       │apple  ││
+││        │       ││
+│├────────┼───────┤│
+││C       │cat    ││
+│├────────┼───────┤│
+││D       │dog    ││
+│└────────┴───────┘│
+└──────────────────┘
+`,
+	},
+	{
+		test: "Remove all rows from table",
+		size: image.Point{20, 10},
+		setup: func() *Box {
+			table := NewTable(0, 0)
+			table.AppendRow(NewLabel("A"), NewLabel("apple"))
+			table.AppendRow(NewLabel("B"), NewLabel("box"))
+			table.AppendRow(NewLabel("C"), NewLabel("cat"))
+			table.AppendRow(NewLabel("D"), NewLabel("dog"))
+			table.SetBorder(true)
+
+			table.RemoveRows()
+
+			box := NewHBox(table)
+			box.SetBorder(true)
+
+			return box
+		},
+		want: `
+┌──────────────────┐
+│┌────────┬───────┐│
+││........│.......││
+││........│.......││
+││........│.......││
+││........│.......││
+││........│.......││
+││........│.......││
+│└────────┴───────┘│
+└──────────────────┘
+`,
+	},
 }
 
 func TestTable_Draw(t *testing.T) {
