@@ -107,7 +107,7 @@ func (b *Box) Draw(p *Painter) {
 		})
 		p.WithStyle(style, func(p *Painter) {
 			p.WithMask(image.Rect(0, 0, sz.X-1, 1), func(p *Painter) {
-				p.DrawText(1, 0, b.title)
+				p.DrawText(2, 0, b.title)
 			})
 		})
 		p.Translate(1, 1)
