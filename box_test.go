@@ -284,6 +284,22 @@ var drawBoxTests = []struct {
 └────────┘
 `,
 	},
+	{
+		test: "Box with chinese text",
+		setup: func() *Box {
+			b := NewVBox(NewLabel("测试"))
+			b.SetTitle("标题")
+			b.SetBorder(true)
+			return b
+		},
+		want: `
+┌标题────┐
+│测试....│
+│........│
+│........│
+└────────┘
+`,
+	},
 }
 
 func TestBox_Draw(t *testing.T) {
