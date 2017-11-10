@@ -454,3 +454,32 @@ func TestBox_Prepend(t *testing.T) {
 		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
 	}
 }
+
+func TestBox_Remove(t *testing.T) {
+	want := `
+┌──────────────────┐
+│Test 0............│
+│..................│
+│Test 2............│
+│..................│
+└──────────────────┘
+`
+	surface := newTestSurface(20, 6)
+	painter := NewPainter(surface, NewTheme())
+
+	label0 := NewLabel("Test 0")
+	label1 := NewLabel("Test 1")
+	label2 := NewLabel("Test 2")
+
+	b := NewVBox(label0, label1, label2)
+
+	b.Remove(1)
+
+	b.SetBorder(true)
+
+	painter.Repaint(b)
+
+	if surface.String() != want {
+		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	}
+}
