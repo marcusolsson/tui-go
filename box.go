@@ -58,7 +58,7 @@ func (b *Box) Prepend(w Widget) {
 
 // Insert adds the widget into the Box at a given index.
 func (b *Box) Insert(i int, w Widget) {
-	if len(b.children) < i {
+	if len(b.children) < i || i < 0 {
 		return
 	}
 
