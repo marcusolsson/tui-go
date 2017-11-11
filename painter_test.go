@@ -213,6 +213,7 @@ func (s *testSurface) Size() image.Point {
 	return s.size
 }
 
+// String writes the testSurface's characters as a string.
 func (s *testSurface) String() string {
 	var buf bytes.Buffer
 	buf.WriteRune('\n')
@@ -223,6 +224,48 @@ func (s *testSurface) String() string {
 				if w := runeWidth(cell.Rune); w > 1 {
 					i += w - 1
 				}
+			} else {
+				buf.WriteRune(s.emptyCh)
+			}
+		}
+		buf.WriteRune('\n')
+	}
+	return buf.String()
+}
+
+// FgColors renders the testSurface's foreground colors, using the digit 0-7 for painted cells.
+func (s *testSurface) FgColors() string {
+	var buf bytes.Buffer
+	buf.WriteRune('\n')
+	for j := 0; j < s.size.Y; j++ {
+		for i := 0; i < s.size.X; i++ {
+			if cell, ok := s.cells[image.Point{i, j}]; ok {
+				color := cell.Style.Fg
+				if cell.Style.Reverse {
+					color = cell.Style.Bg
+				}
+				buf.WriteRune('0' + rune(color))
+			} else {
+				buf.WriteRune(s.emptyCh)
+			}
+		}
+		buf.WriteRune('\n')
+	}
+	return buf.String()
+}
+
+// BgColors renders the testSurface's background colors, using the digit 0-7 for painted cells.
+func (s *testSurface) BgColors() string {
+	var buf bytes.Buffer
+	buf.WriteRune('\n')
+	for j := 0; j < s.size.Y; j++ {
+		for i := 0; i < s.size.X; i++ {
+			if cell, ok := s.cells[image.Point{i, j}]; ok {
+				color := cell.Style.Bg
+				if cell.Style.Reverse {
+					color = cell.Style.Fg
+				}
+				buf.WriteRune('0' + rune(color))
 			} else {
 				buf.WriteRune(s.emptyCh)
 			}
