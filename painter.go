@@ -155,21 +155,17 @@ func (p *Painter) SetStyle(s Style) {
 	p.style = s
 }
 
-// RestoreStyle clears any style and restores it to the default.
-func (p *Painter) RestoreStyle() {
-	p.SetStyle(p.theme.Style("normal"))
-}
-
-// WithStyle decorates the painter with the style associated with an identifier.
+// WithStyle executes the provided function, with the Painter assigned the style with the given name.
 func (p *Painter) WithStyle(n string, fn func(*Painter)) {
 	if !p.theme.HasStyle(n) {
 		fn(p)
 		return
 	}
 
+	prev := p.style
 	p.SetStyle(p.theme.Style(n))
 	fn(p)
-	p.RestoreStyle()
+	p.SetStyle(prev)
 }
 
 // WithMask masks a painter to restrict painting within the given rectangle.
