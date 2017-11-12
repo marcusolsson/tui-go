@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"image"
 	"testing"
-	"github.com/cceckman/tui-go"
+	"github.com/marcusolsson/tui-go"
 )
 
 func TestMask_Full(t *testing.T) {

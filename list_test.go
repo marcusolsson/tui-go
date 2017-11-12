@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/kr/pretty"
-	"github.com/cceckman/tui-go"
+	"github.com/marcusolsson/tui-go"
 )
 
 func TestList_Draw(t *testing.T) {

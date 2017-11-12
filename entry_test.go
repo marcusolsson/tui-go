@@ -3,7 +3,7 @@ package tui_test
 import (
 	"image"
 	"testing"
-	"github.com/cceckman/tui-go"
+	"github.com/marcusolsson/tui-go"
 )
 
 var drawEntryTests = []struct {

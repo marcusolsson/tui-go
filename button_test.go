@@ -2,7 +2,7 @@ package tui_test
 
 import (
 	"testing"
-	"github.com/cceckman/tui-go"
+	"github.com/marcusolsson/tui-go"
 )
 
 func TestButton_OnActivated(t *testing.T) {
