@@ -1,4 +1,4 @@
-package tui
+package tui_test
 
 import (
 	"bytes"
