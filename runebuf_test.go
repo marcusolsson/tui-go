@@ -6,22 +6,77 @@ import (
 	"testing"
 )
 
-func TestRuneBuffer_MoveToLineStart(t *testing.T) {
+func TestRuneBuffer_MoveForward(t *testing.T) {
 	for _, tt := range []struct {
-		curr RuneBuffer
-		want RuneBuffer
+		text    string
+		in, out int
 	}{
-		{RuneBuffer{idx: 3, buf: []rune("foo")}, RuneBuffer{idx: 0, buf: []rune("foo")}},
-		{RuneBuffer{idx: 0, buf: []rune("foo")}, RuneBuffer{idx: 0, buf: []rune("foo")}},
+		{"foo", 0, 1},
+		{"foo", 2, 3},
+		{"foo", 3, 3},
+		{"Lorem ipsum dolor \nsit amet.", 17, 18},
 	} {
 		t.Run("", func(t *testing.T) {
-			tt.curr.MoveToLineStart()
+			var buf RuneBuffer
+			buf.SetWithIdx(tt.in, []rune(tt.text))
 
-			if tt.want.idx != tt.curr.idx {
-				t.Fatalf("want = %v; got = %v", tt.want.idx, tt.curr.idx)
+			buf.MoveForward()
+
+			if tt.out != buf.idx {
+				t.Fatalf("want = %v; got = %v", tt.out, buf.idx)
 			}
-			if !reflect.DeepEqual(tt.want.buf, tt.curr.buf) {
-				t.Fatalf("want = %v; got = %v", tt.want.buf, tt.curr.buf)
+		})
+	}
+}
+
+func TestRuneBuffer_MoveBackward(t *testing.T) {
+	for _, tt := range []struct {
+		text    string
+		in, out int
+	}{
+		{"foo", 0, 0},
+		{"foo", 2, 1},
+		{"foo", 3, 2},
+		{"Lorem ipsum dolor \nsit amet.", 18, 17},
+	} {
+		t.Run("", func(t *testing.T) {
+			var buf RuneBuffer
+			buf.SetWithIdx(tt.in, []rune(tt.text))
+
+			buf.MoveBackward()
+
+			if tt.out != buf.idx {
+				t.Fatalf("want = %v; got = %v", tt.out, buf.idx)
+			}
+		})
+	}
+}
+
+func TestRuneBuffer_MoveToLineStart(t *testing.T) {
+	for _, tt := range []struct {
+		text    string
+		in, out int
+	}{
+		{"foo", 3, 0},
+		{"foo", 0, 0},
+		{"Lorem ipsum dolor \nsit amet.", 21, 19},
+		{"Lorem ipsum dolor \n\nsit amet.", 21, 20},
+		{"Sed maximus tempor condimentum.\n\nNam et risus est. Cras ornare iaculis orci, \n\nsit amet fringilla nisl pharetra quis.", 40, 33},
+		{"Sed maximus tempor condimentum.\n\nNam et risus est. Cras ornare iaculis orci, \n\nsit amet fringilla nisl pharetra quis.", 90, 79},
+		{"Sed maximus tempor condimentum.\n\nNam et risus est. Cras ornare iaculis orci, \n\nsit amet fringilla nisl pharetra quis.", 79, 79},
+		// On a empty line.
+		{"Sed maximus tempor condimentum.\n\nNam et risus est. Cras ornare iaculis orci, \n\nsit amet fringilla nisl pharetra quis.", 78, 78},
+		// On newline character.
+		{"Sed maximus tempor condimentum.\n\nNam et risus est. Cras ornare iaculis orci, \n\nsit amet fringilla nisl pharetra quis.", 77, 33},
+	} {
+		t.Run("", func(t *testing.T) {
+			var buf RuneBuffer
+			buf.SetWithIdx(tt.in, []rune(tt.text))
+
+			buf.MoveToLineStart()
+
+			if tt.out != buf.idx {
+				t.Fatalf("want = %v; got = %v", tt.out, buf.idx)
 			}
 		})
 	}
@@ -29,20 +84,26 @@ func TestRuneBuffer_MoveToLineStart(t *testing.T) {
 
 func TestRuneBuffer_MoveToLineEnd(t *testing.T) {
 	for _, tt := range []struct {
-		curr RuneBuffer
-		want RuneBuffer
+		text    string
+		in, out int
 	}{
-		{RuneBuffer{idx: 3, buf: []rune("foo")}, RuneBuffer{idx: 3, buf: []rune("foo")}},
-		{RuneBuffer{idx: 0, buf: []rune("foo")}, RuneBuffer{idx: 3, buf: []rune("foo")}},
+		{"foo", 0, 3},
+		{"foo", 3, 3},
+		{"Lorem ipsum dolor \nsit amet.", 0, 18},
+		{"Lorem ipsum dolor \n\nsit amet.", 20, 29},
+		{"Sed maximus tempor condimentum.\n\nNam et risus est. Cras ornare iaculis orci, \n\nsit amet fringilla nisl pharetra quis.", 0, 31},
+		{"Sed maximus tempor condimentum.\n\nNam et risus est. Cras ornare iaculis orci, \n\nsit amet fringilla nisl pharetra quis.", 33, 77},
+		{"Sed maximus tempor condimentum.\n\nNam et risus est. Cras ornare iaculis orci, \n\nsit amet fringilla nisl pharetra quis.", 79, 117},
+		{"Sed maximus tempor condimentum.\n\nNam et risus est. Cras ornare iaculis orci, \n\nsit amet fringilla nisl pharetra quis.", 77, 77},
 	} {
 		t.Run("", func(t *testing.T) {
-			tt.curr.MoveToLineEnd()
+			var buf RuneBuffer
+			buf.SetWithIdx(tt.in, []rune(tt.text))
 
-			if tt.want.idx != tt.curr.idx {
-				t.Fatalf("want = %v; got = %v", tt.want.idx, tt.curr.idx)
-			}
-			if !reflect.DeepEqual(tt.want.buf, tt.curr.buf) {
-				t.Fatalf("want = %v; got = %v", tt.want.buf, tt.curr.buf)
+			buf.MoveToLineEnd()
+
+			if tt.out != buf.idx {
+				t.Fatalf("want = %v; got = %v", tt.out, buf.idx)
 			}
 		})
 	}
@@ -98,30 +159,6 @@ func TestRuneBuffer_Kill(t *testing.T) {
 	}
 }
 
-func TestRuneBuffer_CursorPos(t *testing.T) {
-	for _, tt := range []struct {
-		text        string
-		screenWidth int
-		idx         int
-		out         image.Point
-	}{
-		{"Lorem ipsum dolor sit amet.", 12, 27, image.Pt(5, 2)},
-		{"Lorem ipsum dolor sit amet.", 16, 27, image.Pt(15, 1)},
-		{"Lorem ipsum dolor sit amet.", 27, 20, image.Pt(20, 0)},
-	} {
-		t.Run("", func(t *testing.T) {
-			var r RuneBuffer
-			r.wordwrap = true
-			r.SetWithIdx(tt.idx, []rune(tt.text))
-
-			if got := r.CursorPos(tt.screenWidth); tt.out != got {
-				t.Fatalf("want = %s; got = %s", tt.out, got)
-			}
-		})
-
-	}
-}
-
 func TestRuneBuffer_SplitByLines(t *testing.T) {
 	for _, tt := range []struct {
 		text  string
@@ -129,18 +166,23 @@ func TestRuneBuffer_SplitByLines(t *testing.T) {
 		wrap  bool
 		want  []string
 	}{
-		{"Lorem ipsum dolor sit amet.", 12, true, []string{"Lorem ipsum", "dolor sit", "amet."}},
+		{"Lorem ipsum dolor sit amet.", 12, true, []string{"Lorem ipsum ", "dolor sit ", "amet."}},
 		{"Lorem ipsum dolor sit amet.", 27, true, []string{"Lorem ipsum dolor sit amet."}},
 		{"Lorem ipsum dolor sit amet.", 12, false, []string{"Lorem ipsum dolor sit amet."}},
 	} {
-		got := getSplitByLine([]rune(tt.text), tt.width, tt.wrap)
+		var buf RuneBuffer
+		buf.Set([]rune(tt.text))
+		buf.SetMaxWidth(tt.width)
+		buf.wordwrap = tt.wrap
+
+		got := buf.SplitByLine()
 		if !reflect.DeepEqual(tt.want, got) {
 			t.Fatalf("want = %#v; got = %#v", tt.want, got)
 		}
 	}
 }
 
-func TestRuneBuffer_CursorPosWithWordWrap(t *testing.T) {
+func TestRuneBuffer_CursorPos(t *testing.T) {
 	for _, tt := range []struct {
 		text        string
 		screenWidth int
@@ -151,24 +193,32 @@ func TestRuneBuffer_CursorPosWithWordWrap(t *testing.T) {
 		// Lorem ipsum
 		// dolor sit amet.
 		{"Lorem ipsum dolor sit amet.", 12, 11, true, image.Pt(11, 0)},
-		{"Lorem ipsum dolor sit amet.", 12, 12, true, image.Pt(0, 1)},
-		{"Lorem ipsum dolor sit amet.", 12, 13, true, image.Pt(1, 1)},
+		{"Lorem ipsum dolor sit amet.", 12, 12, true, image.Pt(12, 0)},
+		{"Lorem ipsum dolor sit amet.", 12, 13, true, image.Pt(0, 1)},
 
 		// Lorem ipsum dolor
 		// sit amet.
 		{"Lorem ipsum dolor sit amet.", 19, 17, true, image.Pt(17, 0)},
-		{"Lorem ipsum dolor sit amet.", 19, 18, true, image.Pt(0, 1)},
-		{"Lorem ipsum dolor sit amet.", 19, 19, true, image.Pt(1, 1)},
-		{"Lorem ipsum dolor sit amet.", 19, 20, true, image.Pt(2, 1)},
-		{"Lorem ipsum dolor sit amet.", 19, 21, true, image.Pt(3, 1)},
+		{"Lorem ipsum dolor sit amet.", 19, 18, true, image.Pt(18, 0)},
+		{"Lorem ipsum dolor sit amet.", 19, 19, true, image.Pt(0, 1)},
+		{"Lorem ipsum dolor sit amet.", 19, 20, true, image.Pt(1, 1)},
+		{"Lorem ipsum dolor sit amet.", 19, 21, true, image.Pt(2, 1)},
+
+		// aa bb
+		//
+		// cc dd
+		{"aa bb\n\ncc dd", 10, 4, true, image.Pt(4, 0)},
+		{"aa bb\n\ncc dd", 10, 5, true, image.Pt(5, 0)},
+		{"aa bb\n\ncc dd", 10, 6, true, image.Pt(0, 1)},
+		{"aa bb\n\ncc dd", 10, 7, true, image.Pt(0, 2)},
 	} {
-		t.Skip("Skip until a more sophisticated word wrap has been implemented.")
 		t.Run("", func(t *testing.T) {
 			var r RuneBuffer
 			r.wordwrap = tt.wrap
 			r.SetWithIdx(tt.idx, []rune(tt.text))
+			r.SetMaxWidth(tt.screenWidth)
 
-			if got := r.CursorPos(tt.screenWidth); tt.want != got {
+			if got := r.CursorPos(); tt.want != got {
 				t.Fatalf("want = %s; got = %s", tt.want, got)
 			}
 		})

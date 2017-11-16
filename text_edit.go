@@ -30,14 +30,15 @@ func (e *TextEdit) Draw(p *Painter) {
 	}
 	p.WithStyle(style, func(p *Painter) {
 		s := e.Size()
+		e.text.SetMaxWidth(s.X)
 
-		lines := e.text.SplitByLine(s.X)
+		lines := e.text.SplitByLine()
 		for i, line := range lines {
 			p.FillRect(0, i, s.X, 1)
 			p.DrawText(0, i, line)
 		}
 		if e.IsFocused() {
-			pos := e.text.CursorPos(s.X)
+			pos := e.text.CursorPos()
 			p.DrawCursor(pos.X, pos.Y)
 		}
 	})
@@ -60,6 +61,9 @@ func (e *TextEdit) OnKeyEvent(ev KeyEvent) {
 	if !e.IsFocused() {
 		return
 	}
+
+	screenWidth := e.Size().X
+	e.text.SetMaxWidth(screenWidth)
 
 	if ev.Key != KeyRune {
 		switch ev.Key {
@@ -86,8 +90,7 @@ func (e *TextEdit) OnKeyEvent(ev KeyEvent) {
 		case KeyRight, KeyCtrlF:
 			e.text.MoveForward()
 
-			screenWidth := e.Size().X
-			isCursorTooFar := e.text.CursorPos(screenWidth).X >= screenWidth
+			isCursorTooFar := e.text.CursorPos().X >= screenWidth
 			isTextLeft := (e.text.Width() - e.offset) > (screenWidth - 1)
 
 			if isCursorTooFar && isTextLeft {
@@ -98,7 +101,7 @@ func (e *TextEdit) OnKeyEvent(ev KeyEvent) {
 			e.offset = 0
 		case KeyEnd, KeyCtrlE:
 			e.text.MoveToLineEnd()
-			left := e.text.Width() - (e.Size().X - 1)
+			left := e.text.Width() - (screenWidth - 1)
 			if left >= 0 {
 				e.offset = left
 			}
@@ -109,7 +112,7 @@ func (e *TextEdit) OnKeyEvent(ev KeyEvent) {
 	}
 
 	e.text.WriteRune(ev.Rune)
-	if e.text.CursorPos(e.Size().X).X >= e.Size().X {
+	if e.text.CursorPos().X >= screenWidth {
 		e.offset++
 	}
 	if e.onTextChange != nil {
