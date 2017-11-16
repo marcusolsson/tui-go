@@ -386,6 +386,7 @@ func TestEntry_MoveToStartAndEnd(t *testing.T) {
 		e := NewEntry()
 		e.SetText("Lorem ipsum")
 		e.SetFocused(true)
+		e.text.SetMaxWidth(5)
 		e.offset = 6
 
 		surface := newTestSurface(5, 1)
@@ -397,7 +398,7 @@ func TestEntry_MoveToStartAndEnd(t *testing.T) {
 
 			want := "\nLorem\n"
 
-			if got := e.text.CursorPos(5); got.X != 0 {
+			if got := e.text.CursorPos(); got.X != 0 {
 				t.Errorf("cursor position should be %d, but was %d", 0, got.X)
 			}
 			if e.offset != 0 {
@@ -413,7 +414,7 @@ func TestEntry_MoveToStartAndEnd(t *testing.T) {
 
 			want := "\npsum \n"
 
-			if got := e.text.CursorPos(5); got.X != 11 {
+			if got := e.text.CursorPos(); got.X != 11 {
 				t.Errorf("cursor position should be %d, but was %d", 11, got.X)
 			}
 			if e.offset != 7 {
@@ -430,6 +431,7 @@ func TestEntry_OnKeyBackspaceEvent(t *testing.T) {
 		e := NewEntry()
 		e.SetText("Lorem ipsum")
 		e.SetFocused(true)
+		e.text.SetMaxWidth(5)
 		e.offset = 6
 
 		surface := newTestSurface(5, 1)
@@ -441,7 +443,7 @@ func TestEntry_OnKeyBackspaceEvent(t *testing.T) {
 
 			want := "\nm ips\n"
 
-			if got := e.text.CursorPos(5); got.X != 9 {
+			if got := e.text.CursorPos(); got.X != 9 {
 				t.Errorf("cursor position should be %d, but was %d", 9, got.X)
 			}
 			if e.offset != 4 {
