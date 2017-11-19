@@ -4,8 +4,8 @@ import (
 	"image"
 	"strings"
 
+	"github.com/marcusolsson/tui-go/wordwrap"
 	runewidth "github.com/mattn/go-runewidth"
-	wordwrap "github.com/mitchellh/go-wordwrap"
 )
 
 // RuneBuffer provides readline functionality for text widgets.
@@ -14,6 +14,13 @@ type RuneBuffer struct {
 	idx int
 
 	wordwrap bool
+
+	width int
+}
+
+// SetMaxWidth sets the maximum text width.
+func (r *RuneBuffer) SetMaxWidth(w int) {
+	r.width = w
 }
 
 // Width returns the width of the rune buffer, taking into account for CJK.
@@ -55,35 +62,39 @@ func (r *RuneBuffer) Len() int {
 }
 
 // SplitByLine returns the lines for a given width.
-func (r *RuneBuffer) SplitByLine(width int) []string {
+func (r *RuneBuffer) SplitByLine() []string {
+	return r.getSplitByLine(r.width)
+}
+
+func (r *RuneBuffer) getSplitByLine(w int) []string {
 	var text string
 	if r.wordwrap {
-		text = wordwrap.WrapString(r.String(), uint(width))
+		text = wordwrap.WrapString(r.String(), w)
 	} else {
 		text = r.String()
 	}
 	return strings.Split(text, "\n")
 }
 
-func getSplitByLine(rs []rune, width int, wrap bool) []string {
-	var text string
-	if wrap {
-		text = wordwrap.WrapString(string(rs), uint(width))
-	} else {
-		text = string(rs)
-	}
-	return strings.Split(text, "\n")
-}
-
 // CursorPos returns the coordinate for the cursor for a given width.
-func (r *RuneBuffer) CursorPos(width int) image.Point {
-	if width == 0 {
+func (r *RuneBuffer) CursorPos() image.Point {
+	if r.width == 0 {
 		return image.ZP
 	}
 
-	sp := getSplitByLine(r.buf[:r.idx], width, r.wordwrap)
-
-	return image.Pt(stringWidth(sp[len(sp)-1]), len(sp)-1)
+	sp := r.SplitByLine()
+	var x, y int
+	remaining := r.idx
+	for _, l := range sp {
+		if len(l) < remaining {
+			y++
+			remaining -= len(l) + 1
+		} else {
+			x = remaining
+			break
+		}
+	}
+	return image.Pt(x, y)
 }
 
 func (r *RuneBuffer) String() string {
@@ -120,7 +131,7 @@ func (r *RuneBuffer) MoveToLineStart() {
 // MoveToLineEnd moves the cursor to the end of the current line.
 func (r *RuneBuffer) MoveToLineEnd() {
 	for i := r.idx; i < len(r.buf)-1; i++ {
-		if r.buf[i+1] == '\n' {
+		if r.buf[i] == '\n' {
 			r.idx = i
 			return
 		}
@@ -156,5 +167,5 @@ func (r *RuneBuffer) Kill() {
 }
 
 func (r *RuneBuffer) heightForWidth(w int) int {
-	return len(r.SplitByLine(w))
+	return len(r.getSplitByLine(w))
 }

@@ -398,8 +398,11 @@ func TestEntry_MoveToStartAndEnd(t *testing.T) {
 
 			want := "\nLorem\n"
 
+			if got := e.CursorPos(); got.X != 0 {
+				t.Errorf("cursor position should be %d, but was %d", 0, got.X)
+			}
 			if e.Offset != 0 {
-				t.Errorf("Offset should be %d, but was %d", 0, e.Offset)
+				t.Errorf("offset should be %d, but was %d", 0, e.Offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
@@ -411,8 +414,11 @@ func TestEntry_MoveToStartAndEnd(t *testing.T) {
 
 			want := "\npsum \n"
 
+			if got := e.CursorPos(); got.X != 11 {
+				t.Errorf("cursor position should be %d, but was %d", 11, got.X)
+			}
 			if e.Offset != 7 {
-				t.Errorf("Offset should be %d, but was %d", 7, e.Offset)
+				t.Errorf("offset should be %d, but was %d", 7, e.Offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
@@ -436,8 +442,11 @@ func TestEntry_OnKeyBackspaceEvent(t *testing.T) {
 
 			want := "\nm ips\n"
 
+			if got := e.CursorPos(); got.X != 9 {
+				t.Errorf("cursor position should be %d, but was %d", 9, got.X)
+			}
 			if e.Offset != 4 {
-				t.Errorf("Offset should be %d, but was %d", 4, e.Offset)
+				t.Errorf("offset should be %d, but was %d", 4, e.Offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
