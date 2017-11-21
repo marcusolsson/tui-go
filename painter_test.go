@@ -220,6 +220,9 @@ func (s *testSurface) String() string {
 		for i := 0; i < s.size.X; i++ {
 			if cell, ok := s.cells[image.Point{i, j}]; ok {
 				buf.WriteRune(cell.Rune)
+				if w := runeWidth(cell.Rune); w > 1 {
+					i += w - 1
+				}
 			} else {
 				buf.WriteRune(s.emptyCh)
 			}
