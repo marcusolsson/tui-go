@@ -86,9 +86,9 @@ func (r *RuneBuffer) CursorPos() image.Point {
 	var x, y int
 	remaining := r.idx
 	for _, l := range sp {
-		if len(l) < remaining {
+		if stringWidth(l) < remaining {
 			y++
-			remaining -= len(l) + 1
+			remaining -= stringWidth(l) + 1
 		} else {
 			x = remaining
 			break
