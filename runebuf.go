@@ -102,6 +102,7 @@ func (r *RuneBuffer) String() string {
 	return string(r.buf)
 }
 
+// Runes return the buffer
 func (r *RuneBuffer) Runes() []rune {
 	return r.buf
 }
