@@ -140,16 +140,16 @@ func (e *Entry) Text() string {
 }
 
 func (e *Entry) visibleText() string {
-	text := e.text.String()
-	if text == "" {
+	text := e.text
+	if text.Len() == 0 {
 		return ""
 	}
 	windowStart := e.offset
 	windowEnd := e.Size().X + windowStart
-	if windowEnd > len(text) {
-		windowEnd = len(text)
+	if windowEnd > text.Len() {
+		windowEnd = text.Len()
 	}
-	return text[windowStart:windowEnd]
+	return string(text.Runes()[windowStart:windowEnd])
 }
 
 func (e *Entry) isTextRemaining() bool {
