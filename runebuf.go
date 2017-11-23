@@ -3,6 +3,7 @@ package tui
 import (
 	"image"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/marcusolsson/tui-go/wordwrap"
 	runewidth "github.com/mattn/go-runewidth"
@@ -86,19 +87,23 @@ func (r *RuneBuffer) CursorPos() image.Point {
 	var x, y int
 	remaining := r.idx
 	for _, l := range sp {
-		if stringWidth(l) < remaining {
+		if utf8.RuneCountInString(l) < remaining {
 			y++
-			remaining -= stringWidth(l) + 1
+			remaining -= utf8.RuneCountInString(l) + 1
 		} else {
 			x = remaining
 			break
 		}
 	}
-	return image.Pt(x, y)
+	return image.Pt(stringWidth(string(r.buf[:x])), y)
 }
 
 func (r *RuneBuffer) String() string {
 	return string(r.buf)
+}
+
+func (r *RuneBuffer) Runes() []rune {
+	return r.buf
 }
 
 // MoveBackward moves the cursor back by one rune.
