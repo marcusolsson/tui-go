@@ -47,7 +47,7 @@ var drawCJKTests = []struct {
 			return b
 		},
 		want: `
-┌标题────┐	
+┌标题────┐
 │测试....│
 │........│
 └────────┘
