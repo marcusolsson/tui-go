@@ -69,11 +69,16 @@ func (b *Box) Insert(i int, w Widget) {
 
 // Remove deletes the widget from the Box at a given index.
 func (b *Box) Remove(i int) {
-	if len(b.children) < i {
+	if len(b.children) <= i || i < 0 {
 		return
 	}
 
 	b.children = append(b.children[:i], b.children[i+1:]...)
+}
+
+// Length returns the number of items in the box.
+func (b *Box) Length() int {
+	return len(b.children)
 }
 
 // SetBorder sets whether the border is visible or not.

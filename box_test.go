@@ -474,6 +474,7 @@ func TestBox_Remove(t *testing.T) {
 	b := NewVBox(label0, label1, label2)
 
 	b.Remove(1)
+	b.Remove(10)
 
 	b.SetBorder(true)
 
