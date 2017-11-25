@@ -1,16 +1,17 @@
-package tui
+package tui_test
 
 import (
 	"testing"
 
 	"github.com/kr/pretty"
+	"github.com/marcusolsson/tui-go"
 )
 
 func TestList_Draw(t *testing.T) {
 	surface := newTestSurface(10, 5)
-	painter := NewPainter(surface, NewTheme())
+	painter := tui.NewPainter(surface, tui.NewTheme())
 
-	l := NewList()
+	l := tui.NewList()
 	l.AddItems("foo", "bar")
 	painter.Repaint(l)
 
@@ -29,9 +30,9 @@ bar
 
 func TestList_RemoveItem(t *testing.T) {
 	surface := newTestSurface(5, 3)
-	painter := NewPainter(surface, NewTheme())
+	painter := tui.NewPainter(surface, tui.NewTheme())
 
-	l := NewList()
+	l := tui.NewList()
 	l.AddItems("one", "two", "three", "four", "five")
 	l.SetSelected(1)
 

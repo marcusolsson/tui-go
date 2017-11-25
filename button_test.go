@@ -1,19 +1,20 @@
-package tui
+package tui_test
 
 import (
 	"testing"
+	"github.com/marcusolsson/tui-go"
 )
 
 func TestButton_OnActivated(t *testing.T) {
-	btn := NewButton("test")
+	btn := tui.NewButton("test")
 
 	var invoked bool
-	btn.OnActivated(func(b *Button) {
+	btn.OnActivated(func(b *tui.Button) {
 		invoked = true
 	})
 
-	ev := KeyEvent{
-		Key: KeyEnter,
+	ev := tui.KeyEvent{
+		Key: tui.KeyEnter,
 	}
 
 	t.Run("When button is not focused", func(t *testing.T) {
@@ -36,9 +37,9 @@ func TestButton_OnActivated(t *testing.T) {
 
 func TestButton_Draw(t *testing.T) {
 	surface := newTestSurface(10, 5)
-	painter := NewPainter(surface, NewTheme())
+	painter := tui.NewPainter(surface, tui.NewTheme())
 
-	btn := NewButton("test")
+	btn := tui.NewButton("test")
 	painter.Repaint(btn)
 
 	want := `

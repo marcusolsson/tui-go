@@ -1,21 +1,22 @@
-package tui
+package tui_test
 
 import (
 	"image"
 	"testing"
+	"github.com/marcusolsson/tui-go"
 )
 
 var drawEntryTests = []struct {
 	test  string
 	size  image.Point
-	setup func() *Entry
+	setup func() *tui.Entry
 	want  string
 }{
 	{
 		test: "Empty entry",
 		size: image.Point{15, 2},
-		setup: func() *Entry {
-			return NewEntry()
+		setup: func() *tui.Entry {
+			return tui.NewEntry()
 		},
 		want: `
                
@@ -25,8 +26,8 @@ var drawEntryTests = []struct {
 	{
 		test: "Entry with text",
 		size: image.Point{15, 2},
-		setup: func() *Entry {
-			e := NewEntry()
+		setup: func() *tui.Entry {
+			e := tui.NewEntry()
 			e.SetText("test")
 			return e
 		},
@@ -38,10 +39,10 @@ test
 	{
 		test: "Scrolling entry",
 		size: image.Point{15, 2},
-		setup: func() *Entry {
-			e := NewEntry()
+		setup: func() *tui.Entry {
+			e := tui.NewEntry()
 			e.SetText("Lorem ipsum dolor sit amet")
-			e.offset = 11
+			e.Offset = 11
 			return e
 		},
 		want: `
@@ -52,11 +53,11 @@ test
 	{
 		test: "Scrolling entry when focused",
 		size: image.Point{15, 2},
-		setup: func() *Entry {
-			e := NewEntry()
+		setup: func() *tui.Entry {
+			e := tui.NewEntry()
 			e.SetText("Lorem ipsum dolor sit amet")
 			e.SetFocused(true)
-			e.offset = 12
+			e.Offset = 12
 			return e
 		},
 		want: `
@@ -77,7 +78,7 @@ func TestEntry_Draw(t *testing.T) {
 				surface = newTestSurface(tt.size.X, tt.size.Y)
 			}
 
-			painter := NewPainter(surface, NewTheme())
+			painter := tui.NewPainter(surface, tui.NewTheme())
 			painter.Repaint(tt.setup())
 
 			if surface.String() != tt.want {
@@ -88,18 +89,18 @@ func TestEntry_Draw(t *testing.T) {
 }
 
 func TestEntry_OnChanged(t *testing.T) {
-	e := NewEntry()
+	e := tui.NewEntry()
 
 	var invoked bool
-	e.OnChanged(func(e *Entry) {
+	e.OnChanged(func(e *tui.Entry) {
 		invoked = true
 		if e.Text() != "t" {
 			t.Errorf("e.Text() = %s; want = %s", e.Text(), "t")
 		}
 	})
 
-	ev := KeyEvent{
-		Key:  KeyRune,
+	ev := tui.KeyEvent{
+		Key:  tui.KeyRune,
 		Rune: 't',
 	}
 
@@ -122,15 +123,15 @@ func TestEntry_OnChanged(t *testing.T) {
 }
 
 func TestEntry_OnSubmit(t *testing.T) {
-	e := NewEntry()
+	e := tui.NewEntry()
 
 	var invoked bool
-	e.OnSubmit(func(e *Entry) {
+	e.OnSubmit(func(e *tui.Entry) {
 		invoked = true
 	})
 
-	ev := KeyEvent{
-		Key: KeyEnter,
+	ev := tui.KeyEvent{
+		Key: tui.KeyEnter,
 	}
 
 	t.Run("When entry is not focused", func(t *testing.T) {
@@ -153,18 +154,18 @@ func TestEntry_OnSubmit(t *testing.T) {
 
 var layoutEntryTests = []struct {
 	test  string
-	setup func() *Box
+	setup func() *tui.Box
 	want  string
 }{
 	{
 		test: "Preferred",
-		setup: func() *Box {
-			e := NewEntry()
-			e.SetSizePolicy(Preferred, Preferred)
+		setup: func() *tui.Box {
+			e := tui.NewEntry()
+			e.SetSizePolicy(tui.Preferred, tui.Preferred)
 
-			b := NewHBox(e)
+			b := tui.NewHBox(e)
 			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
+			b.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 			return b
 		},
@@ -178,20 +179,20 @@ var layoutEntryTests = []struct {
 	},
 	{
 		test: "Preferred/Preferred",
-		setup: func() *Box {
-			e1 := NewEntry()
-			e1.SetSizePolicy(Preferred, Preferred)
+		setup: func() *tui.Box {
+			e1 := tui.NewEntry()
+			e1.SetSizePolicy(tui.Preferred, tui.Preferred)
 			e1.SetText("0123456789foo")
-			e1.offset = 4
+			e1.Offset = 4
 
-			e2 := NewEntry()
-			e2.SetSizePolicy(Preferred, Preferred)
+			e2 := tui.NewEntry()
+			e2.SetSizePolicy(tui.Preferred, tui.Preferred)
 			e2.SetText("0123456789bar")
-			e2.offset = 4
+			e2.Offset = 4
 
-			b := NewHBox(e1, e2)
+			b := tui.NewHBox(e1, e2)
 			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
+			b.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 			return b
 		},
@@ -205,18 +206,18 @@ var layoutEntryTests = []struct {
 	},
 	{
 		test: "Preferred/Minimum",
-		setup: func() *Box {
-			e1 := NewEntry()
-			e1.SetSizePolicy(Preferred, Preferred)
+		setup: func() *tui.Box {
+			e1 := tui.NewEntry()
+			e1.SetSizePolicy(tui.Preferred, tui.Preferred)
 			e1.SetText("0123456789foo")
-			e1.offset = 5
+			e1.Offset = 5
 
-			e2 := NewEntry()
-			e2.SetSizePolicy(Minimum, Preferred)
+			e2 := tui.NewEntry()
+			e2.SetSizePolicy(tui.Minimum, tui.Preferred)
 			e2.SetText("0123456789bar")
-			e2.offset = 3
+			e2.Offset = 3
 
-			b := NewHBox(e1, e2)
+			b := tui.NewHBox(e1, e2)
 			b.SetBorder(true)
 
 			return b
@@ -230,19 +231,19 @@ var layoutEntryTests = []struct {
 `,
 	},
 	{
-		test: "Minimum/Preferred",
-		setup: func() *Box {
-			e1 := NewEntry()
-			e1.SetSizePolicy(Minimum, Preferred)
+		test: "tui.Minimum/tui.Preferred",
+		setup: func() *tui.Box {
+			e1 := tui.NewEntry()
+			e1.SetSizePolicy(tui.Minimum, tui.Preferred)
 			e1.SetText("0123456789foo")
-			e1.offset = 3
+			e1.Offset = 3
 
-			e2 := NewEntry()
-			e2.SetSizePolicy(Preferred, Preferred)
+			e2 := tui.NewEntry()
+			e2.SetSizePolicy(tui.Preferred, tui.Preferred)
 			e2.SetText("0123456789bar")
-			e2.offset = 5
+			e2.Offset = 5
 
-			b := NewHBox(e1, e2)
+			b := tui.NewHBox(e1, e2)
 			b.SetBorder(true)
 
 			return b
@@ -257,18 +258,18 @@ var layoutEntryTests = []struct {
 	},
 	{
 		test: "Preferred/Expanding",
-		setup: func() *Box {
-			e1 := NewEntry()
-			e1.SetSizePolicy(Preferred, Preferred)
+		setup: func() *tui.Box {
+			e1 := tui.NewEntry()
+			e1.SetSizePolicy(tui.Preferred, tui.Preferred)
 			e1.SetText("foo")
 
-			e2 := NewEntry()
-			e2.SetSizePolicy(Expanding, Preferred)
+			e2 := tui.NewEntry()
+			e2.SetSizePolicy(tui.Expanding, tui.Preferred)
 			e2.SetText("bar")
 
-			b := NewHBox(e1, e2)
+			b := tui.NewHBox(e1, e2)
 			b.SetBorder(true)
-			b.SetSizePolicy(Expanding, Expanding)
+			b.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 			return b
 		},
@@ -281,17 +282,17 @@ var layoutEntryTests = []struct {
 `,
 	},
 	{
-		test: "Expanding/Preferred",
-		setup: func() *Box {
-			e1 := NewEntry()
+		test: "tui.Expanding/tui.Preferred",
+		setup: func() *tui.Box {
+			e1 := tui.NewEntry()
 			e1.SetText("foo")
-			e1.SetSizePolicy(Expanding, Preferred)
+			e1.SetSizePolicy(tui.Expanding, tui.Preferred)
 
-			e2 := NewEntry()
+			e2 := tui.NewEntry()
 			e2.SetText("bar")
-			e2.SetSizePolicy(Preferred, Preferred)
+			e2.SetSizePolicy(tui.Preferred, tui.Preferred)
 
-			b := NewHBox(e1, e2)
+			b := tui.NewHBox(e1, e2)
 			b.SetBorder(true)
 
 			return b
@@ -311,7 +312,7 @@ func TestEntry_Layout(t *testing.T) {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
 			surface := newTestSurface(20, 5)
-			painter := NewPainter(surface, NewTheme())
+			painter := tui.NewPainter(surface, tui.NewTheme())
 			painter.Repaint(tt.setup())
 
 			if surface.String() != tt.want {
@@ -322,59 +323,59 @@ func TestEntry_Layout(t *testing.T) {
 }
 
 func TestEntry_OnEvent(t *testing.T) {
-	e := NewEntry()
+	e := tui.NewEntry()
 	e.SetText("Lorem ipsum")
 	e.SetFocused(true)
 
 	surface := newTestSurface(4, 1)
-	painter := NewPainter(surface, NewTheme())
+	painter := tui.NewPainter(surface, tui.NewTheme())
 	painter.Repaint(e)
 
 	want := `
 Lore
 `
-	if e.offset != 0 {
-		t.Errorf("offset = %d; want = %d", e.offset, 0)
+	if e.Offset != 0 {
+		t.Errorf("Offset = %d; want = %d", e.Offset, 0)
 	}
 	if surface.String() != want {
 		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
 	}
 
-	e.OnKeyEvent(KeyEvent{Key: KeyRight})
+	e.OnKeyEvent(tui.KeyEvent{Key: tui.KeyRight})
 	painter.Repaint(e)
 
 	want = `
 orem
 `
-	if e.offset != 1 {
-		t.Errorf("offset = %d; want = %d", e.offset, 1)
+	if e.Offset != 1 {
+		t.Errorf("Offset = %d; want = %d", e.Offset, 1)
 	}
 	if surface.String() != want {
 		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
 	}
 
-	e.OnKeyEvent(KeyEvent{Key: KeyLeft})
-	e.OnKeyEvent(KeyEvent{Key: KeyLeft})
+	e.OnKeyEvent(tui.KeyEvent{Key: tui.KeyLeft})
+	e.OnKeyEvent(tui.KeyEvent{Key: tui.KeyLeft})
 	painter.Repaint(e)
 
 	want = `
 Lore
 `
-	if e.offset != 0 {
-		t.Errorf("offset = %d; want = %d", e.offset, 0)
+	if e.Offset != 0 {
+		t.Errorf("Offset = %d; want = %d", e.Offset, 0)
 	}
 	if surface.String() != want {
 		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
 	}
 
-	repeatKeyEvent(e, KeyEvent{Key: KeyRight}, 20)
+	repeatKeyEvent(e, tui.KeyEvent{Key: tui.KeyRight}, 20)
 	painter.Repaint(e)
 
 	want = `
 sum 
 `
-	if e.offset != 8 {
-		t.Errorf("offset = %d; want = %d", e.offset, 8)
+	if e.Offset != 8 {
+		t.Errorf("Offset = %d; want = %d", e.Offset, 8)
 	}
 	if surface.String() != want {
 		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
@@ -383,42 +384,41 @@ sum
 
 func TestEntry_MoveToStartAndEnd(t *testing.T) {
 	t.Run("Given an entry with too long text", func(t *testing.T) {
-		e := NewEntry()
+		e := tui.NewEntry()
 		e.SetText("Lorem ipsum")
 		e.SetFocused(true)
-		e.text.SetMaxWidth(5)
-		e.offset = 6
+		e.Offset = 6
 
 		surface := newTestSurface(5, 1)
-		painter := NewPainter(surface, NewTheme())
+		painter := tui.NewPainter(surface, tui.NewTheme())
 
 		t.Run("When cursor is moved to the start", func(t *testing.T) {
-			repeatKeyEvent(e, KeyEvent{Key: KeyCtrlA}, 1)
+			repeatKeyEvent(e, tui.KeyEvent{Key: tui.KeyCtrlA}, 1)
 			painter.Repaint(e)
 
 			want := "\nLorem\n"
 
-			if got := e.text.CursorPos(); got.X != 0 {
+			if got := e.CursorPos(); got.X != 0 {
 				t.Errorf("cursor position should be %d, but was %d", 0, got.X)
 			}
-			if e.offset != 0 {
-				t.Errorf("offset should be %d, but was %d", 0, e.offset)
+			if e.Offset != 0 {
+				t.Errorf("offset should be %d, but was %d", 0, e.Offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
 			}
 		})
 		t.Run("When cursor is moved to the end", func(t *testing.T) {
-			repeatKeyEvent(e, KeyEvent{Key: KeyCtrlE}, 1)
+			repeatKeyEvent(e, tui.KeyEvent{Key: tui.KeyCtrlE}, 1)
 			painter.Repaint(e)
 
 			want := "\npsum \n"
 
-			if got := e.text.CursorPos(); got.X != 11 {
+			if got := e.CursorPos(); got.X != 11 {
 				t.Errorf("cursor position should be %d, but was %d", 11, got.X)
 			}
-			if e.offset != 7 {
-				t.Errorf("offset should be %d, but was %d", 7, e.offset)
+			if e.Offset != 7 {
+				t.Errorf("offset should be %d, but was %d", 7, e.Offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
@@ -428,91 +428,90 @@ func TestEntry_MoveToStartAndEnd(t *testing.T) {
 }
 func TestEntry_OnKeyBackspaceEvent(t *testing.T) {
 	t.Run("Given an entry with too long text", func(t *testing.T) {
-		e := NewEntry()
+		e := tui.NewEntry()
 		e.SetText("Lorem ipsum")
 		e.SetFocused(true)
-		e.text.SetMaxWidth(5)
-		e.offset = 6
+		e.Offset = 6
 
 		surface := newTestSurface(5, 1)
-		painter := NewPainter(surface, NewTheme())
+		painter := tui.NewPainter(surface, tui.NewTheme())
 
 		t.Run("When cursor is moved to the middle", func(t *testing.T) {
-			repeatKeyEvent(e, KeyEvent{Key: KeyLeft}, 2)
+			repeatKeyEvent(e, tui.KeyEvent{Key: tui.KeyLeft}, 2)
 			painter.Repaint(e)
 
 			want := "\nm ips\n"
 
-			if got := e.text.CursorPos(); got.X != 9 {
+			if got := e.CursorPos(); got.X != 9 {
 				t.Errorf("cursor position should be %d, but was %d", 9, got.X)
 			}
-			if e.offset != 4 {
-				t.Errorf("offset should be %d, but was %d", 4, e.offset)
+			if e.Offset != 4 {
+				t.Errorf("offset should be %d, but was %d", 4, e.Offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
 			}
 		})
 		t.Run("When character in the middle is deleted", func(t *testing.T) {
-			repeatKeyEvent(e, KeyEvent{Key: KeyBackspace2}, 1)
+			repeatKeyEvent(e, tui.KeyEvent{Key: tui.KeyBackspace2}, 1)
 			painter.Repaint(e)
 
 			want := "\nm ipu\n"
 
-			if e.offset != 4 {
-				t.Errorf("offset should be %d, but was %d", 4, e.offset)
+			if e.Offset != 4 {
+				t.Errorf("Offset should be %d, but was %d", 4, e.Offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
 			}
 		})
 		t.Run("When cursor is moved to the end", func(t *testing.T) {
-			repeatKeyEvent(e, KeyEvent{Key: KeyRight}, 6)
+			repeatKeyEvent(e, tui.KeyEvent{Key: tui.KeyRight}, 6)
 			painter.Repaint(e)
 
 			want := "\nipum \n"
 
-			if e.offset != 6 {
-				t.Errorf("offset should be %d, but was %d", 6, e.offset)
+			if e.Offset != 6 {
+				t.Errorf("Offset should be %d, but was %d", 6, e.Offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
 			}
 		})
 		t.Run("When last character is deleted", func(t *testing.T) {
-			repeatKeyEvent(e, KeyEvent{Key: KeyBackspace2}, 1)
+			repeatKeyEvent(e, tui.KeyEvent{Key: tui.KeyBackspace2}, 1)
 			painter.Repaint(e)
 
 			want := "\n ipu \n"
 
-			if e.offset != 5 {
-				t.Errorf("offset should be %d, but was %d", 5, e.offset)
+			if e.Offset != 5 {
+				t.Errorf("Offset should be %d, but was %d", 5, e.Offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
 			}
 		})
 		t.Run("When all characters are deleted", func(t *testing.T) {
-			repeatKeyEvent(e, KeyEvent{Key: KeyBackspace2}, 9)
+			repeatKeyEvent(e, tui.KeyEvent{Key: tui.KeyBackspace2}, 9)
 			painter.Repaint(e)
 
 			want := "\n     \n"
 
-			if e.offset != 0 {
-				t.Errorf("offset should be %d, but was %d", 0, e.offset)
+			if e.Offset != 0 {
+				t.Errorf("Offset should be %d, but was %d", 0, e.Offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
 			}
 		})
 		t.Run("When deleting an empty text", func(t *testing.T) {
-			repeatKeyEvent(e, KeyEvent{Key: KeyBackspace2}, 1)
+			repeatKeyEvent(e, tui.KeyEvent{Key: tui.KeyBackspace2}, 1)
 			painter.Repaint(e)
 
 			want := "\n     \n"
 
-			if e.offset != 0 {
-				t.Errorf("offset should be %d, but was %d", 0, e.offset)
+			if e.Offset != 0 {
+				t.Errorf("Offset should be %d, but was %d", 0, e.Offset)
 			}
 			if surface.String() != want {
 				t.Errorf("surface should be:\n%s\nbut was:\n%s", want, surface.String())
@@ -521,35 +520,10 @@ func TestEntry_OnKeyBackspaceEvent(t *testing.T) {
 	})
 }
 
-func TestIsTextRemaining(t *testing.T) {
-	for _, tt := range []struct {
-		text   string
-		offset int
-		width  int
-		want   bool
-	}{
-		{"Lorem ipsum", 0, 11, false},
-		{"Lorem ipsum", 1, 11, false},
-		{"Lorem ipsum", 0, 10, true},
-		{"Lorem ipsum", 5, 5, true},
-	} {
-		t.Run("", func(t *testing.T) {
-			e := NewEntry()
-			e.SetText(tt.text)
-			e.SetFocused(true)
-			e.Resize(image.Pt(tt.width, 1))
-
-			e.offset = tt.offset
-
-			if e.isTextRemaining() != tt.want {
-				t.Fatalf("want = %v; got = %v", tt.want, e.isTextRemaining())
-			}
-		})
-	}
-}
-
-func repeatKeyEvent(e *Entry, ev KeyEvent, n int) {
+func repeatKeyEvent(e *tui.Entry, ev tui.KeyEvent, n int) {
 	for i := 0; i < n; i++ {
 		e.OnKeyEvent(ev)
 	}
 }
+
+

@@ -1,18 +1,19 @@
-package tui
+package tui_test
 
 import (
 	"bytes"
 	"image"
 	"testing"
+	"github.com/marcusolsson/tui-go"
 )
 
 func TestMask_Full(t *testing.T) {
-	surface := newTestSurface(10, 10)
+	sz := image.Pt(10, 10)
+	surface := newTestSurface(sz.X, sz.Y)
 
-	p := NewPainter(surface, NewTheme())
-	p.WithMask(image.Rect(0, 0, 10, 10), func(p *Painter) {
-		p.WithMask(image.Rect(0, 0, 10, 10), func(p *Painter) {
-			sz := p.surface.Size()
+	p := tui.NewPainter(surface, tui.NewTheme())
+	p.WithMask(image.Rect(0, 0, sz.X, sz.Y), func(p *tui.Painter) {
+		p.WithMask(image.Rect(0, 0, sz.Y, sz.Y), func(p *tui.Painter) {
 			for x := 0; x < sz.X; x++ {
 				for y := 0; y < sz.Y; y++ {
 					p.DrawRune(x, y, '█')
@@ -39,12 +40,12 @@ func TestMask_Full(t *testing.T) {
 }
 
 func TestMask_Inset(t *testing.T) {
-	surface := newTestSurface(10, 10)
+	sz := image.Pt(10, 10)
+	surface := newTestSurface(sz.X, sz.Y)
 
-	p := NewPainter(surface, NewTheme())
-	p.WithMask(image.Rect(0, 0, 10, 10), func(p *Painter) {
-		p.WithMask(image.Rect(1, 1, 9, 9), func(p *Painter) {
-			sz := p.surface.Size()
+	p := tui.NewPainter(surface, tui.NewTheme())
+	p.WithMask(image.Rect(0, 0, sz.X, sz.Y), func(p *tui.Painter) {
+		p.WithMask(image.Rect(1, 1, 9, 9), func(p *tui.Painter) {
 			for x := 0; x < sz.X; x++ {
 				for y := 0; y < sz.Y; y++ {
 					p.DrawRune(x, y, '█')
@@ -71,12 +72,12 @@ func TestMask_Inset(t *testing.T) {
 }
 
 func TestMask_FirstCell(t *testing.T) {
-	surface := newTestSurface(10, 10)
+	sz := image.Pt(10, 10)
+	surface := newTestSurface(sz.X, sz.Y)
 
-	p := NewPainter(surface, NewTheme())
-	p.WithMask(image.Rect(0, 0, 10, 10), func(p *Painter) {
-		p.WithMask(image.Rect(0, 0, 1, 1), func(p *Painter) {
-			sz := p.surface.Size()
+	p := tui.NewPainter(surface, tui.NewTheme())
+	p.WithMask(image.Rect(0, 0, sz.X, sz.Y), func(p *tui.Painter) {
+		p.WithMask(image.Rect(0, 0, 1, 1), func(p *tui.Painter) {
 			for x := 0; x < sz.X; x++ {
 				for y := 0; y < sz.Y; y++ {
 					p.DrawRune(x, y, '█')
@@ -103,12 +104,12 @@ func TestMask_FirstCell(t *testing.T) {
 }
 
 func TestMask_LastCell(t *testing.T) {
-	surface := newTestSurface(10, 10)
+	sz := image.Pt(10, 10)
+	surface := newTestSurface(sz.X, sz.Y)
 
-	p := NewPainter(surface, NewTheme())
-	p.WithMask(image.Rect(0, 0, 10, 10), func(p *Painter) {
-		p.WithMask(image.Rect(9, 9, 10, 10), func(p *Painter) {
-			sz := p.surface.Size()
+	p := tui.NewPainter(surface, tui.NewTheme())
+	p.WithMask(image.Rect(0, 0, sz.X, sz.Y), func(p *tui.Painter) {
+		p.WithMask(image.Rect(9, 9, 10, 10), func(p *tui.Painter) {
 			for x := 0; x < sz.X; x++ {
 				for y := 0; y < sz.Y; y++ {
 					p.DrawRune(x, y, '█')
@@ -135,12 +136,12 @@ func TestMask_LastCell(t *testing.T) {
 }
 
 func TestMask_MaskWithinEmptyMaskIsHidden(t *testing.T) {
-	surface := newTestSurface(10, 10)
+	sz := image.Pt(10, 10)
+	surface := newTestSurface(sz.X, sz.Y)
 
-	p := NewPainter(surface, NewTheme())
-	p.WithMask(image.Rect(0, 0, 0, 0), func(p *Painter) {
-		p.WithMask(image.Rect(1, 1, 9, 9), func(p *Painter) {
-			sz := p.surface.Size()
+	p := tui.NewPainter(surface, tui.NewTheme())
+	p.WithMask(image.Rect(0, 0, 0, 0), func(p *tui.Painter) {
+		p.WithMask(image.Rect(1, 1, 9, 9), func(p *tui.Painter) {
 			for x := 0; x < sz.X; x++ {
 				for y := 0; y < sz.Y; y++ {
 					p.DrawRune(x, y, '█')
@@ -168,7 +169,7 @@ func TestMask_MaskWithinEmptyMaskIsHidden(t *testing.T) {
 
 type testCell struct {
 	Rune  rune
-	Style Style
+	Style tui.Style
 }
 
 type testSurface struct {
@@ -186,7 +187,7 @@ func newTestSurface(w, h int) *testSurface {
 	}
 }
 
-func (s *testSurface) SetCell(x, y int, ch rune, style Style) {
+func (s *testSurface) SetCell(x, y int, ch rune, style tui.Style) {
 	s.cells[image.Point{x, y}] = testCell{
 		Rune:  ch,
 		Style: style,

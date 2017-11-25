@@ -1,20 +1,21 @@
-package tui
+package tui_test
 
 import (
 	"image"
 	"testing"
+	"github.com/marcusolsson/tui-go"
 )
 
 var drawBoxTests = []struct {
 	test  string
 	size  image.Point
-	setup func() *Box
+	setup func() *tui.Box
 	want  string
 }{
 	{
 		test: "Empty horizontal box",
-		setup: func() *Box {
-			b := NewHBox()
+		setup: func() *tui.Box {
+			b := tui.NewHBox()
 			b.SetBorder(true)
 			return b
 		},
@@ -28,8 +29,8 @@ var drawBoxTests = []struct {
 	},
 	{
 		test: "Horizontal box containing one widget",
-		setup: func() *Box {
-			b := NewHBox(NewLabel("test"))
+		setup: func() *tui.Box {
+			b := tui.NewHBox(tui.NewLabel("test"))
 			b.SetBorder(true)
 			return b
 		},
@@ -43,8 +44,8 @@ var drawBoxTests = []struct {
 	},
 	{
 		test: "Horizontal box containing multiple widgets",
-		setup: func() *Box {
-			b := NewHBox(NewLabel("test"), NewLabel("foo"))
+		setup: func() *tui.Box {
+			b := tui.NewHBox(tui.NewLabel("test"), tui.NewLabel("foo"))
 			b.SetBorder(true)
 			return b
 		},
@@ -58,8 +59,8 @@ var drawBoxTests = []struct {
 	},
 	{
 		test: "Empty vertical box",
-		setup: func() *Box {
-			b := NewVBox()
+		setup: func() *tui.Box {
+			b := tui.NewVBox()
 			b.SetBorder(true)
 			return b
 		},
@@ -73,8 +74,8 @@ var drawBoxTests = []struct {
 	},
 	{
 		test: "Vertical box containing one widget",
-		setup: func() *Box {
-			b := NewVBox(NewLabel("test"))
+		setup: func() *tui.Box {
+			b := tui.NewVBox(tui.NewLabel("test"))
 			b.SetBorder(true)
 			return b
 		},
@@ -88,8 +89,8 @@ var drawBoxTests = []struct {
 	},
 	{
 		test: "Vertical box containing multiple widgets",
-		setup: func() *Box {
-			b := NewVBox(NewLabel("test"), NewLabel("foo"))
+		setup: func() *tui.Box {
+			b := tui.NewVBox(tui.NewLabel("test"), tui.NewLabel("foo"))
 			b.SetBorder(true)
 			return b
 		},
@@ -104,11 +105,11 @@ var drawBoxTests = []struct {
 	{
 		test: "Horizontally centered box",
 		size: image.Point{32, 5},
-		setup: func() *Box {
-			nested := NewVBox(NewLabel("test"))
+		setup: func() *tui.Box {
+			nested := tui.NewVBox(tui.NewLabel("test"))
 			nested.SetBorder(true)
 
-			b := NewHBox(NewSpacer(), nested, NewSpacer())
+			b := tui.NewHBox(tui.NewSpacer(), nested, tui.NewSpacer())
 			b.SetBorder(true)
 			return b
 		},
@@ -123,14 +124,14 @@ var drawBoxTests = []struct {
 	{
 		test: "Two columns",
 		size: image.Point{32, 10},
-		setup: func() *Box {
-			first := NewVBox(NewLabel("test"))
+		setup: func() *tui.Box {
+			first := tui.NewVBox(tui.NewLabel("test"))
 			first.SetBorder(true)
 
-			second := NewVBox(NewLabel("test"))
+			second := tui.NewVBox(tui.NewLabel("test"))
 			second.SetBorder(true)
 
-			third := NewHBox(first, second)
+			third := tui.NewHBox(first, second)
 			third.SetBorder(true)
 
 			return third
@@ -151,24 +152,24 @@ var drawBoxTests = []struct {
 	{
 		test: "Two rows with two columns",
 		size: image.Point{32, 22},
-		setup: func() *Box {
-			col0 := NewVBox(NewLabel("test"))
+		setup: func() *tui.Box {
+			col0 := tui.NewVBox(tui.NewLabel("test"))
 			col0.SetBorder(true)
-			col1 := NewVBox(NewLabel("test"))
+			col1 := tui.NewVBox(tui.NewLabel("test"))
 			col1.SetBorder(true)
 
-			row0 := NewHBox(col0, col1)
+			row0 := tui.NewHBox(col0, col1)
 			row0.SetBorder(true)
 
-			col2 := NewVBox(NewLabel("test"))
+			col2 := tui.NewVBox(tui.NewLabel("test"))
 			col2.SetBorder(true)
-			col3 := NewVBox(NewLabel("test"))
+			col3 := tui.NewVBox(tui.NewLabel("test"))
 			col3.SetBorder(true)
 
-			row1 := NewHBox(col2, col3)
+			row1 := tui.NewHBox(col2, col3)
 			row1.SetBorder(true)
 
-			b := NewVBox(row0, row1)
+			b := tui.NewVBox(row0, row1)
 			b.SetBorder(true)
 
 			return b
@@ -201,26 +202,26 @@ var drawBoxTests = []struct {
 	{
 		test: "Maximum/Preferred/Preferred",
 		size: image.Point{32, 24},
-		setup: func() *Box {
-			edit0 := NewLabel("")
+		setup: func() *tui.Box {
+			edit0 := tui.NewLabel("")
 			edit0.SetText("test\ntesting\nfoo\nbar")
-			row0 := NewVBox(edit0)
-			row0.SetSizePolicy(Preferred, Maximum)
+			row0 := tui.NewVBox(edit0)
+			row0.SetSizePolicy(tui.Preferred, tui.Maximum)
 			row0.SetBorder(true)
 
-			edit1 := NewLabel("")
+			edit1 := tui.NewLabel("")
 			edit1.SetText("test\ntesting\nfoo\nbar")
-			row1 := NewVBox(edit1)
-			row1.SetSizePolicy(Preferred, Preferred)
+			row1 := tui.NewVBox(edit1)
+			row1.SetSizePolicy(tui.Preferred, tui.Preferred)
 			row1.SetBorder(true)
 
-			edit2 := NewLabel("")
+			edit2 := tui.NewLabel("")
 			edit2.SetText("foo")
-			row2 := NewVBox(edit2)
-			row2.SetSizePolicy(Preferred, Preferred)
+			row2 := tui.NewVBox(edit2)
+			row2.SetSizePolicy(tui.Preferred, tui.Preferred)
 			row2.SetBorder(true)
 
-			b := NewVBox(row0, row1, row2)
+			b := tui.NewVBox(row0, row1, row2)
 			b.SetBorder(true)
 
 			return b
@@ -253,9 +254,9 @@ var drawBoxTests = []struct {
 `,
 	},
 	{
-		test: "Box with title",
-		setup: func() *Box {
-			b := NewVBox(NewLabel("test"))
+		test: "tui.Box with title",
+		setup: func() *tui.Box {
+			b := tui.NewVBox(tui.NewLabel("test"))
 			b.SetTitle("Title")
 			b.SetBorder(true)
 			return b
@@ -269,9 +270,9 @@ var drawBoxTests = []struct {
 `,
 	},
 	{
-		test: "Box with very long title",
-		setup: func() *Box {
-			b := NewVBox(NewLabel("test"))
+		test: "tui.Box with very long title",
+		setup: func() *tui.Box {
+			b := tui.NewVBox(tui.NewLabel("test"))
 			b.SetTitle("Very long title")
 			b.SetBorder(true)
 			return b
@@ -297,7 +298,7 @@ func TestBox_Draw(t *testing.T) {
 				surface = newTestSurface(tt.size.X, tt.size.Y)
 			}
 
-			painter := NewPainter(surface, NewTheme())
+			painter := tui.NewPainter(surface, tui.NewTheme())
 			painter.Repaint(tt.setup())
 
 			if surface.String() != tt.want {
@@ -308,8 +309,8 @@ func TestBox_Draw(t *testing.T) {
 }
 
 func TestBox_IsFocused(t *testing.T) {
-	btn := NewButton("Test box focus")
-	box := NewVBox(btn)
+	btn := tui.NewButton("Test box focus")
+	box := tui.NewVBox(btn)
 	want := false
 	if box.IsFocused() != want {
 		t.Errorf("got = \n%t\n\nwant = \n%t", box.IsFocused(), want)
@@ -324,7 +325,7 @@ func TestBox_IsFocused(t *testing.T) {
 var insertWidgetTests = []struct {
 	test  string
 	size  image.Point
-	setup func() *Box
+	setup func() *tui.Box
 	index int
 	want  string
 }{
@@ -399,15 +400,15 @@ func TestBox_Insert(t *testing.T) {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
 			surface := newTestSurface(20, 10)
-			painter := NewPainter(surface, NewTheme())
+			painter := tui.NewPainter(surface, tui.NewTheme())
 
-			label0 := NewLabel("Test 0")
-			label1 := NewLabel("Test 1")
-			label2 := NewLabel("Test 2")
+			label0 := tui.NewLabel("Test 0")
+			label1 := tui.NewLabel("Test 1")
+			label2 := tui.NewLabel("Test 2")
 
-			b := NewVBox(label0, label1, label2)
+			b := tui.NewVBox(label0, label1, label2)
 
-			insertLabel := NewLabel("Insertion")
+			insertLabel := tui.NewLabel("Insertion")
 			b.Insert(tt.index, insertLabel)
 
 			b.SetBorder(true)
@@ -435,15 +436,15 @@ func TestBox_Prepend(t *testing.T) {
 └──────────────────┘
 `
 	surface := newTestSurface(20, 10)
-	painter := NewPainter(surface, NewTheme())
+	painter := tui.NewPainter(surface, tui.NewTheme())
 
-	label0 := NewLabel("Test 0")
-	label1 := NewLabel("Test 1")
-	label2 := NewLabel("Test 2")
+	label0 := tui.NewLabel("Test 0")
+	label1 := tui.NewLabel("Test 1")
+	label2 := tui.NewLabel("Test 2")
 
-	b := NewVBox(label0, label1, label2)
+	b := tui.NewVBox(label0, label1, label2)
 
-	label := NewLabel("Prepend")
+	label := tui.NewLabel("Prepend")
 	b.Prepend(label)
 
 	b.SetBorder(true)
@@ -465,13 +466,13 @@ func TestBox_Remove(t *testing.T) {
 └──────────────────┘
 `
 	surface := newTestSurface(20, 6)
-	painter := NewPainter(surface, NewTheme())
+	painter := tui.NewPainter(surface, tui.NewTheme())
 
-	label0 := NewLabel("Test 0")
-	label1 := NewLabel("Test 1")
-	label2 := NewLabel("Test 2")
+	label0 := tui.NewLabel("Test 0")
+	label1 := tui.NewLabel("Test 1")
+	label2 := tui.NewLabel("Test 2")
 
-	b := NewVBox(label0, label1, label2)
+	b := tui.NewVBox(label0, label1, label2)
 
 	b.Remove(1)
 	b.Remove(10)

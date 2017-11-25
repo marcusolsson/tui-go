@@ -1,21 +1,22 @@
-package tui
+package tui_test
 
 import (
 	"image"
 	"testing"
+	"github.com/marcusolsson/tui-go"
 )
 
 var drawGridTests = []struct {
 	test  string
 	size  image.Point
-	setup func() *Grid
+	setup func() *tui.Grid
 	want  string
 }{
 	{
 		test: "Empty grid with border",
 		size: image.Point{15, 5},
-		setup: func() *Grid {
-			g := NewGrid(0, 0)
+		setup: func() *tui.Grid {
+			g := tui.NewGrid(0, 0)
 			g.SetBorder(true)
 			return g
 		},
@@ -28,10 +29,10 @@ var drawGridTests = []struct {
 `,
 	},
 	{
-		test: "Grid with empty labels",
+		test: "tui.Grid with empty labels",
 		size: image.Point{15, 5},
-		setup: func() *Grid {
-			g := NewGrid(2, 2)
+		setup: func() *tui.Grid {
+			g := tui.NewGrid(2, 2)
 			g.SetBorder(true)
 			return g
 		},
@@ -44,15 +45,15 @@ var drawGridTests = []struct {
 `,
 	},
 	{
-		test: "Grid with short labels",
+		test: "tui.Grid with short labels",
 		size: image.Point{19, 9},
-		setup: func() *Grid {
-			g := NewGrid(0, 0)
+		setup: func() *tui.Grid {
+			g := tui.NewGrid(0, 0)
 			g.SetBorder(true)
-			l := NewLabel("testing")
-			l.SetSizePolicy(Minimum, Preferred)
-			g.AppendRow(l, NewLabel("test"))
-			g.AppendRow(NewLabel("foo"), NewLabel("bar"))
+			l := tui.NewLabel("testing")
+			l.SetSizePolicy(tui.Minimum, tui.Preferred)
+			g.AppendRow(l, tui.NewLabel("test"))
+			g.AppendRow(tui.NewLabel("foo"), tui.NewLabel("bar"))
 			return g
 		},
 		want: `
@@ -68,16 +69,16 @@ var drawGridTests = []struct {
 `,
 	},
 	{
-		test: "Grid with word wrap",
+		test: "tui.Grid with word wrap",
 		size: image.Point{19, 5},
-		setup: func() *Grid {
-			l := NewLabel("this will wrap")
+		setup: func() *tui.Grid {
+			l := tui.NewLabel("this will wrap")
 			l.SetWordWrap(true)
-			l.SetSizePolicy(Expanding, Preferred)
+			l.SetSizePolicy(tui.Expanding, tui.Preferred)
 
-			g := NewGrid(0, 0)
+			g := tui.NewGrid(0, 0)
 			g.SetBorder(true)
-			g.AppendRow(l, NewLabel("test"))
+			g.AppendRow(l, tui.NewLabel("test"))
 			return g
 		},
 		want: `
@@ -89,10 +90,10 @@ var drawGridTests = []struct {
 `,
 	},
 	{
-		test: "Grid with column stretch",
+		test: "tui.Grid with column stretch",
 		size: image.Point{24, 3},
-		setup: func() *Grid {
-			g := NewGrid(3, 1)
+		setup: func() *tui.Grid {
+			g := tui.NewGrid(3, 1)
 			g.SetBorder(true)
 
 			g.SetColumnStretch(0, 1)
@@ -108,10 +109,10 @@ var drawGridTests = []struct {
 `,
 	},
 	{
-		test: "Grid with one undefined column stretch",
+		test: "tui.Grid with one undefined column stretch",
 		size: image.Point{19, 3},
-		setup: func() *Grid {
-			g := NewGrid(3, 1)
+		setup: func() *tui.Grid {
+			g := tui.NewGrid(3, 1)
 			g.SetBorder(true)
 
 			// First column stretch defaults to 0
@@ -129,10 +130,10 @@ var drawGridTests = []struct {
 `,
 	},
 	{
-		test: "Grid with mixed column stretch",
+		test: "tui.Grid with mixed column stretch",
 		size: image.Point{34, 3},
-		setup: func() *Grid {
-			g := NewGrid(3, 1)
+		setup: func() *tui.Grid {
+			g := tui.NewGrid(3, 1)
 			g.SetBorder(true)
 
 			g.SetColumnStretch(0, 3)
@@ -148,16 +149,16 @@ var drawGridTests = []struct {
 `,
 	},
 	{
-		test: "Grid with single zero stretch column",
+		test: "tui.Grid with single zero stretch column",
 		size: image.Point{34, 3},
-		setup: func() *Grid {
-			g := NewGrid(0, 0)
+		setup: func() *tui.Grid {
+			g := tui.NewGrid(0, 0)
 			g.SetBorder(true)
 
 			g.AppendRow(
-				NewLabel("foo"),
-				NewLabel("bar"),
-				NewLabel("test"),
+				tui.NewLabel("foo"),
+				tui.NewLabel("bar"),
+				tui.NewLabel("test"),
 			)
 
 			g.SetColumnStretch(0, 1)
@@ -173,17 +174,17 @@ var drawGridTests = []struct {
 `,
 	},
 	{
-		test: "Grid with multiple zero stretch columns",
+		test: "tui.Grid with multiple zero stretch columns",
 		size: image.Point{34, 3},
-		setup: func() *Grid {
-			g := NewGrid(0, 0)
+		setup: func() *tui.Grid {
+			g := tui.NewGrid(0, 0)
 			g.SetBorder(true)
 
 			g.AppendRow(
-				NewLabel("foo"),
-				NewLabel("bar"),
-				NewLabel("baz"),
-				NewLabel("test"),
+				tui.NewLabel("foo"),
+				tui.NewLabel("bar"),
+				tui.NewLabel("baz"),
+				tui.NewLabel("test"),
 			)
 
 			g.SetColumnStretch(0, 0)
@@ -205,7 +206,7 @@ func TestGrid_Draw(t *testing.T) {
 	for _, tt := range drawGridTests {
 		t.Run(tt.test, func(t *testing.T) {
 			surface := newTestSurface(tt.size.X, tt.size.Y)
-			painter := NewPainter(surface, NewTheme())
+			painter := tui.NewPainter(surface, tui.NewTheme())
 			painter.Repaint(tt.setup())
 
 			if surface.String() != tt.want {

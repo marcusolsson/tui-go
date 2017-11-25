@@ -1,6 +1,8 @@
 package tui
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestKeybinding_Match(t *testing.T) {
 	for _, tt := range []struct {

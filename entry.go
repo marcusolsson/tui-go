@@ -16,7 +16,7 @@ type Entry struct {
 	onTextChange func(*Entry)
 	onSubmit     func(*Entry)
 
-	offset int
+	Offset int
 }
 
 // NewEntry returns a new Entry.
@@ -41,9 +41,14 @@ func (e *Entry) Draw(p *Painter) {
 
 		if e.IsFocused() {
 			pos := e.text.CursorPos()
-			p.DrawCursor(pos.X-e.offset, 0)
+			p.DrawCursor(pos.X-e.Offset, 0)
 		}
 	})
+}
+
+// CursorPos returns the coordinate for the cursor for a given width.
+func (e *Entry) CursorPos() image.Point {
+	return e.text.CursorPos()
 }
 
 // SizeHint returns the recommended size hint for the entry.
@@ -68,8 +73,8 @@ func (e *Entry) OnKeyEvent(ev KeyEvent) {
 			}
 		case KeyBackspace2:
 			e.text.Backspace()
-			if e.offset > 0 && !e.isTextRemaining() {
-				e.offset--
+			if e.Offset > 0 && !e.isTextRemaining() {
+				e.Offset--
 			}
 			if e.onTextChange != nil {
 				e.onTextChange(e)
@@ -81,26 +86,26 @@ func (e *Entry) OnKeyEvent(ev KeyEvent) {
 			}
 		case KeyLeft, KeyCtrlB:
 			e.text.MoveBackward()
-			if e.offset > 0 {
-				e.offset--
+			if e.Offset > 0 {
+				e.Offset--
 			}
 		case KeyRight, KeyCtrlF:
 			e.text.MoveForward()
 
 			isCursorTooFar := e.text.CursorPos().X >= screenWidth
-			isTextLeft := (e.text.Width() - e.offset) > (screenWidth - 1)
+			isTextLeft := (e.text.Width() - e.Offset) > (screenWidth - 1)
 
 			if isCursorTooFar && isTextLeft {
-				e.offset++
+				e.Offset++
 			}
 		case KeyHome, KeyCtrlA:
 			e.text.MoveToLineStart()
-			e.offset = 0
+			e.Offset = 0
 		case KeyEnd, KeyCtrlE:
 			e.text.MoveToLineEnd()
 			left := e.text.Width() - (screenWidth - 1)
 			if left >= 0 {
-				e.offset = left
+				e.Offset = left
 			}
 		case KeyCtrlK:
 			e.text.Kill()
@@ -110,7 +115,7 @@ func (e *Entry) OnKeyEvent(ev KeyEvent) {
 
 	e.text.WriteRune(ev.Rune)
 	if e.text.CursorPos().X >= screenWidth {
-		e.offset++
+		e.Offset++
 	}
 	if e.onTextChange != nil {
 		e.onTextChange(e)
@@ -144,7 +149,7 @@ func (e *Entry) visibleText() string {
 	if text.Len() == 0 {
 		return ""
 	}
-	windowStart := e.offset
+	windowStart := e.Offset
 	windowEnd := e.Size().X + windowStart
 	if windowEnd > text.Len() {
 		windowEnd = text.Len()
@@ -153,5 +158,5 @@ func (e *Entry) visibleText() string {
 }
 
 func (e *Entry) isTextRemaining() bool {
-	return e.text.Width()-e.offset > e.Size().X
+	return e.text.Width()-e.Offset > e.Size().X
 }
