@@ -35,7 +35,7 @@ func TestButton_OnActivated(t *testing.T) {
 }
 
 func TestButton_Draw(t *testing.T) {
-	surface := newTestSurface(10, 5)
+	surface := NewTestSurface(10, 5)
 	painter := NewPainter(surface, NewTheme())
 
 	btn := NewButton("test")

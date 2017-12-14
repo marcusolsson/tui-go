@@ -7,7 +7,7 @@ import (
 )
 
 func TestList_Draw(t *testing.T) {
-	surface := newTestSurface(10, 5)
+	surface := NewTestSurface(10, 5)
 	painter := NewPainter(surface, NewTheme())
 
 	l := NewList()
@@ -28,7 +28,7 @@ bar
 }
 
 func TestList_RemoveItem(t *testing.T) {
-	surface := newTestSurface(5, 3)
+	surface := NewTestSurface(5, 3)
 	painter := NewPainter(surface, NewTheme())
 
 	l := NewList()
