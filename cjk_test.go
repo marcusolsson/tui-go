@@ -89,7 +89,7 @@ var drawCJKTests = []struct {
 
 func TestCJK_Label(t *testing.T) {
 	for _, tt := range drawCJKTests {
-		surface := newTestSurface(10, 4)
+		surface := NewTestSurface(10, 4)
 
 		painter := NewPainter(surface, NewTheme())
 		painter.Repaint(tt.setup())

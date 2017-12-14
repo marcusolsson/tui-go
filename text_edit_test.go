@@ -34,11 +34,11 @@ func TestTextEdit_Draw(t *testing.T) {
 	for _, tt := range drawTextEditTests {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
-			var surface *testSurface
+			var surface *TestSurface
 			if tt.size.X == 0 && tt.size.Y == 0 {
-				surface = newTestSurface(10, 5)
+				surface = NewTestSurface(10, 5)
 			} else {
-				surface = newTestSurface(tt.size.X, tt.size.Y)
+				surface = NewTestSurface(tt.size.X, tt.size.Y)
 			}
 
 			painter := NewPainter(surface, NewTheme())

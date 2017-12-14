@@ -290,11 +290,11 @@ func TestBox_Draw(t *testing.T) {
 	for _, tt := range drawBoxTests {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
-			var surface *testSurface
+			var surface *TestSurface
 			if tt.size.X == 0 && tt.size.Y == 0 {
-				surface = newTestSurface(10, 5)
+				surface = NewTestSurface(10, 5)
 			} else {
-				surface = newTestSurface(tt.size.X, tt.size.Y)
+				surface = NewTestSurface(tt.size.X, tt.size.Y)
 			}
 
 			painter := NewPainter(surface, NewTheme())
@@ -398,7 +398,7 @@ func TestBox_Insert(t *testing.T) {
 	for _, tt := range insertWidgetTests {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
-			surface := newTestSurface(20, 10)
+			surface := NewTestSurface(20, 10)
 			painter := NewPainter(surface, NewTheme())
 
 			label0 := NewLabel("Test 0")
@@ -434,7 +434,7 @@ func TestBox_Prepend(t *testing.T) {
 │..................│
 └──────────────────┘
 `
-	surface := newTestSurface(20, 10)
+	surface := NewTestSurface(20, 10)
 	painter := NewPainter(surface, NewTheme())
 
 	label0 := NewLabel("Test 0")
@@ -464,7 +464,7 @@ func TestBox_Remove(t *testing.T) {
 │..................│
 └──────────────────┘
 `
-	surface := newTestSurface(20, 6)
+	surface := NewTestSurface(20, 6)
 	painter := NewPainter(surface, NewTheme())
 
 	label0 := NewLabel("Test 0")

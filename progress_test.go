@@ -11,7 +11,7 @@ func TestProgress_Draw(t *testing.T) {
 	p.SetSizePolicy(Expanding, Minimum)
 	p.SetCurrent(50)
 
-	surface := newTestSurface(11, 2)
+	surface := NewTestSurface(11, 2)
 	painter := NewPainter(surface, NewTheme())
 	painter.Repaint(p)
 

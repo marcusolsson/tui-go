@@ -70,11 +70,11 @@ func TestEntry_Draw(t *testing.T) {
 	for _, tt := range drawEntryTests {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
-			var surface *testSurface
+			var surface *TestSurface
 			if tt.size.X == 0 && tt.size.Y == 0 {
-				surface = newTestSurface(10, 5)
+				surface = NewTestSurface(10, 5)
 			} else {
-				surface = newTestSurface(tt.size.X, tt.size.Y)
+				surface = NewTestSurface(tt.size.X, tt.size.Y)
 			}
 
 			painter := NewPainter(surface, NewTheme())
@@ -310,7 +310,7 @@ func TestEntry_Layout(t *testing.T) {
 	for _, tt := range layoutEntryTests {
 		tt := tt
 		t.Run(tt.test, func(t *testing.T) {
-			surface := newTestSurface(20, 5)
+			surface := NewTestSurface(20, 5)
 			painter := NewPainter(surface, NewTheme())
 			painter.Repaint(tt.setup())
 
@@ -326,7 +326,7 @@ func TestEntry_OnEvent(t *testing.T) {
 	e.SetText("Lorem ipsum")
 	e.SetFocused(true)
 
-	surface := newTestSurface(4, 1)
+	surface := NewTestSurface(4, 1)
 	painter := NewPainter(surface, NewTheme())
 	painter.Repaint(e)
 
@@ -389,7 +389,7 @@ func TestEntry_MoveToStartAndEnd(t *testing.T) {
 		e.text.SetMaxWidth(5)
 		e.offset = 6
 
-		surface := newTestSurface(5, 1)
+		surface := NewTestSurface(5, 1)
 		painter := NewPainter(surface, NewTheme())
 
 		t.Run("When cursor is moved to the start", func(t *testing.T) {
@@ -434,7 +434,7 @@ func TestEntry_OnKeyBackspaceEvent(t *testing.T) {
 		e.text.SetMaxWidth(5)
 		e.offset = 6
 
-		surface := newTestSurface(5, 1)
+		surface := NewTestSurface(5, 1)
 		painter := NewPainter(surface, NewTheme())
 
 		t.Run("When cursor is moved to the middle", func(t *testing.T) {
