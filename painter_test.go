@@ -166,7 +166,7 @@ func TestMask_MaskWithinEmptyMaskIsHidden(t *testing.T) {
 }
 
 func TestWithStyle_ApplyStyle(t *testing.T) {
-	surface := newTestSurface(5, 5)
+	surface := NewTestSurface(5, 5)
 
 	theme := NewTheme()
 	theme.SetStyle("explicit", Style{Fg: ColorWhite, Bg: ColorBlack})
@@ -221,7 +221,7 @@ func TestWithStyle_ApplyStyle(t *testing.T) {
 }
 
 func TestWithStyle_Stacks(t *testing.T) {
-	surface := newTestSurface(10, 10)
+	surface := NewTestSurface(10, 10)
 
 	theme := NewTheme()
 	theme.SetStyle("explicit", Style{Fg: Color(3)})
