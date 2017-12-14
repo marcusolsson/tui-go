@@ -74,8 +74,8 @@ func (s *TestSurface) String() string {
 	return buf.String()
 }
 
-// FgColors renders the testSurface's foreground colors, using the digit 0-7 for painted cells.
-func (s *testSurface) FgColors() string {
+// FgColors renders the TestSurface's foreground colors, using the digit 0-7 for painted cells.
+func (s *TestSurface) FgColors() string {
 	var buf bytes.Buffer
 	buf.WriteRune('\n')
 	for j := 0; j < s.size.Y; j++ {
@@ -95,8 +95,8 @@ func (s *testSurface) FgColors() string {
 	return buf.String()
 }
 
-// BgColors renders the testSurface's background colors, using the digit 0-7 for painted cells.
-func (s *testSurface) BgColors() string {
+// BgColors renders the TestSurface's background colors, using the digit 0-7 for painted cells.
+func (s *TestSurface) BgColors() string {
 	var buf bytes.Buffer
 	buf.WriteRune('\n')
 	for j := 0; j < s.size.Y; j++ {
