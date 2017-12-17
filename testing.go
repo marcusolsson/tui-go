@@ -92,9 +92,6 @@ func (s *TestSurface) FgColors() string {
 		for i := 0; i < s.size.X; i++ {
 			if cell, ok := s.cells[image.Point{i, j}]; ok {
 				color := cell.Style.Fg
-				if cell.Style.Reverse {
-					color = cell.Style.Bg
-				}
 				buf.WriteRune('0' + rune(color))
 			} else {
 				buf.WriteRune(s.emptyCh)
@@ -113,9 +110,6 @@ func (s *TestSurface) BgColors() string {
 		for i := 0; i < s.size.X; i++ {
 			if cell, ok := s.cells[image.Point{i, j}]; ok {
 				color := cell.Style.Bg
-				if cell.Style.Reverse {
-					color = cell.Style.Fg
-				}
 				buf.WriteRune('0' + rune(color))
 			} else {
 				buf.WriteRune(s.emptyCh)
@@ -137,13 +131,13 @@ func (s *TestSurface) Decorations() string {
 		for i := 0; i < s.size.X; i++ {
 			if cell, ok := s.cells[image.Point{i, j}]; ok {
 				mask := int64(0)
-				if cell.Style.Reverse {
+				if cell.Style.Reverse == DecorationOn {
 					mask |= 1
 				}
-				if cell.Style.Bold {
+				if cell.Style.Bold == DecorationOn {
 					mask |= 2
 				}
-				if cell.Style.Underline {
+				if cell.Style.Underline == DecorationOn {
 					mask |= 4
 				}
 				buf.WriteString(strconv.FormatInt(mask, 16))

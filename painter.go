@@ -155,16 +155,11 @@ func (p *Painter) SetStyle(s Style) {
 	p.style = s
 }
 
-// WithStyle executes the provided function, with the Painter assigned the style with the given name.
-// If there's no Style with that name, it continues to use the same Style.
+// WithStyle executes the provided function with the named Style applied on top of the current one.
 func (p *Painter) WithStyle(n string, fn func(*Painter)) {
-	if !p.theme.HasStyle(n) {
-		fn(p)
-		return
-	}
-
 	prev := p.style
-	p.SetStyle(p.theme.Style(n))
+	new := prev.mergeIn(p.theme.Style(n))
+	p.SetStyle(new)
 	fn(p)
 	p.SetStyle(prev)
 }
