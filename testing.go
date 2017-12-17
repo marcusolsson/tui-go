@@ -3,6 +3,7 @@ package tui
 import (
 	"bytes"
 	"image"
+	"strconv"
 )
 
 type testCell struct {
@@ -114,5 +115,36 @@ func (s *TestSurface) BgColors() string {
 		buf.WriteRune('\n')
 	}
 	return buf.String()
+}
+
+// Decorations renders the testSurface's decorations (Reverse, Bold, Underline) using a bitmask:
+//	Reverse: 1
+//	Bold: 2
+//	Underline: 4
+func (s *TestSurface) Decorations() string {
+	var buf bytes.Buffer
+	buf.WriteRune('\n')
+	for j := 0; j < s.size.Y; j++ {
+		for i := 0; i < s.size.X; i++ {
+			if cell, ok := s.cells[image.Point{i, j}]; ok {
+				mask := int64(0)
+				if cell.Style.Reverse {
+					mask |= 1
+				}
+				if cell.Style.Bold {
+					mask |= 2
+				}
+				if cell.Style.Underline {
+					mask |= 4
+				}
+				buf.WriteString(strconv.FormatInt(mask, 16))
+			} else {
+				buf.WriteRune(s.emptyCh)
+			}
+		}
+		buf.WriteRune('\n')
+	}
+	return buf.String()
+
 }
 
