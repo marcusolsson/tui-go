@@ -301,7 +301,7 @@ var styleInheritTests = []struct {
 		test: "no second style, keeps first",
 		theme: func() *Theme {
 			r := NewTheme()
-			r.SetStyle("first", Style{Fg: Color(3), Bold: true})
+			r.SetStyle("first", Style{Fg: Color(3), Bold: DecorationOn})
 			return r
 		},
 		wantFg: `
@@ -319,7 +319,7 @@ var styleInheritTests = []struct {
 		test: "empty second style, inherits from first",
 		theme: func() *Theme{
 			r := NewTheme()
-			r.SetStyle("first", Style{Fg: Color(3), Bold: true})
+			r.SetStyle("first", Style{Fg: Color(3), Bold: DecorationOn})
 			r.SetStyle("second", Style{})
 			return r
 		},
