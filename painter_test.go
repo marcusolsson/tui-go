@@ -291,3 +291,89 @@ func TestWithStyle_Stacks(t *testing.T) {
 	}
 }
 
+var styleInheritTests = []struct {
+	test            string
+	theme           func() *Theme
+	wantFg          string
+	wantDecorations string
+}{
+	{
+		test: "no second style, keeps first",
+		theme: func() *Theme {
+			r := NewTheme()
+			r.SetStyle("first", Style{Fg: Color(3), Bold: true})
+			return r
+		},
+		wantFg: `
+333..333..
+333..333..
+333..333..
+`,
+		wantDecorations: `
+222..222..
+222..222..
+222..222..
+`,
+	},
+	{
+		test: "empty second style, inherits from first",
+		theme: func() *Theme{
+			r := NewTheme()
+			r.SetStyle("first", Style{Fg: Color(3), Bold: true})
+			r.SetStyle("second", Style{})
+			return r
+		},
+		wantFg: `
+333..333..
+333..333..
+333..333..
+`,
+		wantDecorations: `
+222..222..
+222..222..
+222..222..
+`,
+},
+
+}
+
+func TestWithStyle_Inherit(t *testing.T) {
+	for _, tt := range styleInheritTests {
+		tt := tt
+		t.Run(tt.test, func(t *testing.T) {
+
+			surface := NewTestSurface(10, 3)
+			theme := tt.theme()
+
+			fill := func(p *Painter) {
+				sz := p.surface.Size()
+				for x := 0; x < sz.X; x++ {
+					for y := 0; y < sz.Y; y++ {
+						p.DrawRune(x, y, ' ')
+					}
+				}
+			}
+
+			p := NewPainter(surface, theme)
+			p.WithMask(image.Rect(0, 0, 10, 3), func(p *Painter) {
+				p.WithStyle("first", func(p *Painter) {
+					p.WithMask(image.Rect(0, 0, 3, 3), fill)
+
+					p.WithStyle("second", func(p *Painter) {
+						p.WithMask(image.Rect(5, 0, 8, 3), fill)
+					})
+				})
+			})
+
+			gotColors := surface.FgColors()
+			gotDecorations := surface.Decorations()
+
+			if gotColors != tt.wantFg {
+				t.Errorf("unexpected colors: got = \n%s\nwant = \n%s", gotColors, tt.wantFg)
+			}
+			if gotDecorations != tt.wantDecorations {
+				t.Errorf("unexpected decorations: got = \n%s\nwant = \n%s", gotDecorations, tt.wantDecorations)
+			}
+		})
+	}
+}

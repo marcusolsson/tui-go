@@ -156,6 +156,7 @@ func (p *Painter) SetStyle(s Style) {
 }
 
 // WithStyle executes the provided function, with the Painter assigned the style with the given name.
+// If there's no Style with that name, it continues to use the same Style.
 func (p *Painter) WithStyle(n string, fn func(*Painter)) {
 	if !p.theme.HasStyle(n) {
 		fn(p)
