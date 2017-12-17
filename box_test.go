@@ -307,6 +307,56 @@ func TestBox_Draw(t *testing.T) {
 	}
 }
 
+var styleBoxTests = []struct {
+	test  string
+	setup func() *Box
+	theme func() *Theme
+	wantColors  string
+	wantDecorations string
+}{
+	{
+		test: "Red horizontal box",
+		setup: func() *Box {
+			b := NewHBox()
+			return b
+		},
+		theme: func() *Theme{
+			t := NewTheme()
+			t.SetStyle("box", Style{
+				Fg: Color(3),
+			})
+			return t
+		},
+		wantColors: `
+3333333333
+3333333333
+3333333333
+3333333333
+3333333333
+`,
+	},
+}
+
+func TestBox_Style(t *testing.T) {
+	for _, tt := range styleBoxTests {
+		tt := tt
+		t.Run(tt.test, func(t *testing.T) {
+			surface := NewTestSurface(10, 5)
+			painter := NewPainter(surface, tt.theme())
+			painter.Repaint(tt.setup())
+
+			if tt.wantColors != "" && surface.FgColors() != tt.wantColors {
+				t.Errorf("wrong colors: got = \n%s\n\nwant = \n%s", surface.FgColors(), tt.wantColors)
+			}
+			if tt.wantDecorations != "" && surface.Decorations() != tt.wantDecorations {
+				t.Errorf("wrong decorations: got = \n%s\n\nwant = \n%s", surface.Decorations(), tt.wantDecorations)
+			}
+		})
+	}
+}
+
+
+
 func TestBox_IsFocused(t *testing.T) {
 	btn := NewButton("Test box focus")
 	box := NewVBox(btn)
