@@ -113,41 +113,44 @@ func (b *Box) Draw(p *Painter) {
 		style += ".focused"
 	}
 
-	sz := b.Size()
+	p.WithStyle(style, func(p *Painter) {
 
-	if b.border {
-		p.WithStyle(style+".border", func(p *Painter) {
-			p.DrawRect(0, 0, sz.X, sz.Y)
-		})
-		p.WithStyle(style, func(p *Painter) {
-			p.WithMask(image.Rect(0, 0, sz.X-1, 1), func(p *Painter) {
-				p.DrawText(1, 0, b.title)
+		sz := b.Size()
+
+		if b.border {
+			p.WithStyle(style+".border", func(p *Painter) {
+				p.DrawRect(0, 0, sz.X, sz.Y)
 			})
-		})
-		p.Translate(1, 1)
-		defer p.Restore()
-	}
-
-	var off image.Point
-	for _, child := range b.children {
-		switch b.Alignment() {
-		case Horizontal:
-			p.Translate(off.X, 0)
-		case Vertical:
-			p.Translate(0, off.Y)
+			p.WithStyle(style, func(p *Painter) {
+				p.WithMask(image.Rect(0, 0, sz.X-1, 1), func(p *Painter) {
+					p.DrawText(1, 0, b.title)
+				})
+			})
+			p.Translate(1, 1)
+			defer p.Restore()
 		}
 
-		p.WithMask(image.Rectangle{
-			Min: image.ZP,
-			Max: child.Size(),
-		}, func(p *Painter) {
-			child.Draw(p)
-		})
+		var off image.Point
+		for _, child := range b.children {
+			switch b.Alignment() {
+			case Horizontal:
+				p.Translate(off.X, 0)
+			case Vertical:
+				p.Translate(0, off.Y)
+			}
 
-		p.Restore()
+			p.WithMask(image.Rectangle{
+				Min: image.ZP,
+				Max: child.Size(),
+			}, func(p *Painter) {
+				child.Draw(p)
+			})
 
-		off = off.Add(child.Size())
-	}
+			p.Restore()
+
+			off = off.Add(child.Size())
+		}
+	})
 }
 
 // MinSizeHint returns the minimum size hint for the layout.
