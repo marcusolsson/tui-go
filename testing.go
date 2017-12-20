@@ -20,6 +20,7 @@ type TestSurface struct {
 	emptyCh rune
 }
 
+// NewTestSurface returns a new TestSurface.
 func NewTestSurface(w, h int) *TestSurface {
 	return &TestSurface{
 		cells:   make(map[image.Point]testCell),
@@ -28,6 +29,7 @@ func NewTestSurface(w, h int) *TestSurface {
 	}
 }
 
+// SetCell sets the contents of the addressed cell.
 func (s *TestSurface) SetCell(x, y int, ch rune, style Style) {
 	s.cells[image.Point{x, y}] = testCell{
 		Rune:  ch,
@@ -35,27 +37,34 @@ func (s *TestSurface) SetCell(x, y int, ch rune, style Style) {
 	}
 }
 
+// SetCursor moves the Surface's cursor to the specified position.
 func (s *TestSurface) SetCursor(x, y int) {
 	s.cursor = image.Point{x, y}
 }
 
+// HideCursor removes the cursor from the display.
 func (s *TestSurface) HideCursor() {
 	s.cursor = image.Point{}
 }
 
+// Begin resets the state of the TestSurface, clearing all cells.
+// It must be called before drawing the Surface.
 func (s *TestSurface) Begin() {
 	s.cells = make(map[image.Point]testCell)
 }
 
+// End indicates the surface has been painted on, and can be rendered.
+// It's a no-op for TestSurface.
 func (s *TestSurface) End() {
 	// NOP
 }
 
+// Size returns the dimensions of the surface.
 func (s *TestSurface) Size() image.Point {
 	return s.size
 }
 
-// String writes the TestSurface's characters as a string.
+// String returns the characters written to the TestSurface.
 func (s *TestSurface) String() string {
 	var buf bytes.Buffer
 	buf.WriteRune('\n')
@@ -75,7 +84,7 @@ func (s *TestSurface) String() string {
 	return buf.String()
 }
 
-// FgColors renders the TestSurface's foreground colors, using the digit 0-7 for painted cells.
+// FgColors renders the TestSurface's foreground colors, using the digits 0-7 for painted cells, and the empty character for unpainted cells.
 func (s *TestSurface) FgColors() string {
 	var buf bytes.Buffer
 	buf.WriteRune('\n')
@@ -96,7 +105,7 @@ func (s *TestSurface) FgColors() string {
 	return buf.String()
 }
 
-// BgColors renders the TestSurface's background colors, using the digit 0-7 for painted cells.
+// BgColors renders the TestSurface's background colors, using the digits 0-7 for painted cells, and the empty character for unpainted cells.
 func (s *TestSurface) BgColors() string {
 	var buf bytes.Buffer
 	buf.WriteRune('\n')
@@ -117,7 +126,7 @@ func (s *TestSurface) BgColors() string {
 	return buf.String()
 }
 
-// Decorations renders the testSurface's decorations (Reverse, Bold, Underline) using a bitmask:
+// Decorations renders the TestSurface's decorations (Reverse, Bold, Underline) using a bitmask:
 //	Reverse: 1
 //	Bold: 2
 //	Underline: 4
