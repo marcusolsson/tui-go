@@ -334,7 +334,37 @@ var styleInheritTests = []struct {
 222..222..
 `,
 },
-
+	{
+		test: "second style overrides only explicit properties",
+		theme: func() *Theme{
+			r := NewTheme()
+			r.SetStyle("first", Style{Fg: Color(3), Bold: DecorationOn})
+			r.SetStyle("second", Style{Underline: DecorationOn})
+			return r
+		},
+		wantFg: `
+333..333..
+333..333..
+333..333..
+`,
+		wantDecorations: `
+222..666..
+222..666..
+222..666..
+`	},
+	{
+		test: "second style resets a previously set property",
+		theme: func() *Theme{
+			r := NewTheme()
+			r.SetStyle("first", Style{Bold: DecorationOn})
+			r.SetStyle("second", Style{Bold: DecorationOff})
+			return r
+		},
+		wantDecorations: `
+222..000..
+222..000..
+222..000..
+`	},
 }
 
 func TestWithStyle_Inherit(t *testing.T) {
@@ -368,7 +398,7 @@ func TestWithStyle_Inherit(t *testing.T) {
 			gotColors := surface.FgColors()
 			gotDecorations := surface.Decorations()
 
-			if gotColors != tt.wantFg {
+			if tt.wantFg != "" && gotColors != tt.wantFg {
 				t.Errorf("unexpected colors: got = \n%s\nwant = \n%s", gotColors, tt.wantFg)
 			}
 			if gotDecorations != tt.wantDecorations {
