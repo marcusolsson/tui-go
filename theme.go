@@ -19,6 +19,7 @@ const (
 // Decoration represents a bold/underline/etc. state
 type Decoration int
 
+// Decoration modes: Inherit from parent widget, explicitly on, or explicitly off.
 const (
 	DecorationInherit Decoration = iota
 	DecorationOn
