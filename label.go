@@ -31,7 +31,9 @@ func NewLabel(text string) *Label {
 
 // Resize changes the size of the Widget.
 func (l *Label) Resize(size image.Point) {
-	l.cacheSizeHint = nil
+	if l.Size() != size {
+		l.cacheSizeHint = nil
+	}
 	l.WidgetBase.Resize(size)
 }
 
