@@ -29,6 +29,12 @@ func NewLabel(text string) *Label {
 	}
 }
 
+// Resize changes the size of the Widget.
+func (l *Label) Resize(size image.Point) {
+	l.cacheSizeHint = nil
+	l.WidgetBase.Resize(size)
+}
+
 // Draw draws the label.
 func (l *Label) Draw(p *Painter) {
 	lines := strings.Split(l.text, "\n")
