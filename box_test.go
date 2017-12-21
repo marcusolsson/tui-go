@@ -387,6 +387,86 @@ var styleBoxTests = []struct {
 2222222222
 `,
 	},
+	{
+		test: "Styled box, labels inherit",
+		setup: func() *Box {
+			return NewVBox(
+				NewLabel("label 1"),
+				NewLabel("label 2"),
+			)
+		},
+		theme: func() *Theme {
+			t := NewTheme()
+			t.SetStyle("box", Style{
+				Fg:   Color(3),
+				Bold: DecorationOn,
+			})
+			return t
+		},
+		wantContents: `
+label 1   
+          
+          
+label 2   
+          
+`,
+		wantColors: `
+3333333333
+3333333333
+3333333333
+3333333333
+3333333333
+`,
+		wantDecorations: `
+2222222222
+2222222222
+2222222222
+2222222222
+2222222222
+`,
+	},
+	{
+		test: "blue box, bold border",
+		setup: func() *Box {
+			r := NewVBox(
+				NewLabel("label 1"),
+				NewLabel("label 2"),
+			)
+			r.SetBorder(true)
+			return r
+		},
+		theme: func() *Theme {
+			t := NewTheme()
+			t.SetStyle("box", Style{
+				Fg: Color(3),
+			})
+			t.SetStyle("box.border", Style{
+				Bold: DecorationOn,
+			})
+			return t
+		},
+		wantContents: `
+┌────────┐
+│label 1 │
+│        │
+│label 2 │
+└────────┘
+`,
+		wantColors: `
+3333333333
+3333333333
+3333333333
+3333333333
+3333333333
+`,
+		wantDecorations: `
+2222222222
+2000000002
+2000000002
+2000000002
+2222222222
+`,
+	},
 }
 
 func TestBox_Style(t *testing.T) {

@@ -130,7 +130,7 @@ func (b *Box) Draw(p *Painter) {
 			p.Translate(1, 1)
 			defer p.Restore()
 		} else {
-			p.FillRect(0, 0, sz.X-1, sz.Y-1)
+			p.FillRect(0, 0, sz.X, sz.Y)
 		}
 
 		var off image.Point
