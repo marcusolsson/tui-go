@@ -55,3 +55,10 @@ For an overview of the alternatives for writing terminal user interfaces, check 
 ## License
 
 tui-go is released under the [MIT License](LICENSE).
+
+## Contact
+
+If you're interested in chatting with users and contributors, join `#tui-go` on
+the [Freenode](https://freenode.net/) IRC network. (There's a web interface
+[here](https://webchat.freenode.net/), and instructions for IRC clients
+[here](https://freenode.net/kb/answer/chat).)
