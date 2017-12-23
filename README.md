@@ -59,7 +59,7 @@ tui-go is released under the [MIT License](LICENSE).
 ## Contact
 
 If you're interested in chatting with users and contributors, join
-[#tui-go](https://gophers.slack.com/messages/tui-gu) on
+[#tui-go](https://gophers.slack.com/messages/tui-go) on
 the [Gophers Slack](https://gophers.slack.com).
 If you're not already a part of the Slack workspace, you can join
 [here](https://invite.slack.golangbridge.org/). If you prefer a lower-bandwidth
