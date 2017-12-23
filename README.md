@@ -58,7 +58,11 @@ tui-go is released under the [MIT License](LICENSE).
 
 ## Contact
 
-If you're interested in chatting with users and contributors, join `#tui-go` on
-the [Freenode](https://freenode.net/) IRC network. (There's a web interface
-[here](https://webchat.freenode.net/), and instructions for IRC clients
-[here](https://freenode.net/kb/answer/chat).)
+If you're interested in chatting with users and contributors, join
+[#tui-go](https://gophers.slack.com/messages/tui-gu) on
+the [Gophers Slack](https://gophers.slack.com).
+If you're not already a part of the Slack workspace, you can join
+[here](https://invite.slack.golangbridge.org/). If you prefer a lower-bandwidth
+interface, see [this
+article](https://get.slack.help/hc/en-us/articles/201727913-Connect-to-Slack-over-IRC-and-XMPP)
+on connecting to Slack via IRC or XMPP.
