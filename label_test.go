@@ -35,6 +35,22 @@ var labelTests = []struct {
 		size:     image.Point{100, 100},
 		sizeHint: image.Point{4, 1},
 	},
+	{
+		test: "Unicode only",
+		setup: func() *Label {
+			return NewLabel("∅")
+		},
+		size:     image.Point{100, 100},
+		sizeHint: image.Point{1, 1},
+	},
+	{
+		test: "Tall string",
+		setup: func() *Label {
+			return NewLabel("Null set: ∅")
+		},
+		size:     image.Point{100, 100},
+		sizeHint: image.Point{11, 1},
+	},
 }
 
 func TestLabel_Size(t *testing.T) {
