@@ -23,6 +23,7 @@ func TestSimple(t *testing.T) {
 		{"Nulla lorem magna, efficitur interdum ante at, convallis sodales nulla. Sed maximus tempor condimentum.\n\nNam et risus est. Cras ornare iaculis orci, sit amet fringilla nisl pharetra quis.", 35, "Nulla lorem magna, efficitur \ninterdum ante at, convallis \nsodales nulla. Sed maximus tempor \ncondimentum.\n\nNam et risus est. Cras ornare \niaculis orci, sit amet fringilla \nnisl pharetra quis."},
 		{"\n\nNam et risus est.", 30, "\n\nNam et risus est."},
 		{"a\n\na\n\n", 6, "a\n\na\n\n"},
+		{"null set ∅", 11, "null set ∅"},
 	} {
 		t.Run("", func(t *testing.T) {
 			if got := WrapString(tt.In, tt.Width); got != tt.Out {
