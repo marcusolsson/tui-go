@@ -39,11 +39,7 @@ func (l *Label) Resize(size image.Point) {
 
 // Draw draws the label.
 func (l *Label) Draw(p *Painter) {
-	lines := strings.Split(l.text, "\n")
-
-	if l.wordWrap {
-		lines = strings.Split(wordwrap.WrapString(l.text, uint(l.Size().X)), "\n")
-	}
+	lines := l.lines()
 
 	style := "label"
 	if l.styleName != "" {
@@ -68,22 +64,23 @@ func (l *Label) SizeHint() image.Point {
 		return *l.cacheSizeHint
 	}
 	var max int
-	lines := strings.Split(l.text, "\n")
-	if l.wordWrap {
-		lines = strings.Split(wordwrap.WrapString(l.text, uint(l.Size().X)), "\n")
-	}
+	lines := l.lines()
 	for _, line := range lines {
 		if w := stringWidth(line); w > max {
 			max = w
 		}
 	}
-	sizeHint := image.Point{max, l.heightForWidth(max)}
+	sizeHint := image.Point{max, len(lines)}
 	l.cacheSizeHint = &sizeHint
 	return sizeHint
 }
 
-func (l *Label) heightForWidth(w int) int {
-	return len(strings.Split(wordwrap.WrapString(l.text, uint(w)), "\n"))
+func (l *Label) lines() []string {
+	txt := l.text
+	if l.wordWrap {
+		txt = wordwrap.WrapString(l.text, uint(l.Size().X))
+	}
+	return strings.Split(txt, "\n")
 }
 
 // Text returns the text content of the label.
