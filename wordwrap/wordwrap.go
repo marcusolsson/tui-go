@@ -3,6 +3,8 @@ package wordwrap
 import (
 	"bytes"
 	"unicode"
+
+	"github.com/mattn/go-runewidth"
 )
 
 // WrapString wraps the input string by inserting newline characters. It does
@@ -12,42 +14,50 @@ func WrapString(s string, width int) string {
 		return s
 	}
 
+	// Output buffer. Does not include the most recent word.
 	var buf bytes.Buffer
+	// Trailing word.
 	var word bytes.Buffer
-
-	word.WriteByte(s[0])
+	var wordLen int
 
 	spaceLeft := width
-	for i := 1; i < len(s); i++ {
-		curr := s[i]
-		prev := s[i-1]
+	var prev rune
 
-		if curr == '\n' {
+	for _, curr := range s {
+		if curr == rune('\n') {
+			// Received a newline.
 			if word.Len() > spaceLeft {
 				spaceLeft = width
-				buf.WriteRune('\n')
+				buf.WriteRune(curr)
 			} else {
 				spaceLeft = width
 			}
-			// fmt.Printf("33: writing %q with %d spaces remaining out of %d\n", word.String(), spaceLeft, width)
 			word.WriteTo(&buf)
-		} else if unicode.IsSpace(rune(prev)) && !unicode.IsSpace(rune(curr)) {
-			if word.Len() > spaceLeft {
-				spaceLeft = width - word.Len()
+			wordLen = 0
+		} else if unicode.IsSpace(prev) && !unicode.IsSpace(curr) {
+			// At the start of a new word.
+			// Does the last word fit on this line, or the next?
+			if wordLen > spaceLeft {
+				spaceLeft = width - wordLen
 				buf.WriteRune('\n')
 			} else {
-				spaceLeft -= word.Len()
+				spaceLeft -= wordLen
 			}
 			// fmt.Printf("42: writing %q with %d spaces remaining out of %d\n", word.String(), spaceLeft, width)
 			word.WriteTo(&buf)
+			wordLen = 0
 		}
-		word.WriteByte(curr)
+		word.WriteRune(curr)
+		wordLen += runewidth.RuneWidth(curr)
+
+		prev = curr
 	}
 
-	if word.Len() > spaceLeft {
+	// Close out the final word.
+	if wordLen > spaceLeft {
+		spaceLeft = width - wordLen
 		buf.WriteRune('\n')
 	}
-	// fmt.Printf("51: writing %q with %d spaces remaining out of %d\n", word.String(), spaceLeft, width)
 	word.WriteTo(&buf)
 
 	return buf.String()
