@@ -55,7 +55,6 @@ func WrapString(s string, width int) string {
 
 	// Close out the final word.
 	if wordLen > spaceLeft {
-		spaceLeft = width - wordLen
 		buf.WriteRune('\n')
 	}
 	word.WriteTo(&buf)
