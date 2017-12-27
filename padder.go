@@ -5,6 +5,7 @@ import "image"
 var _ Widget = &Padder{}
 
 // Padder is a widget to fill out space.
+// It adds empty space of a specified size to the outside of its contained Widget.
 type Padder struct {
 	widget Widget
 
@@ -12,6 +13,8 @@ type Padder struct {
 }
 
 // NewPadder returns a new Padder.
+// The enclosed Widget is given horizontal margin of x on the right and x on the left,
+// and a vertical margin of y on the top and y on the bottom.
 func NewPadder(x, y int, w Widget) *Padder {
 	return &Padder{
 		widget:  w,
