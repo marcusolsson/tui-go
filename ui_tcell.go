@@ -64,9 +64,9 @@ func (ui *tcellUI) SetKeybinding(seq string, fn func()) {
 	})
 }
 
-// ResetKeygindings reinitializes the keybindings so as to revert to the
+// ClearKeygindings reinitializes the keybindings so as to revert to the
 // original state.
-func (ui *tcellUI) ResetKeybindings() {
+func (ui *tcellUI) ClearKeybindings() {
 	ui.keybindings = make([]*keybinding, 0)
 }
 
