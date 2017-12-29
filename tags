@@ -1,0 +1,747 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/248cffc9/
+AddItems	list.go	/^func (l *List) AddItems(items ...string) {$/;"	f	unknown:tui.List
+Alignment	box.go	/^func (b *Box) Alignment() Alignment {$/;"	f	unknown:tui.Box
+Alignment	box.go	/^type Alignment int$/;"	t	package:tui
+Append	box.go	/^func (b *Box) Append(w Widget) {$/;"	f	unknown:tui.Box
+Append	label_sizehint_test.go	/^func (t *TailBox) Append(w Widget) {$/;"	f	unknown:tui.TailBox
+AppendRow	grid.go	/^func (g *Grid) AppendRow(row ...Widget) {$/;"	f	unknown:tui.Grid
+Backspace	runebuf.go	/^func (r *RuneBuffer) Backspace() {$/;"	f	unknown:tui.RuneBuffer
+Begin	painter.go	/^func (p *Painter) Begin() {$/;"	f	unknown:tui.Painter
+Begin	testing.go	/^func (s *TestSurface) Begin() {$/;"	f	unknown:tui.TestSurface
+Begin	ui_tcell.go	/^func (s *tcellSurface) Begin() {$/;"	f	unknown:tui.tcellSurface
+Bg	theme.go	/^	Bg Color$/;"	m	struct:tui.Style
+BgColors	testing.go	/^func (s *TestSurface) BgColors() string {$/;"	f	unknown:tui.TestSurface
+Bold	theme.go	/^	Bold      Decoration$/;"	m	struct:tui.Style
+Box	box.go	/^type Box struct {$/;"	s	package:tui
+Box	example/color/main.go	/^	*tui.Box$/;"	M	struct:main.StyledBox	typeref:typename:*tui.Box
+Button	button.go	/^type Button struct {$/;"	s	package:tui
+Color	theme.go	/^type Color int$/;"	t	package:tui
+ColorBlack	theme.go	/^	ColorBlack$/;"	c	package:tui
+ColorBlue	theme.go	/^	ColorBlue$/;"	c	package:tui
+ColorCyan	theme.go	/^	ColorCyan$/;"	c	package:tui
+ColorDefault	theme.go	/^	ColorDefault Color = iota$/;"	c	package:tui
+ColorGreen	theme.go	/^	ColorGreen$/;"	c	package:tui
+ColorMagenta	theme.go	/^	ColorMagenta$/;"	c	package:tui
+ColorRed	theme.go	/^	ColorRed$/;"	c	package:tui
+ColorWhite	theme.go	/^	ColorWhite$/;"	c	package:tui
+ColorYellow	theme.go	/^	ColorYellow$/;"	c	package:tui
+CursorPos	runebuf.go	/^func (r *RuneBuffer) CursorPos() image.Point {$/;"	f	unknown:tui.RuneBuffer
+Decoration	theme.go	/^type Decoration int$/;"	t	package:tui
+DecorationInherit	theme.go	/^	DecorationInherit Decoration = iota$/;"	c	package:tui
+DecorationOff	theme.go	/^	DecorationOff$/;"	c	package:tui
+DecorationOn	theme.go	/^	DecorationOn$/;"	c	package:tui
+Decorations	testing.go	/^func (s *TestSurface) Decorations() string {$/;"	f	unknown:tui.TestSurface
+DefaultFocusChain	focus.go	/^var DefaultFocusChain = &SimpleFocusChain{$/;"	v	package:tui
+DefaultTheme	theme.go	/^var DefaultTheme = &Theme{$/;"	v	package:tui
+Delete	runebuf.go	/^func (r *RuneBuffer) Delete() {$/;"	f	unknown:tui.RuneBuffer
+Draw	box.go	/^func (b *Box) Draw(p *Painter) {$/;"	f	unknown:tui.Box
+Draw	button.go	/^func (b *Button) Draw(p *Painter) {$/;"	f	unknown:tui.Button
+Draw	entry.go	/^func (e *Entry) Draw(p *Painter) {$/;"	f	unknown:tui.Entry
+Draw	example/color/main.go	/^func (s *StyledBox) Draw(p *tui.Painter) {$/;"	f	unknown:main.StyledBox
+Draw	grid.go	/^func (g *Grid) Draw(p *Painter) {$/;"	f	unknown:tui.Grid
+Draw	label.go	/^func (l *Label) Draw(p *Painter) {$/;"	f	unknown:tui.Label
+Draw	label_sizehint_test.go	/^func (t *TailBox) Draw(p *Painter) {$/;"	f	unknown:tui.TailBox
+Draw	list.go	/^func (l *List) Draw(p *Painter) {$/;"	f	unknown:tui.List
+Draw	padder.go	/^func (p *Padder) Draw(painter *Painter) {$/;"	f	unknown:tui.Padder
+Draw	progress.go	/^func (p *Progress) Draw(painter *Painter) {$/;"	f	unknown:tui.Progress
+Draw	scroll_area.go	/^func (s *ScrollArea) Draw(p *Painter) {$/;"	f	unknown:tui.ScrollArea
+Draw	statusbar.go	/^func (b *StatusBar) Draw(p *Painter) {$/;"	f	unknown:tui.StatusBar
+Draw	table.go	/^func (t *Table) Draw(p *Painter) {$/;"	f	unknown:tui.Table
+Draw	text_edit.go	/^func (e *TextEdit) Draw(p *Painter) {$/;"	f	unknown:tui.TextEdit
+Draw	widget.go	/^func (w *WidgetBase) Draw(p *Painter) {$/;"	f	unknown:tui.WidgetBase
+DrawCursor	painter.go	/^func (p *Painter) DrawCursor(x, y int) {$/;"	f	unknown:tui.Painter
+DrawHorizontalLine	painter.go	/^func (p *Painter) DrawHorizontalLine(x1, x2, y int) {$/;"	f	unknown:tui.Painter
+DrawRect	painter.go	/^func (p *Painter) DrawRect(x, y, w, h int) {$/;"	f	unknown:tui.Painter
+DrawRune	painter.go	/^func (p *Painter) DrawRune(x, y int, r rune) {$/;"	f	unknown:tui.Painter
+DrawText	painter.go	/^func (p *Painter) DrawText(x, y int, text string) {$/;"	f	unknown:tui.Painter
+DrawVerticalLine	painter.go	/^func (p *Painter) DrawVerticalLine(x, y1, y2 int) {$/;"	f	unknown:tui.Painter
+End	painter.go	/^func (p *Painter) End() {$/;"	f	unknown:tui.Painter
+End	testing.go	/^func (s *TestSurface) End() {$/;"	f	unknown:tui.TestSurface
+End	ui_tcell.go	/^func (s *tcellSurface) End() {$/;"	f	unknown:tui.tcellSurface
+Entry	entry.go	/^type Entry struct {$/;"	s	package:tui
+Expanding	widget.go	/^	Expanding$/;"	c	package:tui
+Fg	theme.go	/^	Fg Color$/;"	m	struct:tui.Style
+FgColors	testing.go	/^func (s *TestSurface) FgColors() string {$/;"	f	unknown:tui.TestSurface
+FillRect	painter.go	/^func (p *Painter) FillRect(x, y, w, h int) {$/;"	f	unknown:tui.Painter
+FocusChain	focus.go	/^type FocusChain interface {$/;"	i	package:tui
+FocusDefault	focus.go	/^func (c *SimpleFocusChain) FocusDefault() Widget {$/;"	f	unknown:tui.SimpleFocusChain
+FocusNext	focus.go	/^func (c *SimpleFocusChain) FocusNext(current Widget) Widget {$/;"	f	unknown:tui.SimpleFocusChain
+FocusPrev	focus.go	/^func (c *SimpleFocusChain) FocusPrev(current Widget) Widget {$/;"	f	unknown:tui.SimpleFocusChain
+Grid	grid.go	/^type Grid struct {$/;"	s	package:tui
+Grid	table.go	/^	*Grid$/;"	M	struct:tui.Table	typeref:typename:*Grid
+HasStyle	theme.go	/^func (p *Theme) HasStyle(name string) bool {$/;"	f	unknown:tui.Theme
+HideCursor	testing.go	/^func (s *TestSurface) HideCursor() {$/;"	f	unknown:tui.TestSurface
+HideCursor	ui_tcell.go	/^func (s *tcellSurface) HideCursor() {$/;"	f	unknown:tui.tcellSurface
+Horizontal	box.go	/^	Horizontal Alignment = iota$/;"	c	package:tui
+Insert	box.go	/^func (b *Box) Insert(i int, w Widget) {$/;"	f	unknown:tui.Box
+IsFocused	box.go	/^func (b *Box) IsFocused() bool {$/;"	f	unknown:tui.Box
+IsFocused	padder.go	/^func (p *Padder) IsFocused() bool {$/;"	f	unknown:tui.Padder
+IsFocused	widget.go	/^func (w *WidgetBase) IsFocused() bool {$/;"	f	unknown:tui.WidgetBase
+Key	event.go	/^	Key       Key$/;"	m	struct:tui.KeyEvent
+Key	event.go	/^type Key int16$/;"	t	package:tui
+KeyACK	event.go	/^	KeyACK$/;"	c	package:tui
+KeyBEL	event.go	/^	KeyBEL$/;"	c	package:tui
+KeyBS	event.go	/^	KeyBS$/;"	c	package:tui
+KeyBackspace	event.go	/^	KeyBackspace  = KeyBS$/;"	c	package:tui
+KeyBackspace2	event.go	/^	KeyBackspace2 = KeyDEL$/;"	c	package:tui
+KeyBacktab	event.go	/^	KeyBacktab$/;"	c	package:tui
+KeyCAN	event.go	/^	KeyCAN$/;"	c	package:tui
+KeyCR	event.go	/^	KeyCR$/;"	c	package:tui
+KeyCancel	event.go	/^	KeyCancel$/;"	c	package:tui
+KeyCenter	event.go	/^	KeyCenter$/;"	c	package:tui
+KeyClear	event.go	/^	KeyClear$/;"	c	package:tui
+KeyCtrlA	event.go	/^	KeyCtrlA$/;"	c	package:tui
+KeyCtrlB	event.go	/^	KeyCtrlB$/;"	c	package:tui
+KeyCtrlBackslash	event.go	/^	KeyCtrlBackslash$/;"	c	package:tui
+KeyCtrlC	event.go	/^	KeyCtrlC$/;"	c	package:tui
+KeyCtrlCarat	event.go	/^	KeyCtrlCarat$/;"	c	package:tui
+KeyCtrlD	event.go	/^	KeyCtrlD$/;"	c	package:tui
+KeyCtrlE	event.go	/^	KeyCtrlE$/;"	c	package:tui
+KeyCtrlF	event.go	/^	KeyCtrlF$/;"	c	package:tui
+KeyCtrlG	event.go	/^	KeyCtrlG$/;"	c	package:tui
+KeyCtrlH	event.go	/^	KeyCtrlH$/;"	c	package:tui
+KeyCtrlI	event.go	/^	KeyCtrlI$/;"	c	package:tui
+KeyCtrlJ	event.go	/^	KeyCtrlJ$/;"	c	package:tui
+KeyCtrlK	event.go	/^	KeyCtrlK$/;"	c	package:tui
+KeyCtrlL	event.go	/^	KeyCtrlL$/;"	c	package:tui
+KeyCtrlLeftSq	event.go	/^	KeyCtrlLeftSq \/\/ Escape$/;"	c	package:tui
+KeyCtrlM	event.go	/^	KeyCtrlM$/;"	c	package:tui
+KeyCtrlN	event.go	/^	KeyCtrlN$/;"	c	package:tui
+KeyCtrlO	event.go	/^	KeyCtrlO$/;"	c	package:tui
+KeyCtrlP	event.go	/^	KeyCtrlP$/;"	c	package:tui
+KeyCtrlQ	event.go	/^	KeyCtrlQ$/;"	c	package:tui
+KeyCtrlR	event.go	/^	KeyCtrlR$/;"	c	package:tui
+KeyCtrlRightSq	event.go	/^	KeyCtrlRightSq$/;"	c	package:tui
+KeyCtrlS	event.go	/^	KeyCtrlS$/;"	c	package:tui
+KeyCtrlSpace	event.go	/^	KeyCtrlSpace Key = iota$/;"	c	package:tui
+KeyCtrlT	event.go	/^	KeyCtrlT$/;"	c	package:tui
+KeyCtrlU	event.go	/^	KeyCtrlU$/;"	c	package:tui
+KeyCtrlUnderscore	event.go	/^	KeyCtrlUnderscore$/;"	c	package:tui
+KeyCtrlV	event.go	/^	KeyCtrlV$/;"	c	package:tui
+KeyCtrlW	event.go	/^	KeyCtrlW$/;"	c	package:tui
+KeyCtrlX	event.go	/^	KeyCtrlX$/;"	c	package:tui
+KeyCtrlY	event.go	/^	KeyCtrlY$/;"	c	package:tui
+KeyCtrlZ	event.go	/^	KeyCtrlZ$/;"	c	package:tui
+KeyDC1	event.go	/^	KeyDC1$/;"	c	package:tui
+KeyDC2	event.go	/^	KeyDC2$/;"	c	package:tui
+KeyDC3	event.go	/^	KeyDC3$/;"	c	package:tui
+KeyDC4	event.go	/^	KeyDC4$/;"	c	package:tui
+KeyDEL	event.go	/^	KeyDEL Key = 0x7F$/;"	c	package:tui
+KeyDLE	event.go	/^	KeyDLE$/;"	c	package:tui
+KeyDelete	event.go	/^	KeyDelete$/;"	c	package:tui
+KeyDown	event.go	/^	KeyDown$/;"	c	package:tui
+KeyDownLeft	event.go	/^	KeyDownLeft$/;"	c	package:tui
+KeyDownRight	event.go	/^	KeyDownRight$/;"	c	package:tui
+KeyEM	event.go	/^	KeyEM$/;"	c	package:tui
+KeyENQ	event.go	/^	KeyENQ$/;"	c	package:tui
+KeyEOT	event.go	/^	KeyEOT$/;"	c	package:tui
+KeyESC	event.go	/^	KeyESC$/;"	c	package:tui
+KeyETB	event.go	/^	KeyETB$/;"	c	package:tui
+KeyETX	event.go	/^	KeyETX$/;"	c	package:tui
+KeyEnd	event.go	/^	KeyEnd$/;"	c	package:tui
+KeyEnter	event.go	/^	KeyEnter      = KeyCR$/;"	c	package:tui
+KeyEsc	event.go	/^	KeyEsc        = KeyESC$/;"	c	package:tui
+KeyEscape	event.go	/^	KeyEscape     = KeyESC$/;"	c	package:tui
+KeyEvent	event.go	/^type KeyEvent struct {$/;"	s	package:tui
+KeyExit	event.go	/^	KeyExit$/;"	c	package:tui
+KeyF1	event.go	/^	KeyF1$/;"	c	package:tui
+KeyF10	event.go	/^	KeyF10$/;"	c	package:tui
+KeyF11	event.go	/^	KeyF11$/;"	c	package:tui
+KeyF12	event.go	/^	KeyF12$/;"	c	package:tui
+KeyF13	event.go	/^	KeyF13$/;"	c	package:tui
+KeyF14	event.go	/^	KeyF14$/;"	c	package:tui
+KeyF15	event.go	/^	KeyF15$/;"	c	package:tui
+KeyF16	event.go	/^	KeyF16$/;"	c	package:tui
+KeyF17	event.go	/^	KeyF17$/;"	c	package:tui
+KeyF18	event.go	/^	KeyF18$/;"	c	package:tui
+KeyF19	event.go	/^	KeyF19$/;"	c	package:tui
+KeyF2	event.go	/^	KeyF2$/;"	c	package:tui
+KeyF20	event.go	/^	KeyF20$/;"	c	package:tui
+KeyF21	event.go	/^	KeyF21$/;"	c	package:tui
+KeyF22	event.go	/^	KeyF22$/;"	c	package:tui
+KeyF23	event.go	/^	KeyF23$/;"	c	package:tui
+KeyF24	event.go	/^	KeyF24$/;"	c	package:tui
+KeyF25	event.go	/^	KeyF25$/;"	c	package:tui
+KeyF26	event.go	/^	KeyF26$/;"	c	package:tui
+KeyF27	event.go	/^	KeyF27$/;"	c	package:tui
+KeyF28	event.go	/^	KeyF28$/;"	c	package:tui
+KeyF29	event.go	/^	KeyF29$/;"	c	package:tui
+KeyF3	event.go	/^	KeyF3$/;"	c	package:tui
+KeyF30	event.go	/^	KeyF30$/;"	c	package:tui
+KeyF31	event.go	/^	KeyF31$/;"	c	package:tui
+KeyF32	event.go	/^	KeyF32$/;"	c	package:tui
+KeyF33	event.go	/^	KeyF33$/;"	c	package:tui
+KeyF34	event.go	/^	KeyF34$/;"	c	package:tui
+KeyF35	event.go	/^	KeyF35$/;"	c	package:tui
+KeyF36	event.go	/^	KeyF36$/;"	c	package:tui
+KeyF37	event.go	/^	KeyF37$/;"	c	package:tui
+KeyF38	event.go	/^	KeyF38$/;"	c	package:tui
+KeyF39	event.go	/^	KeyF39$/;"	c	package:tui
+KeyF4	event.go	/^	KeyF4$/;"	c	package:tui
+KeyF40	event.go	/^	KeyF40$/;"	c	package:tui
+KeyF41	event.go	/^	KeyF41$/;"	c	package:tui
+KeyF42	event.go	/^	KeyF42$/;"	c	package:tui
+KeyF43	event.go	/^	KeyF43$/;"	c	package:tui
+KeyF44	event.go	/^	KeyF44$/;"	c	package:tui
+KeyF45	event.go	/^	KeyF45$/;"	c	package:tui
+KeyF46	event.go	/^	KeyF46$/;"	c	package:tui
+KeyF47	event.go	/^	KeyF47$/;"	c	package:tui
+KeyF48	event.go	/^	KeyF48$/;"	c	package:tui
+KeyF49	event.go	/^	KeyF49$/;"	c	package:tui
+KeyF5	event.go	/^	KeyF5$/;"	c	package:tui
+KeyF50	event.go	/^	KeyF50$/;"	c	package:tui
+KeyF51	event.go	/^	KeyF51$/;"	c	package:tui
+KeyF52	event.go	/^	KeyF52$/;"	c	package:tui
+KeyF53	event.go	/^	KeyF53$/;"	c	package:tui
+KeyF54	event.go	/^	KeyF54$/;"	c	package:tui
+KeyF55	event.go	/^	KeyF55$/;"	c	package:tui
+KeyF56	event.go	/^	KeyF56$/;"	c	package:tui
+KeyF57	event.go	/^	KeyF57$/;"	c	package:tui
+KeyF58	event.go	/^	KeyF58$/;"	c	package:tui
+KeyF59	event.go	/^	KeyF59$/;"	c	package:tui
+KeyF6	event.go	/^	KeyF6$/;"	c	package:tui
+KeyF60	event.go	/^	KeyF60$/;"	c	package:tui
+KeyF61	event.go	/^	KeyF61$/;"	c	package:tui
+KeyF62	event.go	/^	KeyF62$/;"	c	package:tui
+KeyF63	event.go	/^	KeyF63$/;"	c	package:tui
+KeyF64	event.go	/^	KeyF64$/;"	c	package:tui
+KeyF7	event.go	/^	KeyF7$/;"	c	package:tui
+KeyF8	event.go	/^	KeyF8$/;"	c	package:tui
+KeyF9	event.go	/^	KeyF9$/;"	c	package:tui
+KeyFF	event.go	/^	KeyFF$/;"	c	package:tui
+KeyFS	event.go	/^	KeyFS$/;"	c	package:tui
+KeyGS	event.go	/^	KeyGS$/;"	c	package:tui
+KeyHelp	event.go	/^	KeyHelp$/;"	c	package:tui
+KeyHome	event.go	/^	KeyHome$/;"	c	package:tui
+KeyInsert	event.go	/^	KeyInsert$/;"	c	package:tui
+KeyLF	event.go	/^	KeyLF$/;"	c	package:tui
+KeyLeft	event.go	/^	KeyLeft$/;"	c	package:tui
+KeyNAK	event.go	/^	KeyNAK$/;"	c	package:tui
+KeyNUL	event.go	/^	KeyNUL Key = iota$/;"	c	package:tui
+KeyPause	event.go	/^	KeyPause$/;"	c	package:tui
+KeyPgDn	event.go	/^	KeyPgDn$/;"	c	package:tui
+KeyPgUp	event.go	/^	KeyPgUp$/;"	c	package:tui
+KeyPrint	event.go	/^	KeyPrint$/;"	c	package:tui
+KeyRS	event.go	/^	KeyRS$/;"	c	package:tui
+KeyRight	event.go	/^	KeyRight$/;"	c	package:tui
+KeyRune	event.go	/^	KeyRune Key = iota + 256$/;"	c	package:tui
+KeySI	event.go	/^	KeySI$/;"	c	package:tui
+KeySO	event.go	/^	KeySO$/;"	c	package:tui
+KeySOH	event.go	/^	KeySOH$/;"	c	package:tui
+KeySTX	event.go	/^	KeySTX$/;"	c	package:tui
+KeySUB	event.go	/^	KeySUB$/;"	c	package:tui
+KeySYN	event.go	/^	KeySYN$/;"	c	package:tui
+KeyTAB	event.go	/^	KeyTAB$/;"	c	package:tui
+KeyTab	event.go	/^	KeyTab        = KeyTAB$/;"	c	package:tui
+KeyUS	event.go	/^	KeyUS$/;"	c	package:tui
+KeyUp	event.go	/^	KeyUp$/;"	c	package:tui
+KeyUpLeft	event.go	/^	KeyUpLeft$/;"	c	package:tui
+KeyUpRight	event.go	/^	KeyUpRight$/;"	c	package:tui
+KeyVT	event.go	/^	KeyVT$/;"	c	package:tui
+Kill	runebuf.go	/^func (r *RuneBuffer) Kill() {$/;"	f	unknown:tui.RuneBuffer
+Label	label.go	/^type Label struct {$/;"	s	package:tui
+Len	runebuf.go	/^func (r *RuneBuffer) Len() int {$/;"	f	unknown:tui.RuneBuffer
+Length	box.go	/^func (b *Box) Length() int {$/;"	f	unknown:tui.Box
+Length	list.go	/^func (l *List) Length() int {$/;"	f	unknown:tui.List
+List	list.go	/^type List struct {$/;"	s	package:tui
+Maximum	widget.go	/^	Maximum$/;"	c	package:tui
+MinSizeHint	box.go	/^func (b *Box) MinSizeHint() image.Point {$/;"	f	unknown:tui.Box
+MinSizeHint	grid.go	/^func (g *Grid) MinSizeHint() image.Point {$/;"	f	unknown:tui.Grid
+MinSizeHint	label.go	/^func (l *Label) MinSizeHint() image.Point {$/;"	f	unknown:tui.Label
+MinSizeHint	padder.go	/^func (p *Padder) MinSizeHint() image.Point {$/;"	f	unknown:tui.Padder
+MinSizeHint	progress.go	/^func (p *Progress) MinSizeHint() image.Point {$/;"	f	unknown:tui.Progress
+MinSizeHint	scroll_area.go	/^func (s *ScrollArea) MinSizeHint() image.Point {$/;"	f	unknown:tui.ScrollArea
+MinSizeHint	spacer.go	/^func (s *Spacer) MinSizeHint() image.Point {$/;"	f	unknown:tui.Spacer
+MinSizeHint	widget.go	/^func (w *WidgetBase) MinSizeHint() image.Point {$/;"	f	unknown:tui.WidgetBase
+Minimum	widget.go	/^	Minimum$/;"	c	package:tui
+ModAlt	event.go	/^	ModAlt$/;"	c	package:tui
+ModCtrl	event.go	/^	ModCtrl$/;"	c	package:tui
+ModMask	event.go	/^type ModMask int16$/;"	t	package:tui
+ModMeta	event.go	/^	ModMeta$/;"	c	package:tui
+ModNone	event.go	/^	ModNone ModMask = 0$/;"	c	package:tui
+ModShift	event.go	/^	ModShift ModMask = 1 << iota$/;"	c	package:tui
+Modifiers	event.go	/^	Modifiers ModMask$/;"	m	struct:tui.KeyEvent
+MouseEvent	event.go	/^type MouseEvent struct {$/;"	s	package:tui
+MoveBackward	runebuf.go	/^func (r *RuneBuffer) MoveBackward() {$/;"	f	unknown:tui.RuneBuffer
+MoveForward	runebuf.go	/^func (r *RuneBuffer) MoveForward() {$/;"	f	unknown:tui.RuneBuffer
+MoveToLineEnd	runebuf.go	/^func (r *RuneBuffer) MoveToLineEnd() {$/;"	f	unknown:tui.RuneBuffer
+MoveToLineStart	runebuf.go	/^func (r *RuneBuffer) MoveToLineStart() {$/;"	f	unknown:tui.RuneBuffer
+Name	event.go	/^func (ev *KeyEvent) Name() string {$/;"	f	unknown:tui.KeyEvent
+New	ui.go	/^func New(root Widget) UI {$/;"	f	package:tui
+NewButton	button.go	/^func NewButton(text string) *Button {$/;"	f	package:tui
+NewEntry	entry.go	/^func NewEntry() *Entry {$/;"	f	package:tui
+NewGrid	grid.go	/^func NewGrid(cols, rows int) *Grid {$/;"	f	package:tui
+NewHBox	box.go	/^func NewHBox(c ...Widget) *Box {$/;"	f	package:tui
+NewLabel	label.go	/^func NewLabel(text string) *Label {$/;"	f	package:tui
+NewList	list.go	/^func NewList() *List {$/;"	f	package:tui
+NewPadder	padder.go	/^func NewPadder(x, y int, w Widget) *Padder {$/;"	f	package:tui
+NewPainter	painter.go	/^func NewPainter(s Surface, p *Theme) *Painter {$/;"	f	package:tui
+NewProgress	progress.go	/^func NewProgress(max int) *Progress {$/;"	f	package:tui
+NewScrollArea	scroll_area.go	/^func NewScrollArea(w Widget) *ScrollArea {$/;"	f	package:tui
+NewSpacer	spacer.go	/^func NewSpacer() *Spacer {$/;"	f	package:tui
+NewStatusBar	statusbar.go	/^func NewStatusBar(text string) *StatusBar {$/;"	f	package:tui
+NewTable	table.go	/^func NewTable(cols, rows int) *Table {$/;"	f	package:tui
+NewTailBox	label_sizehint_test.go	/^func NewTailBox(w ...Widget) *TailBox {$/;"	f	package:tui
+NewTestSurface	testing.go	/^func NewTestSurface(w, h int) *TestSurface {$/;"	f	package:tui
+NewTextEdit	text_edit.go	/^func NewTextEdit() *TextEdit {$/;"	f	package:tui
+NewTheme	theme.go	/^func NewTheme() *Theme {$/;"	f	package:tui
+NewVBox	box.go	/^func NewVBox(c ...Widget) *Box {$/;"	f	package:tui
+OnActivated	button.go	/^func (b *Button) OnActivated(fn func(b *Button)) {$/;"	f	unknown:tui.Button
+OnChanged	entry.go	/^func (e *Entry) OnChanged(fn func(entry *Entry)) {$/;"	f	unknown:tui.Entry
+OnItemActivated	list.go	/^func (l *List) OnItemActivated(fn func(*List)) {$/;"	f	unknown:tui.List
+OnItemActivated	table.go	/^func (t *Table) OnItemActivated(fn func(*Table)) {$/;"	f	unknown:tui.Table
+OnKeyEvent	box.go	/^func (b *Box) OnKeyEvent(ev KeyEvent) {$/;"	f	unknown:tui.Box
+OnKeyEvent	button.go	/^func (b *Button) OnKeyEvent(ev KeyEvent) {$/;"	f	unknown:tui.Button
+OnKeyEvent	entry.go	/^func (e *Entry) OnKeyEvent(ev KeyEvent) {$/;"	f	unknown:tui.Entry
+OnKeyEvent	focus.go	/^func (c *kbFocusController) OnKeyEvent(e KeyEvent) {$/;"	f	unknown:tui.kbFocusController
+OnKeyEvent	grid.go	/^func (g *Grid) OnKeyEvent(ev KeyEvent) {$/;"	f	unknown:tui.Grid
+OnKeyEvent	list.go	/^func (l *List) OnKeyEvent(ev KeyEvent) {$/;"	f	unknown:tui.List
+OnKeyEvent	padder.go	/^func (p *Padder) OnKeyEvent(ev KeyEvent) {$/;"	f	unknown:tui.Padder
+OnKeyEvent	table.go	/^func (t *Table) OnKeyEvent(ev KeyEvent) {$/;"	f	unknown:tui.Table
+OnKeyEvent	text_edit.go	/^func (e *TextEdit) OnKeyEvent(ev KeyEvent) {$/;"	f	unknown:tui.TextEdit
+OnKeyEvent	widget.go	/^func (w *WidgetBase) OnKeyEvent(ev KeyEvent) {$/;"	f	unknown:tui.WidgetBase
+OnSelectionChanged	list.go	/^func (l *List) OnSelectionChanged(fn func(*List)) {$/;"	f	unknown:tui.List
+OnSelectionChanged	table.go	/^func (t *Table) OnSelectionChanged(fn func(*Table)) {$/;"	f	unknown:tui.Table
+OnSubmit	entry.go	/^func (e *Entry) OnSubmit(fn func(entry *Entry)) {$/;"	f	unknown:tui.Entry
+OnTextChanged	text_edit.go	/^func (e *TextEdit) OnTextChanged(fn func(entry *TextEdit)) {$/;"	f	unknown:tui.TextEdit
+Padder	padder.go	/^type Padder struct {$/;"	s	package:tui
+Painter	painter.go	/^type Painter struct {$/;"	s	package:tui
+Pos	event.go	/^	Pos image.Point$/;"	m	struct:tui.MouseEvent
+Pos	runebuf.go	/^func (r *RuneBuffer) Pos() int {$/;"	f	unknown:tui.RuneBuffer
+Preferred	widget.go	/^	Preferred SizePolicy = iota$/;"	c	package:tui
+Prepend	box.go	/^func (b *Box) Prepend(w Widget) {$/;"	f	unknown:tui.Box
+Progress	progress.go	/^type Progress struct {$/;"	s	package:tui
+Quit	ui_tcell.go	/^func (ui *tcellUI) Quit() {$/;"	f	unknown:tui.tcellUI
+Remove	box.go	/^func (b *Box) Remove(i int) {$/;"	f	unknown:tui.Box
+RemoveItem	list.go	/^func (l *List) RemoveItem(i int) {$/;"	f	unknown:tui.List
+RemoveItems	list.go	/^func (l *List) RemoveItems() {$/;"	f	unknown:tui.List
+RemoveRow	grid.go	/^func (g *Grid) RemoveRow(index int) {$/;"	f	unknown:tui.Grid
+RemoveRow	table.go	/^func (t *Table) RemoveRow(index int) {$/;"	f	unknown:tui.Table
+RemoveRows	grid.go	/^func (g *Grid) RemoveRows() {$/;"	f	unknown:tui.Grid
+RemoveRows	table.go	/^func (t *Table) RemoveRows() {$/;"	f	unknown:tui.Table
+Repaint	painter.go	/^func (p *Painter) Repaint(w Widget) {$/;"	f	unknown:tui.Painter
+ResetKeybindings	ui_tcell.go	/^func (ui *tcellUI) ResetKeybindings() {$/;"	f	unknown:tui.tcellUI
+Resize	box.go	/^func (b *Box) Resize(size image.Point) {$/;"	f	unknown:tui.Box
+Resize	grid.go	/^func (g *Grid) Resize(size image.Point) {$/;"	f	unknown:tui.Grid
+Resize	label.go	/^func (l *Label) Resize(size image.Point) {$/;"	f	unknown:tui.Label
+Resize	label_sizehint_test.go	/^func (t *TailBox) Resize(size image.Point) {$/;"	f	unknown:tui.TailBox
+Resize	padder.go	/^func (p *Padder) Resize(size image.Point) {$/;"	f	unknown:tui.Padder
+Resize	scroll_area.go	/^func (s *ScrollArea) Resize(size image.Point) {$/;"	f	unknown:tui.ScrollArea
+Resize	widget.go	/^func (w *WidgetBase) Resize(size image.Point) {$/;"	f	unknown:tui.WidgetBase
+Restore	painter.go	/^func (p *Painter) Restore() {$/;"	f	unknown:tui.Painter
+Reverse	theme.go	/^	Reverse   Decoration$/;"	m	struct:tui.Style
+Run	ui_tcell.go	/^func (ui *tcellUI) Run() error {$/;"	f	unknown:tui.tcellUI
+Rune	event.go	/^	Rune      rune$/;"	m	struct:tui.KeyEvent
+Rune	testing.go	/^	Rune  rune$/;"	m	struct:tui.testCell
+RuneBuffer	runebuf.go	/^type RuneBuffer struct {$/;"	s	package:tui
+Runes	runebuf.go	/^func (r *RuneBuffer) Runes() []rune {$/;"	f	unknown:tui.RuneBuffer
+Scroll	scroll_area.go	/^func (s *ScrollArea) Scroll(dx, dy int) {$/;"	f	unknown:tui.ScrollArea
+ScrollArea	scroll_area.go	/^type ScrollArea struct {$/;"	s	package:tui
+Select	list.go	/^func (l *List) Select(i int) {$/;"	f	unknown:tui.List
+Select	table.go	/^func (t *Table) Select(i int) {$/;"	f	unknown:tui.Table
+Selected	list.go	/^func (l *List) Selected() int {$/;"	f	unknown:tui.List
+Selected	table.go	/^func (t *Table) Selected() int {$/;"	f	unknown:tui.Table
+SelectedItem	list.go	/^func (l *List) SelectedItem() string {$/;"	f	unknown:tui.List
+Set	focus.go	/^func (c *SimpleFocusChain) Set(ws ...Widget) {$/;"	f	unknown:tui.SimpleFocusChain
+Set	runebuf.go	/^func (r *RuneBuffer) Set(buf []rune) {$/;"	f	unknown:tui.RuneBuffer
+SetBorder	box.go	/^func (b *Box) SetBorder(enabled bool) {$/;"	f	unknown:tui.Box
+SetBorder	grid.go	/^func (g *Grid) SetBorder(enabled bool) {$/;"	f	unknown:tui.Grid
+SetCell	grid.go	/^func (g *Grid) SetCell(pos image.Point, w Widget) {$/;"	f	unknown:tui.Grid
+SetCell	testing.go	/^func (s *TestSurface) SetCell(x, y int, ch rune, style Style) {$/;"	f	unknown:tui.TestSurface
+SetCell	ui_tcell.go	/^func (s *tcellSurface) SetCell(x, y int, ch rune, style Style) {$/;"	f	unknown:tui.tcellSurface
+SetColumnStretch	grid.go	/^func (g *Grid) SetColumnStretch(col, stretch int) {$/;"	f	unknown:tui.Grid
+SetContents	label_sizehint_test.go	/^func (t *TailBox) SetContents(w ...Widget) {$/;"	f	unknown:tui.TailBox
+SetCurrent	progress.go	/^func (p *Progress) SetCurrent(c int) {$/;"	f	unknown:tui.Progress
+SetCursor	testing.go	/^func (s *TestSurface) SetCursor(x, y int) {$/;"	f	unknown:tui.TestSurface
+SetCursor	ui_tcell.go	/^func (s *tcellSurface) SetCursor(x, y int) {$/;"	f	unknown:tui.tcellSurface
+SetFocusChain	ui_tcell.go	/^func (ui *tcellUI) SetFocusChain(chain FocusChain) {$/;"	f	unknown:tui.tcellUI
+SetFocused	padder.go	/^func (p *Padder) SetFocused(f bool) {$/;"	f	unknown:tui.Padder
+SetFocused	widget.go	/^func (w *WidgetBase) SetFocused(f bool) {$/;"	f	unknown:tui.WidgetBase
+SetKeybinding	ui_tcell.go	/^func (ui *tcellUI) SetKeybinding(seq string, fn func()) {$/;"	f	unknown:tui.tcellUI
+SetMax	progress.go	/^func (p *Progress) SetMax(m int) {$/;"	f	unknown:tui.Progress
+SetMaxWidth	runebuf.go	/^func (r *RuneBuffer) SetMaxWidth(w int) {$/;"	f	unknown:tui.RuneBuffer
+SetPermanentText	statusbar.go	/^func (b *StatusBar) SetPermanentText(text string) {$/;"	f	unknown:tui.StatusBar
+SetRowStretch	grid.go	/^func (g *Grid) SetRowStretch(row, stretch int) {$/;"	f	unknown:tui.Grid
+SetSelected	list.go	/^func (l *List) SetSelected(i int) {$/;"	f	unknown:tui.List
+SetSelected	table.go	/^func (t *Table) SetSelected(i int) {$/;"	f	unknown:tui.Table
+SetSizePolicy	widget.go	/^func (w *WidgetBase) SetSizePolicy(h, v SizePolicy) {$/;"	f	unknown:tui.WidgetBase
+SetStyle	painter.go	/^func (p *Painter) SetStyle(s Style) {$/;"	f	unknown:tui.Painter
+SetStyle	theme.go	/^func (p *Theme) SetStyle(n string, i Style) {$/;"	f	unknown:tui.Theme
+SetStyleName	label.go	/^func (l *Label) SetStyleName(style string) {$/;"	f	unknown:tui.Label
+SetText	entry.go	/^func (e *Entry) SetText(text string) {$/;"	f	unknown:tui.Entry
+SetText	label.go	/^func (l *Label) SetText(text string) {$/;"	f	unknown:tui.Label
+SetText	statusbar.go	/^func (b *StatusBar) SetText(text string) {$/;"	f	unknown:tui.StatusBar
+SetText	text_edit.go	/^func (e *TextEdit) SetText(text string) {$/;"	f	unknown:tui.TextEdit
+SetTheme	ui_tcell.go	/^func (ui *tcellUI) SetTheme(t *Theme) {$/;"	f	unknown:tui.tcellUI
+SetTitle	box.go	/^func (b *Box) SetTitle(title string) {$/;"	f	unknown:tui.Box
+SetWidget	ui_tcell.go	/^func (ui *tcellUI) SetWidget(w Widget) {$/;"	f	unknown:tui.tcellUI
+SetWithIdx	runebuf.go	/^func (r *RuneBuffer) SetWithIdx(idx int, buf []rune) {$/;"	f	unknown:tui.RuneBuffer
+SetWordWrap	label.go	/^func (l *Label) SetWordWrap(enabled bool) {$/;"	f	unknown:tui.Label
+SetWordWrap	text_edit.go	/^func (e *TextEdit) SetWordWrap(enabled bool) {$/;"	f	unknown:tui.TextEdit
+SimpleFocusChain	focus.go	/^type SimpleFocusChain struct {$/;"	s	package:tui
+Size	padder.go	/^func (p *Padder) Size() image.Point {$/;"	f	unknown:tui.Padder
+Size	testing.go	/^func (s *TestSurface) Size() image.Point {$/;"	f	unknown:tui.TestSurface
+Size	ui_tcell.go	/^func (s *tcellSurface) Size() image.Point {$/;"	f	unknown:tui.tcellSurface
+Size	widget.go	/^func (w *WidgetBase) Size() image.Point {$/;"	f	unknown:tui.WidgetBase
+SizeHint	box.go	/^func (b *Box) SizeHint() image.Point {$/;"	f	unknown:tui.Box
+SizeHint	button.go	/^func (b *Button) SizeHint() image.Point {$/;"	f	unknown:tui.Button
+SizeHint	entry.go	/^func (e *Entry) SizeHint() image.Point {$/;"	f	unknown:tui.Entry
+SizeHint	grid.go	/^func (g *Grid) SizeHint() image.Point {$/;"	f	unknown:tui.Grid
+SizeHint	label.go	/^func (l *Label) SizeHint() image.Point {$/;"	f	unknown:tui.Label
+SizeHint	list.go	/^func (l *List) SizeHint() image.Point {$/;"	f	unknown:tui.List
+SizeHint	padder.go	/^func (p *Padder) SizeHint() image.Point {$/;"	f	unknown:tui.Padder
+SizeHint	progress.go	/^func (p *Progress) SizeHint() image.Point {$/;"	f	unknown:tui.Progress
+SizeHint	scroll_area.go	/^func (s *ScrollArea) SizeHint() image.Point {$/;"	f	unknown:tui.ScrollArea
+SizeHint	spacer.go	/^func (s *Spacer) SizeHint() image.Point {$/;"	f	unknown:tui.Spacer
+SizeHint	statusbar.go	/^func (b *StatusBar) SizeHint() image.Point {$/;"	f	unknown:tui.StatusBar
+SizeHint	text_edit.go	/^func (e *TextEdit) SizeHint() image.Point {$/;"	f	unknown:tui.TextEdit
+SizeHint	widget.go	/^func (w *WidgetBase) SizeHint() image.Point {$/;"	f	unknown:tui.WidgetBase
+SizePolicy	padder.go	/^func (p *Padder) SizePolicy() (SizePolicy, SizePolicy) {$/;"	f	unknown:tui.Padder
+SizePolicy	scroll_area.go	/^func (s *ScrollArea) SizePolicy() (SizePolicy, SizePolicy) {$/;"	f	unknown:tui.ScrollArea
+SizePolicy	spacer.go	/^func (s *Spacer) SizePolicy() (SizePolicy, SizePolicy) {$/;"	f	unknown:tui.Spacer
+SizePolicy	statusbar.go	/^func (b *StatusBar) SizePolicy() (SizePolicy, SizePolicy) {$/;"	f	unknown:tui.StatusBar
+SizePolicy	widget.go	/^func (w *WidgetBase) SizePolicy() (SizePolicy, SizePolicy) {$/;"	f	unknown:tui.WidgetBase
+SizePolicy	widget.go	/^type SizePolicy int$/;"	t	package:tui
+Spacer	spacer.go	/^type Spacer struct {$/;"	s	package:tui
+SplitByLine	runebuf.go	/^func (r *RuneBuffer) SplitByLine() []string {$/;"	f	unknown:tui.RuneBuffer
+StatusBar	statusbar.go	/^type StatusBar struct {$/;"	s	package:tui
+String	runebuf.go	/^func (r *RuneBuffer) String() string {$/;"	f	unknown:tui.RuneBuffer
+String	testing.go	/^func (s *TestSurface) String() string {$/;"	f	unknown:tui.TestSurface
+Style	example/color/main.go	/^	Style string$/;"	m	struct:main.StyledBox
+Style	testing.go	/^	Style Style$/;"	m	struct:tui.testCell
+Style	theme.go	/^func (p *Theme) Style(name string) Style {$/;"	f	unknown:tui.Theme
+Style	theme.go	/^type Style struct {$/;"	s	package:tui
+StyledBox	example/color/main.go	/^type StyledBox struct {$/;"	s	package:main
+Surface	painter.go	/^type Surface interface {$/;"	i	package:tui
+Table	table.go	/^type Table struct {$/;"	s	package:tui
+TailBox	label_sizehint_test.go	/^type TailBox struct {$/;"	s	package:tui
+TailBoxTests	label_sizehint_test.go	/^var TailBoxTests = []struct {$/;"	v	package:tui
+TestBox_Draw	box_test.go	/^func TestBox_Draw(t *testing.T) {$/;"	f	package:tui
+TestBox_Insert	box_test.go	/^func TestBox_Insert(t *testing.T) {$/;"	f	package:tui
+TestBox_IsFocused	box_test.go	/^func TestBox_IsFocused(t *testing.T) {$/;"	f	package:tui
+TestBox_Prepend	box_test.go	/^func TestBox_Prepend(t *testing.T) {$/;"	f	package:tui
+TestBox_Remove	box_test.go	/^func TestBox_Remove(t *testing.T) {$/;"	f	package:tui
+TestButton_Draw	button_test.go	/^func TestButton_Draw(t *testing.T) {$/;"	f	package:tui
+TestButton_OnActivated	button_test.go	/^func TestButton_OnActivated(t *testing.T) {$/;"	f	package:tui
+TestCJK_Label	cjk_test.go	/^func TestCJK_Label(t *testing.T) {$/;"	f	package:tui
+TestEntry_Draw	entry_test.go	/^func TestEntry_Draw(t *testing.T) {$/;"	f	package:tui
+TestEntry_Layout	entry_test.go	/^func TestEntry_Layout(t *testing.T) {$/;"	f	package:tui
+TestEntry_MoveToStartAndEnd	entry_test.go	/^func TestEntry_MoveToStartAndEnd(t *testing.T) {$/;"	f	package:tui
+TestEntry_OnChanged	entry_test.go	/^func TestEntry_OnChanged(t *testing.T) {$/;"	f	package:tui
+TestEntry_OnEvent	entry_test.go	/^func TestEntry_OnEvent(t *testing.T) {$/;"	f	package:tui
+TestEntry_OnKeyBackspaceEvent	entry_test.go	/^func TestEntry_OnKeyBackspaceEvent(t *testing.T) {$/;"	f	package:tui
+TestEntry_OnSubmit	entry_test.go	/^func TestEntry_OnSubmit(t *testing.T) {$/;"	f	package:tui
+TestGrid_Draw	grid_test.go	/^func TestGrid_Draw(t *testing.T) {$/;"	f	package:tui
+TestIsTextRemaining	entry_test.go	/^func TestIsTextRemaining(t *testing.T) {$/;"	f	package:tui
+TestKeybinding_Match	keybinding_test.go	/^func TestKeybinding_Match(t *testing.T) {$/;"	f	package:tui
+TestLabel_Draw	label_test.go	/^func TestLabel_Draw(t *testing.T) {$/;"	f	package:tui
+TestLabel_Size	label_test.go	/^func TestLabel_Size(t *testing.T) {$/;"	f	package:tui
+TestList_Draw	list_test.go	/^func TestList_Draw(t *testing.T) {$/;"	f	package:tui
+TestList_RemoveItem	list_test.go	/^func TestList_RemoveItem(t *testing.T) {$/;"	f	package:tui
+TestMask_FirstCell	painter_test.go	/^func TestMask_FirstCell(t *testing.T) {$/;"	f	package:tui
+TestMask_Full	painter_test.go	/^func TestMask_Full(t *testing.T) {$/;"	f	package:tui
+TestMask_Inset	painter_test.go	/^func TestMask_Inset(t *testing.T) {$/;"	f	package:tui
+TestMask_LastCell	painter_test.go	/^func TestMask_LastCell(t *testing.T) {$/;"	f	package:tui
+TestMask_MaskWithinEmptyMaskIsHidden	painter_test.go	/^func TestMask_MaskWithinEmptyMaskIsHidden(t *testing.T) {$/;"	f	package:tui
+TestNestedScrollArea_Draw	scroll_area_test.go	/^func TestNestedScrollArea_Draw(t *testing.T) {$/;"	f	package:tui
+TestProgress_Draw	progress_test.go	/^func TestProgress_Draw(t *testing.T) {$/;"	f	package:tui
+TestRuneBuffer_Backspace	runebuf_test.go	/^func TestRuneBuffer_Backspace(t *testing.T) {$/;"	f	package:tui
+TestRuneBuffer_CursorPos	runebuf_test.go	/^func TestRuneBuffer_CursorPos(t *testing.T) {$/;"	f	package:tui
+TestRuneBuffer_Kill	runebuf_test.go	/^func TestRuneBuffer_Kill(t *testing.T) {$/;"	f	package:tui
+TestRuneBuffer_MoveBackward	runebuf_test.go	/^func TestRuneBuffer_MoveBackward(t *testing.T) {$/;"	f	package:tui
+TestRuneBuffer_MoveForward	runebuf_test.go	/^func TestRuneBuffer_MoveForward(t *testing.T) {$/;"	f	package:tui
+TestRuneBuffer_MoveToLineEnd	runebuf_test.go	/^func TestRuneBuffer_MoveToLineEnd(t *testing.T) {$/;"	f	package:tui
+TestRuneBuffer_MoveToLineStart	runebuf_test.go	/^func TestRuneBuffer_MoveToLineStart(t *testing.T) {$/;"	f	package:tui
+TestRuneBuffer_SplitByLines	runebuf_test.go	/^func TestRuneBuffer_SplitByLines(t *testing.T) {$/;"	f	package:tui
+TestRuneWidth	text_test.go	/^func TestRuneWidth(t *testing.T) {$/;"	f	package:tui
+TestScrollArea_Draw	scroll_area_test.go	/^func TestScrollArea_Draw(t *testing.T) {$/;"	f	package:tui
+TestSimple	wordwrap/wordwrap_test.go	/^func TestSimple(t *testing.T) {$/;"	f	package:wordwrap
+TestStringWidth	text_test.go	/^func TestStringWidth(t *testing.T) {$/;"	f	package:tui
+TestStyle_Merge	theme_test.go	/^func TestStyle_Merge(t *testing.T) {$/;"	f	package:tui
+TestSurface	testing.go	/^type TestSurface struct {$/;"	s	package:tui
+TestTable_Draw	table_test.go	/^func TestTable_Draw(t *testing.T) {$/;"	f	package:tui
+TestTailBox	label_sizehint_test.go	/^func TestTailBox(t *testing.T) {$/;"	f	package:tui
+TestTextEdit_Draw	text_edit_test.go	/^func TestTextEdit_Draw(t *testing.T) {$/;"	f	package:tui
+TestTrimRightLen	text_test.go	/^func TestTrimRightLen(t *testing.T) {$/;"	f	package:tui
+TestWithStyle_ApplyStyle	painter_test.go	/^func TestWithStyle_ApplyStyle(t *testing.T) {$/;"	f	package:tui
+TestWithStyle_Inherit	painter_test.go	/^func TestWithStyle_Inherit(t *testing.T) {$/;"	f	package:tui
+TestWithStyle_Stacks	painter_test.go	/^func TestWithStyle_Stacks(t *testing.T) {$/;"	f	package:tui
+Text	entry.go	/^func (e *Entry) Text() string {$/;"	f	unknown:tui.Entry
+Text	label.go	/^func (l *Label) Text() string {$/;"	f	unknown:tui.Label
+Text	text_edit.go	/^func (e *TextEdit) Text() string {$/;"	f	unknown:tui.TextEdit
+TextEdit	text_edit.go	/^type TextEdit struct {$/;"	s	package:tui
+Theme	theme.go	/^type Theme struct {$/;"	s	package:tui
+Translate	painter.go	/^func (p *Painter) Translate(x, y int) {$/;"	f	unknown:tui.Painter
+UI	ui.go	/^type UI interface {$/;"	i	package:tui
+Underline	theme.go	/^	Underline Decoration$/;"	m	struct:tui.Style
+Update	ui_tcell.go	/^func (ui *tcellUI) Update(fn func()) {$/;"	f	unknown:tui.tcellUI
+Vertical	box.go	/^	Vertical$/;"	c	package:tui
+Widget	scroll_area.go	/^	Widget Widget$/;"	m	struct:tui.ScrollArea
+Widget	widget.go	/^type Widget interface {$/;"	i	package:tui
+WidgetBase	box.go	/^	WidgetBase$/;"	M	struct:tui.Box	typeref:typename:WidgetBase
+WidgetBase	button.go	/^	WidgetBase$/;"	M	struct:tui.Button	typeref:typename:WidgetBase
+WidgetBase	entry.go	/^	WidgetBase$/;"	M	struct:tui.Entry	typeref:typename:WidgetBase
+WidgetBase	grid.go	/^	WidgetBase$/;"	M	struct:tui.Grid	typeref:typename:WidgetBase
+WidgetBase	label.go	/^	WidgetBase$/;"	M	struct:tui.Label	typeref:typename:WidgetBase
+WidgetBase	label_sizehint_test.go	/^	WidgetBase$/;"	M	struct:tui.TailBox	typeref:typename:WidgetBase
+WidgetBase	list.go	/^	WidgetBase$/;"	M	struct:tui.List	typeref:typename:WidgetBase
+WidgetBase	progress.go	/^	WidgetBase$/;"	M	struct:tui.Progress	typeref:typename:WidgetBase
+WidgetBase	scroll_area.go	/^	WidgetBase$/;"	M	struct:tui.ScrollArea	typeref:typename:WidgetBase
+WidgetBase	spacer.go	/^	WidgetBase$/;"	M	struct:tui.Spacer	typeref:typename:WidgetBase
+WidgetBase	statusbar.go	/^	WidgetBase$/;"	M	struct:tui.StatusBar	typeref:typename:WidgetBase
+WidgetBase	text_edit.go	/^	WidgetBase$/;"	M	struct:tui.TextEdit	typeref:typename:WidgetBase
+WidgetBase	widget.go	/^type WidgetBase struct {$/;"	s	package:tui
+Width	runebuf.go	/^func (r *RuneBuffer) Width() int {$/;"	f	unknown:tui.RuneBuffer
+WithMask	painter.go	/^func (p *Painter) WithMask(r image.Rectangle, fn func(*Painter)) {$/;"	f	unknown:tui.Painter
+WithStyle	painter.go	/^func (p *Painter) WithStyle(n string, fn func(*Painter)) {$/;"	f	unknown:tui.Painter
+WrapString	wordwrap/wordwrap.go	/^func WrapString(s string, width int) string {$/;"	f	package:wordwrap
+WriteRune	runebuf.go	/^func (r *RuneBuffer) WriteRune(s rune) {$/;"	f	unknown:tui.RuneBuffer
+WriteRunes	runebuf.go	/^func (r *RuneBuffer) WriteRunes(s []rune) {$/;"	f	unknown:tui.RuneBuffer
+_	box.go	/^var _ Widget = &Box{}$/;"	v	package:tui
+_	button.go	/^var _ Widget = &Button{}$/;"	v	package:tui
+_	entry.go	/^var _ Widget = &Entry{}$/;"	v	package:tui
+_	grid.go	/^var _ Widget = &Grid{}$/;"	v	package:tui
+_	label.go	/^var _ Widget = &Label{}$/;"	v	package:tui
+_	label_sizehint_test.go	/^var _ Widget = &TailBox{}$/;"	v	package:tui
+_	list.go	/^var _ Widget = &List{}$/;"	v	package:tui
+_	padder.go	/^var _ Widget = &Padder{}$/;"	v	package:tui
+_	progress.go	/^var _ Widget = &Progress{}$/;"	v	package:tui
+_	scroll_area.go	/^var _ Widget = &ScrollArea{}$/;"	v	package:tui
+_	spacer.go	/^var _ Widget = &Spacer{}$/;"	v	package:tui
+_	statusbar.go	/^var _ Widget = &StatusBar{}$/;"	v	package:tui
+_	table.go	/^var _ Widget = &Table{}$/;"	v	package:tui
+_	text_edit.go	/^var _ Widget = &TextEdit{}$/;"	v	package:tui
+_	ui_tcell.go	/^var _ Surface = &tcellSurface{}$/;"	v	package:tui
+_	ui_tcell.go	/^var _ UI = &tcellUI{}$/;"	v	package:tui
+album	example/audioplayer/main.go	/^	album    string$/;"	m	struct:main.song
+alignedSizePolicy	box.go	/^func alignedSizePolicy(a Alignment, w Widget) SizePolicy {$/;"	f	package:tui
+alignment	box.go	/^	alignment Alignment$/;"	m	struct:tui.Box
+artist	example/audioplayer/main.go	/^	artist   string$/;"	m	struct:main.song
+base	theme_test.go	/^var base = Style{Fg: ColorWhite, Bg: ColorBlack, Bold: DecorationOff, Underline: DecorationOff}$/;"	v	package:tui
+body	example/editor/main.go	/^const body = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum du/;"	c	package:main
+body	example/mail/main.go	/^	body    string$/;"	m	struct:main.mail
+border	box.go	/^	border bool$/;"	m	struct:tui.Box
+buf	runebuf.go	/^	buf []rune$/;"	m	struct:tui.RuneBuffer
+cacheSizeHint	label.go	/^	cacheSizeHint *image.Point$/;"	m	struct:tui.Label
+callbackEvent	event.go	/^type callbackEvent struct {$/;"	s	package:tui
+cbFn	event.go	/^	cbFn func()$/;"	M	struct:tui.callbackEvent	typeref:typename:cbFn
+cells	grid.go	/^	cells map[image.Point]Widget$/;"	m	struct:tui.Grid
+cells	testing.go	/^	cells   map[image.Point]testCell$/;"	m	struct:tui.TestSurface
+chain	focus.go	/^	chain FocusChain$/;"	m	struct:tui.kbFocusController
+children	box.go	/^	children []Widget$/;"	m	struct:tui.Box
+clamp	example/multiview/main.go	/^func clamp(n, min, max int) int {$/;"	f	package:main
+colWidths	grid.go	/^	colWidths  []int$/;"	m	struct:tui.Grid
+cols	grid.go	/^	rows, cols int$/;"	m	struct:tui.Grid
+columnStretch	grid.go	/^	columnStretch map[int]int$/;"	m	struct:tui.Grid
+columnWidth	grid.go	/^func (g *Grid) columnWidth(i int) int {$/;"	f	unknown:tui.Grid
+contents	label_sizehint_test.go	/^	contents []Widget$/;"	m	struct:tui.TailBox
+convertColor	ui_tcell.go	/^func convertColor(col Color, fg bool) tcell.Color {$/;"	f	package:tui
+current	progress.go	/^	current, max int$/;"	m	struct:tui.Progress
+cursor	testing.go	/^	cursor  image.Point$/;"	m	struct:tui.TestSurface
+date	example/mail/main.go	/^	date    string$/;"	m	struct:main.mail
+dim	box.go	/^func dim(a Alignment, pt image.Point) int {$/;"	f	package:tui
+doLayout	box.go	/^func doLayout(ws []Widget, space int, a Alignment) []int {$/;"	f	package:tui
+doLayout	grid.go	/^func (g *Grid) doLayout(space int, a Alignment) []int {$/;"	f	unknown:tui.Grid
+doLayout	label_sizehint_test.go	/^func (t *TailBox) doLayout(size image.Point) {$/;"	f	unknown:tui.TailBox
+drawBoxTests	box_test.go	/^var drawBoxTests = []struct {$/;"	v	package:tui
+drawCJKTests	cjk_test.go	/^var drawCJKTests = []struct {$/;"	v	package:tui
+drawEntryTests	entry_test.go	/^var drawEntryTests = []struct {$/;"	v	package:tui
+drawGridTests	grid_test.go	/^var drawGridTests = []struct {$/;"	v	package:tui
+drawLabelTests	label_test.go	/^var drawLabelTests = []struct {$/;"	v	package:tui
+drawNestedScrollAreaTests	scroll_area_test.go	/^var drawNestedScrollAreaTests = []struct {$/;"	v	package:tui
+drawScrollAreaTests	scroll_area_test.go	/^var drawScrollAreaTests = []struct {$/;"	v	package:tui
+drawTableTests	table_test.go	/^var drawTableTests = []struct {$/;"	v	package:tui
+drawTextEditTests	text_edit_test.go	/^var drawTextEditTests = []struct {$/;"	v	package:tui
+duration	example/audioplayer/main.go	/^	duration time.Duration$/;"	m	struct:main.song
+elapsed	example/audioplayer/main.go	/^	elapsed int$/;"	m	struct:main.player
+emptyCh	testing.go	/^	emptyCh rune$/;"	m	struct:tui.TestSurface
+event	event.go	/^type event interface{}$/;"	i	package:tui
+eventQueue	ui_tcell.go	/^	eventQueue chan event$/;"	m	struct:tui.tcellUI
+focused	widget.go	/^	focused bool$/;"	m	struct:tui.WidgetBase
+focusedWidget	focus.go	/^	focusedWidget Widget$/;"	m	struct:tui.kbFocusController
+from	example/mail/main.go	/^	from    string$/;"	m	struct:main.mail
+getSplitByLine	runebuf.go	/^func (r *RuneBuffer) getSplitByLine(w int) []string {$/;"	f	unknown:tui.RuneBuffer
+handleEvent	ui_tcell.go	/^func (ui *tcellUI) handleEvent(ev event) {$/;"	f	unknown:tui.tcellUI
+handleKeyEvent	ui_tcell.go	/^func (ui *tcellUI) handleKeyEvent(tev *tcell.EventKey) {$/;"	f	unknown:tui.tcellUI
+handleMouseEvent	ui_tcell.go	/^func (ui *tcellUI) handleMouseEvent(ev *tcell.EventMouse) {$/;"	f	unknown:tui.tcellUI
+handleResizeEvent	ui_tcell.go	/^func (ui *tcellUI) handleResizeEvent(ev *tcell.EventResize) {$/;"	f	unknown:tui.tcellUI
+handler	keybinding.go	/^	handler  func()$/;"	M	struct:tui.keybinding	typeref:typename:handler
+hasBorder	grid.go	/^	hasBorder bool$/;"	m	struct:tui.Grid
+headers	example/http/main.go	/^	headers = "User-Agent: myBrowser"$/;"	v	package:main
+heightForWidth	label.go	/^func (l *Label) heightForWidth(w int) int {$/;"	f	unknown:tui.Label
+heightForWidth	runebuf.go	/^func (r *RuneBuffer) heightForWidth(w int) int {$/;"	f	unknown:tui.RuneBuffer
+idx	runebuf.go	/^	idx int$/;"	m	struct:tui.RuneBuffer
+insertWidgetTests	box_test.go	/^var insertWidgetTests = []struct {$/;"	v	package:tui
+isTextRemaining	entry.go	/^func (e *Entry) isTextRemaining() bool {$/;"	f	unknown:tui.Entry
+isTextRemaining	text_edit.go	/^func (e *TextEdit) isTextRemaining() bool {$/;"	f	unknown:tui.TextEdit
+items	list.go	/^	items    []string$/;"	m	struct:tui.List
+kbFocus	ui_tcell.go	/^	kbFocus *kbFocusController$/;"	m	struct:tui.tcellUI
+kbFocusController	focus.go	/^type kbFocusController struct {$/;"	s	package:tui
+keyNames	event.go	/^var keyNames = map[Key]string{$/;"	v	package:tui
+keybinding	keybinding.go	/^type keybinding struct {$/;"	s	package:tui
+keybindings	ui_tcell.go	/^	keybindings []*keybinding$/;"	m	struct:tui.tcellUI
+labelTests	label_test.go	/^var labelTests = []struct {$/;"	v	package:tui
+layoutChildren	box.go	/^func (b *Box) layoutChildren(size image.Point) {$/;"	f	unknown:tui.Box
+layoutChildren	grid.go	/^func (g *Grid) layoutChildren(size image.Point) {$/;"	f	unknown:tui.Grid
+layoutEntryTests	entry_test.go	/^var layoutEntryTests = []struct {$/;"	v	package:tui
+logo	example/login/main.go	/^var logo = `     _____ __ ____  ___   ______________  $/;"	v	package:main
+lorem	example/scroll/main.go	/^var lorem = `Lorem ipsum dolor sit amet.`$/;"	v	package:main
+mail	example/mail/main.go	/^type mail struct {$/;"	s	package:main
+mails	example/mail/main.go	/^var mails = []mail{$/;"	v	package:main
+main	example/audioplayer/main.go	/^func main() {$/;"	f	package:main
+main	example/audioplayer/main.go	/^package main$/;"	p
+main	example/chat/main.go	/^func main() {$/;"	f	package:main
+main	example/chat/main.go	/^package main$/;"	p
+main	example/color/main.go	/^func main() {$/;"	f	package:main
+main	example/color/main.go	/^package main$/;"	p
+main	example/editor/main.go	/^func main() {$/;"	f	package:main
+main	example/editor/main.go	/^package main$/;"	p
+main	example/http/main.go	/^func main() {$/;"	f	package:main
+main	example/http/main.go	/^package main$/;"	p
+main	example/login/main.go	/^func main() {$/;"	f	package:main
+main	example/login/main.go	/^package main$/;"	p
+main	example/mail/main.go	/^func main() {$/;"	f	package:main
+main	example/mail/main.go	/^package main$/;"	p
+main	example/multiview/main.go	/^func main() {$/;"	f	package:main
+main	example/multiview/main.go	/^package main$/;"	p
+main	example/scroll/main.go	/^func main() {$/;"	f	package:main
+main	example/scroll/main.go	/^package main$/;"	p
+mapCellToLocal	grid.go	/^func (g *Grid) mapCellToLocal(p image.Point) image.Point {$/;"	f	unknown:tui.Grid
+mapLocalToWorld	painter.go	/^func (p *Painter) mapLocalToWorld(point image.Point) image.Point {$/;"	f	unknown:tui.Painter
+mask	painter.go	/^	mask image.Rectangle$/;"	m	struct:tui.Painter
+match	keybinding.go	/^func (b *keybinding) match(ev KeyEvent) bool {$/;"	f	unknown:tui.keybinding
+max	progress.go	/^	current, max int$/;"	m	struct:tui.Progress
+mergeIn	theme.go	/^func (s Style) mergeIn(delta Style) Style {$/;"	f	unknown:tui.Style
+mergeTests	theme_test.go	/^var mergeTests = []struct {$/;"	v	package:tui
+message	example/chat/main.go	/^	message  string$/;"	m	struct:main.post
+method	example/http/main.go	/^	method  = "GET"$/;"	v	package:main
+minColumnWidth	grid.go	/^func (g *Grid) minColumnWidth(i int) int {$/;"	f	unknown:tui.Grid
+minRowHeight	grid.go	/^func (g *Grid) minRowHeight(i int) int {$/;"	f	unknown:tui.Grid
+moveDown	list.go	/^func (l *List) moveDown() {$/;"	f	unknown:tui.List
+moveDown	table.go	/^func (t *Table) moveDown() {$/;"	f	unknown:tui.Table
+moveUp	list.go	/^func (l *List) moveUp() {$/;"	f	unknown:tui.List
+moveUp	table.go	/^func (t *Table) moveUp() {$/;"	f	unknown:tui.Table
+newTcellUI	ui_tcell.go	/^func newTcellUI(root Widget) (*tcellUI, error) {$/;"	f	package:tui
+offset	entry.go	/^	offset int$/;"	m	struct:tui.Entry
+offset	text_edit.go	/^	offset int$/;"	m	struct:tui.TextEdit
+onActivated	button.go	/^	onActivated func(*Button)$/;"	M	struct:tui.Button	typeref:typename:onActivated
+onItemActivated	list.go	/^	onItemActivated    func(*List)$/;"	M	struct:tui.List	typeref:typename:onItemActivated
+onItemActivated	table.go	/^	onItemActivated    func(*Table)$/;"	M	struct:tui.Table	typeref:typename:onItemActivated
+onSelectionChanged	list.go	/^	onSelectionChanged func(*List)$/;"	M	struct:tui.List	typeref:typename:onSelectionChanged
+onSelectionChanged	table.go	/^	onSelectionChanged func(*Table)$/;"	M	struct:tui.Table	typeref:typename:onSelectionChanged
+onSubmit	entry.go	/^	onSubmit     func(*Entry)$/;"	M	struct:tui.Entry	typeref:typename:onSubmit
+onTextChange	entry.go	/^	onTextChange func(*Entry)$/;"	M	struct:tui.Entry	typeref:typename:onTextChange
+onTextChange	text_edit.go	/^	onTextChange func(*TextEdit)$/;"	M	struct:tui.TextEdit	typeref:typename:onTextChange
+padding	padder.go	/^	padding image.Point$/;"	m	struct:tui.Padder
+paintEvent	event.go	/^type paintEvent struct{}$/;"	s	package:tui
+painter	ui_tcell.go	/^	painter *Painter$/;"	m	struct:tui.tcellUI
+params	example/http/main.go	/^	params  = "x=2&y=3"$/;"	v	package:main
+payload	example/http/main.go	/^	payload = `{"id": 12}`$/;"	v	package:main
+permText	statusbar.go	/^	permText string$/;"	m	struct:tui.StatusBar
+play	example/audioplayer/main.go	/^func (p *player) play(s song, callback func(current, max int)) {$/;"	f	unknown:main.player
+player	example/audioplayer/main.go	/^type player struct {$/;"	s	package:main
+pos	list.go	/^	pos      int$/;"	m	struct:tui.List
+post	example/chat/main.go	/^type post struct {$/;"	s	package:main
+posts	example/chat/main.go	/^var posts = []post{$/;"	v	package:main
+quit	example/audioplayer/main.go	/^	quit    chan struct{}$/;"	m	struct:main.player
+quit	ui_tcell.go	/^	quit chan struct{}$/;"	m	struct:tui.tcellUI
+repeatKeyEvent	entry_test.go	/^func repeatKeyEvent(e *Entry, ev KeyEvent, n int) {$/;"	f	package:tui
+root	ui_tcell.go	/^	root    Widget$/;"	m	struct:tui.tcellUI
+rowHeight	grid.go	/^func (g *Grid) rowHeight(i int) int {$/;"	f	unknown:tui.Grid
+rowHeights	grid.go	/^	rowHeights []int$/;"	m	struct:tui.Grid
+rowStretch	grid.go	/^	rowStretch    map[int]int$/;"	m	struct:tui.Grid
+rowcol	grid.go	/^func (g *Grid) rowcol(i int, a Alignment) []Widget {$/;"	f	unknown:tui.Grid
+rows	grid.go	/^	rows, cols int$/;"	m	struct:tui.Grid
+runeWidth	text.go	/^func runeWidth(r rune) int {$/;"	f	package:tui
+screen	ui_tcell.go	/^	screen tcell.Screen$/;"	m	struct:tui.tcellSurface
+screen	ui_tcell.go	/^	screen tcell.Screen$/;"	m	struct:tui.tcellUI
+selected	list.go	/^	selected int$/;"	m	struct:tui.List
+selected	table.go	/^	selected           int$/;"	m	struct:tui.Table
+sequence	keybinding.go	/^	sequence string$/;"	m	struct:tui.keybinding
+size	testing.go	/^	size    image.Point$/;"	m	struct:tui.TestSurface
+size	widget.go	/^	size image.Point$/;"	m	struct:tui.WidgetBase
+sizePolicyX	widget.go	/^	sizePolicyX SizePolicy$/;"	m	struct:tui.WidgetBase
+sizePolicyY	widget.go	/^	sizePolicyY SizePolicy$/;"	m	struct:tui.WidgetBase
+song	example/audioplayer/main.go	/^type song struct {$/;"	s	package:main
+songs	example/audioplayer/main.go	/^var songs = []song{$/;"	v	package:main
+stringWidth	text.go	/^func stringWidth(s string) int {$/;"	f	package:tui
+style	painter.go	/^	style Style$/;"	m	struct:tui.Painter
+styleInheritTests	painter_test.go	/^var styleInheritTests = []struct {$/;"	v	package:tui
+styleName	label.go	/^	styleName string$/;"	m	struct:tui.Label
+styles	theme.go	/^	styles map[string]Style$/;"	m	struct:tui.Theme
+subject	example/mail/main.go	/^	subject string$/;"	m	struct:main.mail
+surface	painter.go	/^	surface Surface$/;"	m	struct:tui.Painter
+sz	label_sizehint_test.go	/^	sz image.Point$/;"	m	struct:tui.TailBox
+tcellSurface	ui_tcell.go	/^type tcellSurface struct {$/;"	s	package:tui
+tcellUI	ui_tcell.go	/^type tcellUI struct {$/;"	s	package:tui
+testCell	testing.go	/^type testCell struct {$/;"	s	package:tui
+text	button.go	/^	text string$/;"	m	struct:tui.Button
+text	entry.go	/^	text RuneBuffer$/;"	m	struct:tui.Entry
+text	label.go	/^	text     string$/;"	m	struct:tui.Label
+text	statusbar.go	/^	text     string$/;"	m	struct:tui.StatusBar
+text	text_edit.go	/^	text   RuneBuffer$/;"	m	struct:tui.TextEdit
+theme	painter.go	/^	theme *Theme$/;"	m	struct:tui.Painter
+time	example/chat/main.go	/^	time     string$/;"	m	struct:main.post
+title	box.go	/^	title  string$/;"	m	struct:tui.Box
+topLeft	scroll_area.go	/^	topLeft image.Point$/;"	m	struct:tui.ScrollArea
+total	example/audioplayer/main.go	/^	total   int$/;"	m	struct:main.player
+track	example/audioplayer/main.go	/^	track    string$/;"	m	struct:main.song
+transforms	painter.go	/^	transforms []image.Point$/;"	m	struct:tui.Painter
+trimRightLen	text.go	/^func trimRightLen(s string, n int) string {$/;"	f	package:tui
+tui	box.go	/^package tui$/;"	p
+tui	box_test.go	/^package tui$/;"	p
+tui	button.go	/^package tui$/;"	p
+tui	button_test.go	/^package tui$/;"	p
+tui	cjk_test.go	/^package tui$/;"	p
+tui	doc.go	/^package tui$/;"	p
+tui	entry.go	/^package tui$/;"	p
+tui	entry_test.go	/^package tui$/;"	p
+tui	event.go	/^package tui$/;"	p
+tui	focus.go	/^package tui$/;"	p
+tui	grid.go	/^package tui$/;"	p
+tui	grid_test.go	/^package tui$/;"	p
+tui	keybinding.go	/^package tui$/;"	p
+tui	keybinding_test.go	/^package tui$/;"	p
+tui	label.go	/^package tui$/;"	p
+tui	label_sizehint_test.go	/^package tui$/;"	p
+tui	label_test.go	/^package tui$/;"	p
+tui	list.go	/^package tui$/;"	p
+tui	list_test.go	/^package tui$/;"	p
+tui	padder.go	/^package tui$/;"	p
+tui	painter.go	/^package tui$/;"	p
+tui	painter_test.go	/^package tui$/;"	p
+tui	progress.go	/^package tui$/;"	p
+tui	progress_test.go	/^package tui$/;"	p
+tui	runebuf.go	/^package tui$/;"	p
+tui	runebuf_test.go	/^package tui$/;"	p
+tui	scroll_area.go	/^package tui$/;"	p
+tui	scroll_area_test.go	/^package tui$/;"	p
+tui	spacer.go	/^package tui$/;"	p
+tui	statusbar.go	/^package tui$/;"	p
+tui	table.go	/^package tui$/;"	p
+tui	table_test.go	/^package tui$/;"	p
+tui	testing.go	/^package tui$/;"	p
+tui	text.go	/^package tui$/;"	p
+tui	text_edit.go	/^package tui$/;"	p
+tui	text_edit_test.go	/^package tui$/;"	p
+tui	text_test.go	/^package tui$/;"	p
+tui	theme.go	/^package tui$/;"	p
+tui	theme_test.go	/^package tui$/;"	p
+tui	ui.go	/^package tui$/;"	p
+tui	ui_tcell.go	/^package tui$/;"	p
+tui	widget.go	/^package tui$/;"	p
+username	example/chat/main.go	/^	username string$/;"	m	struct:main.post
+visibleText	entry.go	/^func (e *Entry) visibleText() string {$/;"	f	unknown:tui.Entry
+widget	padder.go	/^	widget Widget$/;"	m	struct:tui.Padder
+widgets	focus.go	/^	widgets []Widget$/;"	m	struct:tui.SimpleFocusChain
+width	runebuf.go	/^	width int$/;"	m	struct:tui.RuneBuffer
+wordWrap	label.go	/^	wordWrap bool$/;"	m	struct:tui.Label
+wordwrap	runebuf.go	/^	wordwrap bool$/;"	m	struct:tui.RuneBuffer
+wordwrap	wordwrap/wordwrap.go	/^package wordwrap$/;"	p
+wordwrap	wordwrap/wordwrap_test.go	/^package wordwrap$/;"	p
