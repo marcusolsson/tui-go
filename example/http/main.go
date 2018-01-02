@@ -123,7 +123,7 @@ func main() {
 	tui.DefaultFocusChain.Set(urlEntry, reqParamsEdit, reqMethodEntry, reqDataEdit, reqHeadEdit)
 
 	theme := tui.NewTheme()
-	theme.SetStyle("box.focused", tui.Style{Fg: tui.ColorYellow, Bg: tui.ColorDefault})
+	theme.SetStyle("box.focused.border", tui.Style{Fg: tui.ColorYellow, Bg: tui.ColorDefault})
 
 	ui := tui.New(root)
 	ui.SetTheme(theme)
