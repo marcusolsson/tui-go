@@ -226,6 +226,9 @@ func convertColor(col Color, fg bool) tcell.Color {
 	case ColorYellow:
 		return tcell.ColorYellow
 	default:
+		if c > 0 {
+			tcell.Color(col)
+		}
 		return tcell.ColorDefault
 	}
 }
