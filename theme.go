@@ -1,19 +1,8 @@
 package tui
 
-// Color represents a color.
-type Color int
-
-// Common colors.
+// These do not exist in tcell
 const (
-	ColorDefault Color = iota
-	ColorBlack
-	ColorWhite
-	ColorRed
-	ColorGreen
-	ColorBlue
-	ColorCyan
-	ColorMagenta
-	ColorYellow
+	ColorDefault = "-1"
 )
 
 // Decoration represents a bold/underline/etc. state
@@ -29,8 +18,9 @@ const (
 // Style determines how a cell should be painted.
 // The zero value uses default from
 type Style struct {
-	Fg Color
-	Bg Color
+	// String is used because tcell.GetColor() cannot use type Color string
+	Fg string
+	Bg string
 
 	Reverse   Decoration
 	Bold      Decoration

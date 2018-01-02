@@ -92,7 +92,7 @@ func (s *TestSurface) FgColors() string {
 		for i := 0; i < s.size.X; i++ {
 			if cell, ok := s.cells[image.Point{i, j}]; ok {
 				color := cell.Style.Fg
-				buf.WriteRune('0' + rune(color))
+				buf.WriteRune('0' + rune(convertColor(color)))
 			} else {
 				buf.WriteRune(s.emptyCh)
 			}
@@ -110,7 +110,7 @@ func (s *TestSurface) BgColors() string {
 		for i := 0; i < s.size.X; i++ {
 			if cell, ok := s.cells[image.Point{i, j}]; ok {
 				color := cell.Style.Bg
-				buf.WriteRune('0' + rune(color))
+				buf.WriteRune('0' + rune(convertColor(color)))
 			} else {
 				buf.WriteRune(s.emptyCh)
 			}
@@ -150,4 +150,3 @@ func (s *TestSurface) Decorations() string {
 	return buf.String()
 
 }
-
