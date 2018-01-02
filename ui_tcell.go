@@ -172,8 +172,8 @@ type tcellSurface struct {
 
 func (s *tcellSurface) SetCell(x, y int, ch rune, style Style) {
 	st := tcell.StyleDefault.Normal().
-		Foreground(convertColor(style.Fg, false)).
-		Background(convertColor(style.Bg, false)).
+		Foreground(convertColor(style.Fg)).
+		Background(convertColor(style.Bg)).
 		Reverse(style.Reverse == DecorationOn).
 		Bold(style.Bold == DecorationOn).
 		Underline(style.Underline == DecorationOn)
@@ -202,30 +202,10 @@ func (s *tcellSurface) Size() image.Point {
 	return image.Point{w, h}
 }
 
-func convertColor(col Color, fg bool) tcell.Color {
-	switch col {
-	case ColorDefault:
-		if fg {
-			return tcell.ColorWhite
-		}
-		return tcell.ColorDefault
-	case ColorBlack:
-		return tcell.ColorBlack
-	case ColorWhite:
-		return tcell.ColorWhite
-	case ColorRed:
-		return tcell.ColorRed
-	case ColorGreen:
-		return tcell.ColorGreen
-	case ColorBlue:
-		return tcell.ColorBlue
-	case ColorCyan:
-		return tcell.ColorDarkCyan
-	case ColorMagenta:
-		return tcell.ColorDarkMagenta
-	case ColorYellow:
-		return tcell.ColorYellow
-	default:
-		return tcell.ColorDefault
-	}
+// This adds 256 colors and true color support
+
+// "Blue" would become "blue", "FFFFFF" would become "#FFFFFF"
+// otherwise it wouldn't work.
+func convertColor(col string) tcell.Color {
+	return tcell.GetColor(col)
 }
