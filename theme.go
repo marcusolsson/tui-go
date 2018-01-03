@@ -1,7 +1,7 @@
 package tui
 
 // Color represents a color.
-type Color int
+type Color int32
 
 // Common colors.
 const (
