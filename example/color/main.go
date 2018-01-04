@@ -10,6 +10,8 @@ type StyledBox struct {
 	Style string
 	*tui.Box
 }
+
+// Draw decorates the Draw call to the widget with a style.
 func (s *StyledBox) Draw(p *tui.Painter) {
 	p.WithStyle(s.Style, func(p *tui.Painter) {
 		s.Box.Draw(p)
@@ -33,7 +35,7 @@ func main() {
 	t.SetStyle("list.item", tui.Style{Bg: tui.ColorCyan, Fg: tui.ColorMagenta})
 	t.SetStyle("list.item.selected", tui.Style{Bg: tui.ColorRed, Fg: tui.ColorWhite})
 
-		// The style name is appended to the widget name to support coloring of
+	// The style name is appended to the widget name to support coloring of
 	// individual labels.
 	warning := tui.NewLabel("WARNING: This is a warning")
 	warning.SetStyleName("warning")
@@ -50,7 +52,7 @@ func main() {
 	message2 := tui.NewLabel(" message from our sponsors.")
 	message := &StyledBox{
 		Style: "bsod",
-		Box: tui.NewHBox(message1, emphasis, message2, tui.NewSpacer()),
+		Box:   tui.NewHBox(message1, emphasis, message2, tui.NewSpacer()),
 	}
 
 	emphasis.SetStyleName("emphasis")

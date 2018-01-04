@@ -2,18 +2,22 @@ package tui
 
 // UI defines the operations needed by the underlying engine.
 type UI interface {
-	// Change the root widget of the UI.
+	// SetWidget sets the root widget of the UI.
 	SetWidget(w Widget)
+	// SetTheme sets the current theme of the UI.
 	SetTheme(p *Theme)
+	// SetKeybinding sets the callback for when a key sequence is pressed.
 	SetKeybinding(seq string, fn func())
+	// ClearKeybindings removes all previous set keybindings.
 	ClearKeybindings()
+	// SetFocusChain sets a chain of widgets that determines focus order.
 	SetFocusChain(ch FocusChain)
-	// Start the UI thread; wait for it to complete, either via error or Quit.
+	// Run starts the UI goroutine and blocks either Quit was called or an error occurred.
 	Run() error
-	// Schedule work in the UI thread and await its completion.
+	// Update schedules work in the UI thread and await its completion.
 	// Note that calling Update from the UI thread will result in deadlock.
 	Update(fn func())
-	// Shut down the UI thread.
+	// Quit shuts down the UI goroutine.
 	Quit()
 }
 
