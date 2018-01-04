@@ -41,7 +41,7 @@ func newTcellUI(root Widget) (*tcellUI, error) {
 		quit:        make(chan struct{}, 1),
 		screen:      screen,
 		kbFocus:     &kbFocusController{chain: DefaultFocusChain},
-		eventQueue:  make(chan event, 1),
+		eventQueue:  make(chan event),
 	}, nil
 }
 
@@ -155,13 +155,22 @@ func (ui *tcellUI) Quit() {
 // Use this to update the UI in response to external events,
 // like a timer tick.
 // This method should be used any time you call methods
-// to change UI objects after the first call to `UI.Run()`;
-// changes invoked outside of either this callback or the
+// to change UI objects after the first call to `UI.Run()`.
+//
+// Changes invoked outside of either this callback or the
 // other event handler callbacks may appear to work, but
 // is likely a race condition.  (Run your program with
 // `go run -race` or `go install -race` to detect this!)
+//
+// Calling Update from within an event handler, or from within an Update call,
+// is an error, and will deadlock.
 func (ui *tcellUI) Update(fn func()) {
-	ui.eventQueue <- callbackEvent{fn}
+	blk := make(chan struct{})
+	ui.eventQueue <- callbackEvent{func() {
+		fn()
+		close(blk)
+	}}
+	<-blk
 }
 
 var _ Surface = &tcellSurface{}
