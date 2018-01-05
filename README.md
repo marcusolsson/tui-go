@@ -46,6 +46,8 @@ If you want to know what it is like to build terminal applications with tui-go, 
 
 Documentation is available at [godoc.org](https://godoc.org/github.com/marcusolsson/tui-go).
 
+Make sure you check out some of the [projects using tui-go](https://godoc.org/github.com/marcusolsson/tui-go?importers) on.
+
 ## Related projects
 
 tui-go is mainly influenced by [Qt](https://www.qt.io/) and offers a similar programming model that has been adapted to Go and the terminal.
