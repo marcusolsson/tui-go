@@ -20,7 +20,10 @@ func main() {
 	root.Append(scrollBox)
 	root.Append(tui.NewVBox(tui.NewSpacer()))
 
-	ui := tui.New(root)
+	ui, err := tui.New(root)
+	if err != nil {
+		panic(err)
+	}
 	ui.SetKeybinding("Esc", func() { ui.Quit() })
 	ui.SetKeybinding("Up", func() { s.Scroll(0, -1) })
 	ui.SetKeybinding("Down", func() { s.Scroll(0, 1) })

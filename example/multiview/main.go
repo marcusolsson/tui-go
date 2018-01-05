@@ -15,7 +15,10 @@ func main() {
 
 	root := tui.NewVBox(views[0])
 
-	ui := tui.New(root)
+	ui, err := tui.New(root)
+	if err != nil {
+		panic(err)
+	}
 	ui.SetKeybinding("Esc", func() { ui.Quit() })
 	ui.SetKeybinding("Left", func() {
 		currentView = clamp(currentView-1, 0, len(views)-1)

@@ -31,7 +31,10 @@ func main() {
 		tui.NewLabel("tui-go"),
 	)
 
-	ui := tui.New(box)
+	ui, err := tui.New(box)
+	if err != nil {
+		panic(err)
+	}
 	ui.SetKeybinding("Esc", func() { ui.Quit() })
 
 	if err := ui.Run(); err != nil {

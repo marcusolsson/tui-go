@@ -54,7 +54,10 @@ func main() {
 		status,
 	)
 
-	ui := tui.New(root)
+	ui, err := tui.New(root)
+	if err != nil {
+		panic(err)
+	}
 
 	library.OnItemActivated(func(t *tui.Table) {
 		p.play(songs[t.Selected()-1], func(curr, max int) {

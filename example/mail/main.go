@@ -79,7 +79,10 @@ func main() {
 
 	root := tui.NewVBox(inbox, tui.NewLabel(""), mail)
 
-	ui := tui.New(root)
+	ui, err := tui.New(root)
+	if err != nil {
+		panic(err)
+	}
 	ui.SetKeybinding("Esc", func() { ui.Quit() })
 	ui.SetKeybinding("Shift+Alt+Up", func() { ui.Quit() })
 
