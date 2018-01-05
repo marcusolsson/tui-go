@@ -64,7 +64,10 @@ func main() {
 
 	root := tui.NewVBox(okay, l, warning, fatal, message, okay2)
 
-	ui := tui.New(root)
+	ui, err := tui.New(root)
+	if err != nil {
+		panic(err)
+	}
 	ui.SetTheme(t)
 	ui.SetKeybinding("Esc", func() { ui.Quit() })
 

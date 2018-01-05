@@ -22,7 +22,6 @@ type UI interface {
 }
 
 // New returns a new UI with a root widget.
-func New(root Widget) UI {
-	tcellui, _ := newTcellUI(root)
-	return tcellui
+func New(root Widget) (UI, error) {
+	return newTcellUI(root)
 }

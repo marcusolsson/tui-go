@@ -57,7 +57,10 @@ func main() {
 
 	tui.DefaultFocusChain.Set(user, password, login, register)
 
-	ui := tui.New(root)
+	ui, err := tui.New(root)
+	if err != nil {
+		panic(err)
+	}
 	ui.SetKeybinding("Esc", func() { ui.Quit() })
 
 	if err := ui.Run(); err != nil {
