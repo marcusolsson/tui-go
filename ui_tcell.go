@@ -110,6 +110,8 @@ func (ui *tcellUI) Run() error {
 func (ui *tcellUI) handleEvent(ev event) {
 	switch e := ev.(type) {
 	case KeyEvent:
+		logger.Printf("Received key event: %s", e.Name())
+
 		for _, b := range ui.keybindings {
 			if b.match(e) {
 				b.handler()
@@ -119,9 +121,12 @@ func (ui *tcellUI) handleEvent(ev event) {
 		ui.root.OnKeyEvent(e)
 		ui.painter.Repaint(ui.root)
 	case callbackEvent:
+		// Gets stuck in a print loop when the logger is a widget.
+		//logger.Printf("Received callback event")
 		e.cbFn()
 		ui.painter.Repaint(ui.root)
 	case paintEvent:
+		logger.Printf("Received paint event")
 		ui.painter.Repaint(ui.root)
 	}
 }
@@ -145,6 +150,7 @@ func (ui *tcellUI) handleResizeEvent(ev *tcell.EventResize) {
 
 // Quit signals to the UI to start shutting down.
 func (ui *tcellUI) Quit() {
+	logger.Printf("Quitting")
 	ui.screen.Fini()
 	ui.quit <- struct{}{}
 }
