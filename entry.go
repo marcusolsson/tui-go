@@ -98,10 +98,7 @@ func (e *Entry) OnKeyEvent(ev KeyEvent) {
 			e.offset = 0
 		case KeyEnd, KeyCtrlE:
 			e.text.MoveToLineEnd()
-			left := e.text.Width() - (screenWidth - 1)
-			if left >= 0 {
-				e.offset = left
-			}
+			e.ensureCursorIsVisible()
 		case KeyCtrlK:
 			e.text.Kill()
 		}
@@ -132,6 +129,18 @@ func (e *Entry) OnSubmit(fn func(entry *Entry)) {
 // SetText sets the text content of the entry.
 func (e *Entry) SetText(text string) {
 	e.text.Set([]rune(text))
+	// TODO: Enable when RuneBuf supports cursor movement for CJK.
+	// e.ensureCursorIsVisible()
+	e.offset = 0
+}
+
+func (e *Entry) ensureCursorIsVisible() {
+	left := e.text.Width() - (e.Size().X - 1)
+	if left >= 0 {
+		e.offset = left
+	} else {
+		e.offset = 0
+	}
 }
 
 // Text returns the text content of the entry.

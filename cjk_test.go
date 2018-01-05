@@ -70,6 +70,22 @@ var drawCJKTests = []struct {
 `,
 	},
 	{
+		test: "Entry with long text",
+		setup: func() Widget {
+			e := NewEntry()
+			e.SetText("これはテストです")
+			b := NewVBox(e)
+			b.SetBorder(true)
+			return b
+		},
+		want: `
+┌────────┐
+│これはテ│
+│        │
+└────────┘
+`,
+	},
+	{
 		test: "List",
 		setup: func() Widget {
 			l := NewList()
@@ -89,13 +105,15 @@ var drawCJKTests = []struct {
 
 func TestCJK_Label(t *testing.T) {
 	for _, tt := range drawCJKTests {
-		surface := NewTestSurface(10, 4)
+		t.Run(tt.test, func(t *testing.T) {
+			surface := NewTestSurface(10, 4)
 
-		painter := NewPainter(surface, NewTheme())
-		painter.Repaint(tt.setup())
+			painter := NewPainter(surface, NewTheme())
+			painter.Repaint(tt.setup())
 
-		if surface.String() != tt.want {
-			t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
-		}
+			if surface.String() != tt.want {
+				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			}
+		})
 	}
 }
