@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/marcusolsson/tui-go"
@@ -68,11 +69,12 @@ func main() {
 
 	ui, err := tui.New(root)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
+
 	ui.SetKeybinding("Esc", func() { ui.Quit() })
 
 	if err := ui.Run(); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }

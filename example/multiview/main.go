@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/marcusolsson/tui-go"
 )
 
@@ -17,8 +19,9 @@ func main() {
 
 	ui, err := tui.New(root)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
+
 	ui.SetKeybinding("Esc", func() { ui.Quit() })
 	ui.SetKeybinding("Left", func() {
 		currentView = clamp(currentView-1, 0, len(views)-1)
@@ -30,7 +33,7 @@ func main() {
 	})
 
 	if err := ui.Run(); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }
 
