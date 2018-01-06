@@ -4,6 +4,22 @@ import (
 	"image"
 )
 
+type surfaceCell struct {
+	ch    rune
+	style Style
+}
+
+type surfaceBuffer struct {
+	cells map[image.Point]surfaceCell
+}
+
+func (s *surfaceBuffer) SetCell(x, y int, ch rune, style Style) {
+	s.cells[image.Pt(x, y)] = surfaceCell{
+		ch:    ch,
+		style: style,
+	}
+}
+
 // Surface defines a surface that can be painted on.
 type Surface interface {
 	SetCell(x, y int, ch rune, s Style)
@@ -17,6 +33,8 @@ type Surface interface {
 // Painter provides operations to paint on a surface.
 type Painter struct {
 	theme *Theme
+
+	buffer surfaceBuffer
 
 	// Surface to paint on.
 	surface Surface
@@ -34,6 +52,7 @@ type Painter struct {
 func NewPainter(s Surface, p *Theme) *Painter {
 	return &Painter{
 		theme:   p,
+		buffer:  surfaceBuffer{make(map[image.Point]surfaceCell)},
 		surface: s,
 		style:   p.Style("normal"),
 		mask: image.Rectangle{
@@ -55,29 +74,13 @@ func (p *Painter) Restore() {
 	}
 }
 
-// Begin prepares the surface for painting.
-func (p *Painter) Begin() {
+// Flush writes buffers to the surface.
+func (p *Painter) Flush() {
 	p.surface.Begin()
-}
-
-// End finalizes any painting that has been made.
-func (p *Painter) End() {
-	p.surface.End()
-}
-
-// Repaint clears the surface, draws the scene and flushes it.
-func (p *Painter) Repaint(w Widget) {
-	p.mask = image.Rectangle{
-		Min: image.ZP,
-		Max: p.surface.Size(),
+	for k, v := range p.buffer.cells {
+		p.surface.SetCell(k.X, k.Y, v.ch, v.style)
 	}
-
-	p.surface.HideCursor()
-
-	p.Begin()
-	w.Resize(p.surface.Size())
-	w.Draw(p)
-	p.End()
+	p.surface.End()
 }
 
 // DrawCursor draws the cursor at the given position.
@@ -90,7 +93,7 @@ func (p *Painter) DrawCursor(x, y int) {
 func (p *Painter) DrawRune(x, y int, r rune) {
 	wp := p.mapLocalToWorld(image.Point{x, y})
 	if (p.mask.Min.X <= wp.X) && (wp.X < p.mask.Max.X) && (p.mask.Min.Y <= wp.Y) && (wp.Y < p.mask.Max.Y) {
-		p.surface.SetCell(wp.X, wp.Y, r, p.style)
+		p.buffer.SetCell(wp.X, wp.Y, r, p.style)
 	}
 }
 
