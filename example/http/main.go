@@ -2,6 +2,7 @@ package main
 
 import (
 	"io/ioutil"
+	"log"
 	"net/http"
 	"sort"
 	"strings"
@@ -127,12 +128,13 @@ func main() {
 
 	ui, err := tui.New(root)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
+
 	ui.SetTheme(theme)
 	ui.SetKeybinding("Esc", func() { ui.Quit() })
 
 	if err := ui.Run(); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }
