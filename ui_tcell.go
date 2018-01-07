@@ -64,6 +64,7 @@ func (ui *tcellUI) SetTheme(t *Theme) {
 }
 
 func (ui *tcellUI) SetFocusChain(chain FocusChain) {
+<<<<<<< HEAD
 	if ui.kbFocus.focusedWidget != nil {
 		ui.kbFocus.focusedWidget.SetFocused(false)
 	}
@@ -74,6 +75,9 @@ func (ui *tcellUI) SetFocusChain(chain FocusChain) {
 	if ui.kbFocus.focusedWidget != nil {
 		ui.kbFocus.focusedWidget.SetFocused(true)
 	}
+=======
+	ui.kbFocus.setFocusChain(chain)
+>>>>>>> Enable focus in dialog
 }
 
 func (ui *tcellUI) SetKeybinding(seq string, fn func()) {
@@ -94,10 +98,7 @@ func (ui *tcellUI) Run() error {
 		return err
 	}
 
-	if w := ui.kbFocus.chain.FocusDefault(); w != nil {
-		w.SetFocused(true)
-		ui.kbFocus.focusedWidget = w
-	}
+	ui.kbFocus.setFocusChain(DefaultFocusChain)
 
 	ui.screen.SetStyle(tcell.StyleDefault)
 	ui.screen.EnableMouse()

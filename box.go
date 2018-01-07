@@ -47,8 +47,8 @@ func NewHBox(c ...Widget) *Box {
 }
 
 // Append adds the given widget at the end of the Box.
-func (b *Box) Append(w Widget) {
-	b.children = append(b.children, w)
+func (b *Box) Append(w ...Widget) {
+	b.children = append(b.children, w...)
 }
 
 // Prepend adds the given widget at the start of the Box.
