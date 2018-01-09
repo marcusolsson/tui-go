@@ -126,11 +126,8 @@ func (b *Box) Draw(p *Painter) {
 					p.DrawText(1, 0, b.title)
 				})
 			})
-			p.FillRect(1, 1, sz.X-2, sz.Y-2)
 			p.Translate(1, 1)
 			defer p.Restore()
-		} else {
-			p.FillRect(0, 0, sz.X, sz.Y)
 		}
 
 		var off image.Point
