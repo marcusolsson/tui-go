@@ -311,6 +311,7 @@ var styleBoxTests = []struct {
 	test  string
 	setup func() *Box
 	theme func() *Theme
+	wantContents string
 	wantColors  string
 	wantDecorations string
 }{
@@ -473,6 +474,9 @@ func TestBox_Style(t *testing.T) {
 			painter := NewPainter(surface, tt.theme())
 			painter.Repaint(tt.setup())
 
+			if tt.wantContents != "" && surface.String() != tt.wantContents {
+				t.Errorf("wrong contents: got = \n%s\n\nwant = \n%s", surface.String(), tt.wantContents)
+			}
 			if tt.wantColors != "" && surface.FgColors() != tt.wantColors {
 				t.Errorf("wrong colors: got = \n%s\n\nwant = \n%s", surface.FgColors(), tt.wantColors)
 			}
