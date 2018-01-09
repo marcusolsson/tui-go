@@ -10,6 +10,20 @@ type SubmitLabel struct {
 	OnSubmit func()
 }
 
+func (s *SubmitLabel) Draw(p *tui.Painter) {
+	if s.IsFocused() {
+		p.WithStyle("reversed", s.Label.Draw)
+	} else {
+		s.Label.Draw(p)
+	}
+}
+
+func (s *SubmitLabel) OnKeyEvent(ev tui.KeyEvent) {
+	if s.IsFocused() && ev.Key == tui.KeyEnter && s.OnSubmit != nil{
+		s.OnSubmit()
+	}
+}
+
 type ItemEditor struct {
 	*tui.Box
 	tui.SimpleFocusChain

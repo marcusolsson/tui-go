@@ -105,7 +105,7 @@ func (l *List) Prepend(i *ListItem) {
 }
 
 func (l *List) Edit(i *ListItem) {
-	r := NewItemEditor(, l.fm, i)
+	r := NewItemEditor(l.fm, i)
 
 	// No provisions for popups; set & reset the view.
 	r.Done = func() {
