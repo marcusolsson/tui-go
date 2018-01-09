@@ -14,3 +14,9 @@ func NewZBox(contents ...Widget) *ZBox {
 		contents: contents,
 	}
 }
+
+func (z *ZBox) Draw(p *Painter) {
+	for _, r := range z.contents {
+		r.Draw(p)
+	}
+}
