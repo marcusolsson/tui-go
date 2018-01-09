@@ -1,0 +1,16 @@
+package tui
+
+// A ZBox is a stack of Widgets that have the same X and Y dimensions, where
+// Widgets on top are rendered over those on the bottom.
+// It can be used to implement modal dialogs.
+type ZBox struct {
+	WidgetBase
+
+	contents []Widget
+}
+
+func NewZBox(contents ...Widget) *ZBox {
+	return &ZBox{
+		contents: contents,
+	}
+}
