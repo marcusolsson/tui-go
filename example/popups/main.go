@@ -24,7 +24,7 @@ func main() {
 		{"cceckman", "Charles Eckman"},
 		{"marcusolsson", "Marcus Olsson"},
 	} {
-		list.Prepend(NewItem(list, v.name, v.value))
+		list.Commit(NewItem(list, v.name, v.value))
 	}
 
 	ui, err := tui.New(list)

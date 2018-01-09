@@ -38,9 +38,7 @@ func (fm *FocusManager) prev() {
 
 func (fm *FocusManager) Attach(ui tui.UI) {
 	ui.SetKeybinding("Down", fm.next)
-	ui.SetKeybinding("Right", fm.next)
 	ui.SetKeybinding("Tab", fm.next)
 
 	ui.SetKeybinding("Up", fm.prev)
-	ui.SetKeybinding("Left", fm.prev)
 }

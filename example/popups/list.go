@@ -69,11 +69,15 @@ func (n *NewWidget) Draw(p *tui.Painter) {
 }
 
 type List struct {
+	// is-a:
 	*tui.Box
 	tui.SimpleFocusChain
-	fm *FocusManager
 
-	contents []tui.Widget
+
+	// Has-a:
+	FocusManager *FocusManager
+
+	contents []*ListItem
 	newWidget *NewWidget
 
 	UI WidgetSetter
@@ -81,7 +85,7 @@ type List struct {
 
 func NewList(fm *FocusManager) *List {
 	l := &List{
-		fm: fm,
+		FocusManager: fm,
 
 	}
 	l.newWidget = &NewWidget{
@@ -94,23 +98,37 @@ func NewList(fm *FocusManager) *List {
 		l.newWidget,
 	)
 	l.Set(l.newWidget)
-	l.fm.Set(l)
+	l.FocusManager.Set(l)
 	return l
 }
 
-func (l *List) Prepend(i *ListItem) {
-	l.Box.Prepend(i)
-	l.contents = append([]tui.Widget{i}, l.contents...)
-	l.Set(append([]tui.Widget{l.newWidget}, l.contents...)...)
+func (l *List) Commit(li *ListItem) {
+	var i int
+	for i := 0; i < len(l.contents); i++ {
+		if l.contents[i] == li {
+			return
+		}
+	}
+	// Otherwise, add a new item after the existing ones.
+	l.Box.Insert(i, li)
+	l.contents = append([]*ListItem{li}, l.contents...)
+
+	// Update focus chain
+	fc := make([]tui.Widget, len(l.contents)+1)
+	fc[0] = l.newWidget
+	for i, v := range l.contents {
+		fc[i+1] = v
+	}
+	l.Set(fc...)
 }
 
 func (l *List) Edit(i *ListItem) {
-	r := NewItemEditor(l.fm, i)
+	r := NewItemEditor(l, i)
 
 	// No provisions for popups; set & reset the view.
 	r.Done = func() {
 		l.UI.SetWidget(l)
-		l.fm.Set(l)
+		l.FocusManager.Set(l)
 	}
 	l.UI.SetWidget(r)
 }
