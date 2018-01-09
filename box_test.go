@@ -308,11 +308,11 @@ func TestBox_Draw(t *testing.T) {
 }
 
 var styleBoxTests = []struct {
-	test  string
-	setup func() *Box
-	theme func() *Theme
-	wantContents string
-	wantColors  string
+	test            string
+	setup           func() *Box
+	theme           func() *Theme
+	wantContents    string
+	wantColors      string
 	wantDecorations string
 }{
 	{
@@ -322,7 +322,7 @@ var styleBoxTests = []struct {
 			b.SetFill(true)
 			return b
 		},
-		theme: func() *Theme{
+		theme: func() *Theme {
 			t := NewTheme()
 			t.SetStyle("box", Style{
 				Fg: Color(3),
@@ -421,6 +421,46 @@ label 2
 2222222222
 `,
 	},
+
+	{
+		test: "no fill, labels inherit",
+		setup: func() *Box {
+			b := NewVBox(
+				NewLabel("label 1"),
+				NewLabel("label 2"),
+			)
+			return b
+		},
+		theme: func() *Theme {
+			t := NewTheme()
+			t.SetStyle("box", Style{
+				Fg:   Color(3),
+				Bold: DecorationOn,
+			})
+			return t
+		},
+		wantContents: `
+label 1...
+..........
+..........
+label 2...
+..........
+`,
+		wantColors: `
+3333333...
+..........
+..........
+3333333...
+..........
+`,
+		wantDecorations: `
+2222222...
+..........
+..........
+2222222...
+..........
+`,
+	},
 	{
 		test: "blue box, bold border",
 		setup: func() *Box {
@@ -486,8 +526,6 @@ func TestBox_Style(t *testing.T) {
 		})
 	}
 }
-
-
 
 func TestBox_IsFocused(t *testing.T) {
 	btn := NewButton("Test box focus")
