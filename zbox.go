@@ -30,3 +30,40 @@ func (z *ZBox) Resize(size image.Point) {
 		w.Resize(size)
 	}
 }
+
+// max is a helper to get the maximum image.Point out of the contents.
+func (z *ZBox) max(f func(w Widget) image.Point) image.Point {
+	r := image.ZP
+	for _, w := range z.contents {
+		hint := f(w)
+		if hint.X > r.X {
+			r.X = hint.X
+		}
+		if hint.Y > r.Y {
+			r.Y = hint.Y
+		}
+	}
+	return r
+}
+
+func (z *ZBox) SizeHint() image.Point {
+	return z.max(func(w Widget) image.Point{
+		return w.SizeHint()
+	})
+}
+
+func (z *ZBox) MinSizeHint() image.Point {
+	return z.max(func(w Widget) image.Point{
+		return w.MinSizeHint()
+	})
+}
+
+func (z *ZBox) Size() image.Point {
+	return z.max(func(w Widget) image.Point{
+		return w.Size()
+	})
+}
+
+func (z *ZBox) SizePolicy() (SizePolicy, SizePolicy) {
+	return Expanding, Expanding
+}

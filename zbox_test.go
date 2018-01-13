@@ -57,7 +57,50 @@ background
 ..........
 `,
 	},
+	{
+		test: "PartOfScreen",
+		setup: func() Widget{
+			return NewVBox(
+				NewLabel("tops"),
+				NewSpacer(),
+				NewZBox(
+					NewLabel("bottoms"),
+				),
+			)
+		},
+		want: `
+tops......
+..........
+..........
+bottoms...
+..........
+`,
+},
 
+	{
+		test: "PartialPopover",
+		setup: func() Widget{
+			pop := NewVBox(NewLabel("popup"))
+			pop.SetFill(true)
+			pop.SetBorder(true)
+			base := NewVBox(
+				NewLabel("tops"),
+				NewSpacer(),
+				NewZBox(
+					NewLabel("bottoms"),
+					pop,
+				),
+			)
+			return base
+		},
+		want: `
+tops......
+..........
+┌────────┐
+│popup   │
+└────────┘
+`,
+	},
 }
 
 func TestZBox_Draw(t *testing.T) {
