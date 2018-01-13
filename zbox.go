@@ -67,3 +67,20 @@ func (z *ZBox) Size() image.Point {
 func (z *ZBox) SizePolicy() (SizePolicy, SizePolicy) {
 	return Expanding, Expanding
 }
+
+// Append adds the Widget to the end (i.e. the top) of the ZBox,
+// and returns a function that will remove the Widget again.
+func (z *ZBox) Append(w Widget) func() {
+	z.contents = append(z.contents, w)
+
+	return func() {
+		for i, x := range z.contents {
+			if x == w {
+				pre := z.contents[0:i]
+				post := z.contents[i+1:len(z.contents)]
+				z.contents = append(pre, post...)
+				return
+			}
+		}
+	}
+}

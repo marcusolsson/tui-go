@@ -29,7 +29,7 @@ o'erwrite!
 	},
 	{
 		test: "CoopOvewrite",
-		setup: func() Widget{
+		setup: func() Widget {
 			bgFill := NewVBox(
 				NewLabel("background"),
 				NewSpacer(),
@@ -59,7 +59,7 @@ background
 	},
 	{
 		test: "PartOfScreen",
-		setup: func() Widget{
+		setup: func() Widget {
 			return NewVBox(
 				NewLabel("tops"),
 				NewSpacer(),
@@ -75,11 +75,29 @@ tops......
 bottoms...
 ..........
 `,
-},
+	},
+	{
+		test: "Empty",
+		setup: func() Widget {
+			return NewVBox(
+				NewLabel("tops"),
+				NewSpacer(),
+				NewZBox(),
+				NewLabel("bottoms"),
+			)
+		},
+		want: `
+tops......
+..........
+..........
+bottoms...
+..........
+`,
+	},
 
 	{
 		test: "PartialPopover",
-		setup: func() Widget{
+		setup: func() Widget {
 			pop := NewVBox(NewLabel("popup"))
 			pop.SetFill(true)
 			pop.SetBorder(true)
@@ -99,6 +117,95 @@ tops......
 ┌────────┐
 │popup   │
 └────────┘
+`,
+	},
+	{
+		test: "Append",
+		setup: func() Widget {
+			popupSpace := NewZBox(
+				NewLabel("bottoms"),
+			)
+
+			base := NewVBox(
+				NewLabel("tops"),
+				NewSpacer(),
+				popupSpace,
+			)
+
+			pop := NewVBox(NewLabel("popup"))
+			pop.SetFill(true)
+			pop.SetBorder(true)
+
+			_ = popupSpace.Append(pop)
+
+			return base
+		},
+		want: `
+tops......
+..........
+┌────────┐
+│popup   │
+└────────┘
+`,
+	},
+	{
+		test: "AppendAndRemove",
+		setup: func() Widget {
+			popupSpace := NewZBox(
+				NewLabel("bottoms"),
+			)
+
+			base := NewVBox(
+				NewLabel("tops"),
+				NewSpacer(),
+				popupSpace,
+			)
+
+			pop := NewVBox(NewLabel("popup"))
+			pop.SetFill(true)
+			pop.SetBorder(true)
+
+			remove := popupSpace.Append(pop)
+			remove()
+
+			return base
+		},
+		want: `
+tops......
+..........
+..........
+bottoms...
+..........
+`,
+	},
+	{
+		test: "AppendAndRemove",
+		setup: func() Widget {
+			popupSpace := NewZBox(
+				NewLabel("bottoms"),
+			)
+
+			base := NewVBox(
+				NewLabel("tops"),
+				NewSpacer(),
+				popupSpace,
+			)
+
+			pop := NewVBox(NewLabel("popup"))
+			pop.SetFill(true)
+			pop.SetBorder(true)
+
+			remove := popupSpace.Append(pop)
+			remove()
+
+			return base
+		},
+		want: `
+tops......
+..........
+..........
+bottoms...
+..........
 `,
 	},
 }
