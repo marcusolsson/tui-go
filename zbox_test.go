@@ -27,6 +27,37 @@ o'erwrite!
 ..........
 `,
 	},
+	{
+		test: "CoopOvewrite",
+		setup: func() Widget{
+			bgFill := NewVBox(
+				NewLabel("background"),
+				NewSpacer(),
+			)
+			popup := NewVBox(NewLabel("popup"))
+			popup.SetBorder(true)
+
+			fg := NewVBox(
+				NewSpacer(),
+				NewHBox(
+					NewSpacer(),
+					popup,
+					NewSpacer(),
+				),
+				NewSpacer(),
+			)
+
+			return NewZBox(bgFill, fg)
+		},
+		want: `
+background
+..┌─────┐.
+..│popup│.
+..└─────┘.
+..........
+`,
+	},
+
 }
 
 func TestZBox_Draw(t *testing.T) {

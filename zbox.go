@@ -1,5 +1,9 @@
 package tui
 
+import (
+	"image"
+)
+
 // A ZBox is a stack of Widgets that have the same X and Y dimensions, where
 // Widgets on top are rendered over those on the bottom.
 // It can be used to implement modal dialogs.
@@ -18,5 +22,11 @@ func NewZBox(contents ...Widget) *ZBox {
 func (z *ZBox) Draw(p *Painter) {
 	for _, r := range z.contents {
 		r.Draw(p)
+	}
+}
+
+func (z *ZBox) Resize(size image.Point) {
+	for _, w := range z.contents {
+		w.Resize(size)
 	}
 }
