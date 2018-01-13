@@ -282,7 +282,7 @@ func ExamplePopup() {
 	closePop := root.Append(center(thanksBox))
 
 	painter.Repaint(root)
-	// Repaint twice to get word-wrap behavior right.
+	// Repaint twice to get word-wrap behavior right: marcusolsson/tui-go#108
 	painter.Repaint(root)
 	fmt.Print(s.String())
 
