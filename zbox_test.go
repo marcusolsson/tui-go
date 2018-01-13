@@ -251,7 +251,7 @@ func TestZBox_Draw(t *testing.T) {
 	}
 }
 
-func ExamplePopup() {
+func ExampleZBox_popup() {
 	s := NewTestSurface(15, 7)
 	painter := NewPainter(s, NewTheme())
 
@@ -316,7 +316,7 @@ func ExamplePopup() {
 	// ...............
 }
 
-func ExamplePopupOnPopup() {
+func ExampleZBox_popupOnPopup() {
 	s := NewTestSurface(15, 7)
 	painter := NewPainter(s, NewTheme())
 
