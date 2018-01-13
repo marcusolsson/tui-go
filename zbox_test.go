@@ -315,3 +315,84 @@ func ExamplePopup() {
 	// ...............
 	// ...............
 }
+
+func ExamplePopupOnPopup() {
+	s := NewTestSurface(15, 7)
+	painter := NewPainter(s, NewTheme())
+
+	contributors := NewVBox()
+	for _, contributor := range []string{
+		"marcusolsson",
+		"cceckman",
+		"raghuvanshy",
+		"jsageryd",
+		"fenimore",
+	} {
+		contributors.Append(NewLabel(contributor))
+	}
+	contributors.Append(NewSpacer())
+	root := NewZBox(contributors)
+
+	painter.Repaint(root)
+	fmt.Print(s.String())
+	center := func(w Widget) Widget {
+		return NewVBox(NewSpacer(), NewHBox(NewSpacer(), w, NewSpacer()), NewSpacer())
+	}
+	thanks := NewLabel("Thanks for using tui-go!")
+	thanks.SetWordWrap(true)
+	thanksBox := NewVBox(thanks)
+	thanksBox.SetBorder(true)
+	thanksBox.SetFill(true)
+
+	closePop := root.Append(center(thanksBox))
+
+	painter.Repaint(root)
+	// Repaint twice to get word-wrap behavior right: marcusolsson/tui-go#108
+	painter.Repaint(root)
+	fmt.Print(s.String())
+
+	smile := NewVBox(NewLabel("😀"))
+	smile.SetBorder(true)
+	// ┌──┐
+	// │😀│
+	// └──┘
+	_ = root.Append(center(smile))
+	painter.Repaint(root)
+	fmt.Printf(s.String())
+
+
+	closePop()
+	painter.Repaint(root)
+	fmt.Printf(s.String())
+
+	// ┌──┐
+	// │😀│
+	// └──┘
+
+
+	// Output:
+	// marcusolsson...
+	// cceckman.......
+	// raghuvanshy....
+	// jsageryd.......
+	// fenimore.......
+	// ...............
+	// ...............
+	//
+	// marcusolsson...
+	// cceckman.......
+	// ┌─────┌──┐────┐
+	// │Thank│😀│r   │
+	// │using└──┘-go!│
+	// └─────────────┘
+	// ...............
+	//
+
+	// marcusolsson...
+	// cceckman.......
+	// raghuv┌──┐y...
+	// jsager│😀│....
+	// fenimo└──┘....
+	// ...............
+	// ...............
+}
