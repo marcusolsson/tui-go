@@ -282,6 +282,8 @@ func ExamplePopup() {
 	closePop := root.Append(center(thanksBox))
 
 	painter.Repaint(root)
+	// Repaint twice to get word-wrap behavior right.
+	painter.Repaint(root)
 	fmt.Print(s.String())
 
 	closePop()
@@ -298,11 +300,11 @@ func ExamplePopup() {
 	// ...............
 	//
 	// marcusolsson...
+	// cceckman.......
 	// ┌─────────────┐
 	// │Thanks for   │
 	// │using tui-go!│
 	// └─────────────┘
-	// ...............
 	// ...............
 	//
 	// marcusolsson...
