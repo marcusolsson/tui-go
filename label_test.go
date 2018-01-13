@@ -122,7 +122,7 @@ func TestLabel_Draw(t *testing.T) {
 	}
 }
 
-func ExampleWordWrap() {
+func ExampleLabel_SetWordWrap() {
 	s := NewTestSurface(15, 7)
 	painter := NewPainter(s, NewTheme())
 
