@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"fmt"
 	"image"
 	"testing"
 )
@@ -248,5 +249,67 @@ func TestZBox_Draw(t *testing.T) {
 			}
 		})
 	}
+}
 
+func ExamplePopup() {
+	s := NewTestSurface(15, 7)
+	painter := NewPainter(s, NewTheme())
+
+	contributors := NewVBox()
+	for _, contributor := range []string{
+		"marcusolsson",
+		"cceckman",
+		"raghuvanshy",
+		"jsageryd",
+		"fenimore",
+	} {
+		contributors.Append(NewLabel(contributor))
+	}
+	contributors.Append(NewSpacer())
+	root := NewZBox(contributors)
+
+	painter.Repaint(root)
+	fmt.Print(s.String())
+	center := func(w Widget) Widget {
+		return NewVBox(NewSpacer(), NewHBox(NewSpacer(), w, NewSpacer()), NewSpacer())
+	}
+	thanks := NewLabel("Thanks for using tui-go!")
+	thanks.SetWordWrap(true)
+	thanksBox := NewVBox(thanks)
+	thanksBox.SetBorder(true)
+	thanksBox.SetFill(true)
+
+	closePop := root.Append(center(thanksBox))
+
+	painter.Repaint(root)
+	fmt.Print(s.String())
+
+	closePop()
+	painter.Repaint(root)
+	fmt.Printf(s.String())
+
+	// Output:
+	// marcusolsson...
+	// cceckman.......
+	// raghuvanshy....
+	// jsageryd.......
+	// fenimore.......
+	// ...............
+	// ...............
+	//
+	// marcusolsson...
+	// ┌─────────────┐
+	// │Thanks for   │
+	// │using tui-go!│
+	// └─────────────┘
+	// ...............
+	// ...............
+	//
+	// marcusolsson...
+	// cceckman.......
+	// raghuvanshy....
+	// jsageryd.......
+	// fenimore.......
+	// ...............
+	// ...............
 }
