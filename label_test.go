@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"fmt"
 	"image"
 	"testing"
 )
@@ -119,4 +120,46 @@ func TestLabel_Draw(t *testing.T) {
 			t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
 		}
 	}
+}
+
+func ExampleWordWrap() {
+	s := NewTestSurface(15, 7)
+	painter := NewPainter(s, NewTheme())
+
+	center := func(w Widget) Widget {
+		return NewVBox(NewSpacer(), NewHBox(NewSpacer(), w, NewSpacer()), NewSpacer())
+	}
+
+	thanks := NewLabel("Thanks for using tui-go!")
+	thanks.SetWordWrap(true)
+	thanksBox := NewVBox(thanks)
+	thanksBox.SetBorder(true)
+	thanksBox.SetFill(true)
+
+	root := center(thanksBox)
+
+	// First painting: cuts off text
+	painter.Repaint(root)
+	fmt.Print(s.String())
+
+	// Second painting: wraps appropriately
+	painter.Repaint(root)
+	fmt.Print(s.String())
+
+	// Output:
+	// ...............
+	// ...............
+	// ┌─────────────┐
+	// │Thanks for   │
+	// └─────────────┘
+	// ...............
+	// ...............
+	//
+	// ...............
+	// ...............
+	// ┌─────────────┐
+	// │Thanks for   │
+	// │using tui-go!│
+	// └─────────────┘
+	// ...............
 }
