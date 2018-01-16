@@ -54,7 +54,16 @@ func (ui *tcellUI) SetTheme(t *Theme) {
 }
 
 func (ui *tcellUI) SetFocusChain(chain FocusChain) {
+	if ui.kbFocus.focusedWidget != nil {
+		ui.kbFocus.focusedWidget.SetFocused(false)
+	}
+
 	ui.kbFocus.chain = chain
+	ui.kbFocus.focusedWidget = chain.FocusDefault()
+
+	if ui.kbFocus.focusedWidget != nil {
+		ui.kbFocus.focusedWidget.SetFocused(true)
+	}
 }
 
 func (ui *tcellUI) SetKeybinding(seq string, fn func()) {
