@@ -288,7 +288,7 @@ func ExampleZBox_popup() {
 
 	closePop()
 	painter.Repaint(root)
-	fmt.Printf(s.String())
+	fmt.Print(s.String())
 
 	// Output:
 	// marcusolsson...
@@ -358,12 +358,12 @@ func ExampleZBox_popupOnPopup() {
 	// └──┘
 	_ = root.Append(center(smile))
 	painter.Repaint(root)
-	fmt.Printf(s.String())
+	fmt.Print(s.String())
 
 
 	closePop()
 	painter.Repaint(root)
-	fmt.Printf(s.String())
+	fmt.Print(s.String())
 
 	// ┌──┐
 	// │😀│
