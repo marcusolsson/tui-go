@@ -2,9 +2,25 @@ package tui
 
 import (
 	"image"
+	"strings"
 )
 
 var _ Widget = &Entry{}
+
+// EchoMode is used to determine the visibility of Entry text.
+type EchoMode int
+
+const (
+	// EchoModeNormal displays the characters as they're being entered.
+	EchoModeNormal EchoMode = iota
+
+	// EchoModeNoEcho disables text display. This is useful for when the length
+	// of the password should be kept secret.
+	EchoModeNoEcho
+
+	// EchoModePassword replaces all characters with asterisks.
+	EchoModePassword
+)
 
 // Entry is a one-line text editor. It lets the user supply the application
 // with text, e.g., to input user and password information.
@@ -16,7 +32,8 @@ type Entry struct {
 	onTextChange func(*Entry)
 	onSubmit     func(*Entry)
 
-	offset int
+	echoMode EchoMode
+	offset   int
 }
 
 // NewEntry returns a new Entry.
@@ -37,11 +54,20 @@ func (e *Entry) Draw(p *Painter) {
 		text := e.visibleText()
 
 		p.FillRect(0, 0, s.X, 1)
-		p.DrawText(0, 0, text)
+
+		switch e.echoMode {
+		case EchoModeNormal:
+			p.DrawText(0, 0, text)
+		case EchoModePassword:
+			p.DrawText(0, 0, strings.Repeat("*", len(text)))
+		}
 
 		if e.IsFocused() {
-			pos := e.text.CursorPos()
-			p.DrawCursor(pos.X-e.offset, 0)
+			var off int
+			if e.echoMode != EchoModeNoEcho {
+				off = e.text.CursorPos().X - e.offset
+			}
+			p.DrawCursor(off, 0)
 		}
 	})
 }
@@ -124,6 +150,11 @@ func (e *Entry) OnChanged(fn func(entry *Entry)) {
 // pressing KeyEnter).
 func (e *Entry) OnSubmit(fn func(entry *Entry)) {
 	e.onSubmit = fn
+}
+
+// SetEchoMode sets the echo mode of the entry.
+func (e *Entry) SetEchoMode(m EchoMode) {
+	e.echoMode = m
 }
 
 // SetText sets the text content of the entry.
