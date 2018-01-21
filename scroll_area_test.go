@@ -112,8 +112,8 @@ func TestScrollArea_Draw(t *testing.T) {
 			a.Resize(surface.size)
 			a.Draw(painter)
 
-			if surface.String() != tt.want {
-				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			if diff := surfaceEquals(surface, tt.want); diff != "" {
+				t.Error(diff)
 			}
 		})
 	}
@@ -219,8 +219,8 @@ func TestNestedScrollArea_Draw(t *testing.T) {
 			painter := NewPainter(surface, NewTheme())
 			painter.Repaint(tt.setup())
 
-			if surface.String() != tt.want {
-				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			if diff := surfaceEquals(surface, tt.want); diff != "" {
+				t.Error(diff)
 			}
 		})
 	}

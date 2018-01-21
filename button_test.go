@@ -49,7 +49,7 @@ test
 ..........
 `
 
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 }

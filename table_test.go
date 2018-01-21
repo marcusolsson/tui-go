@@ -120,8 +120,8 @@ func TestTable_Draw(t *testing.T) {
 			painter := NewPainter(surface, NewTheme())
 			painter.Repaint(tt.setup())
 
-			if surface.String() != tt.want {
-				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			if diff := surfaceEquals(surface, tt.want); diff != "" {
+				t.Error(diff)
 			}
 		})
 	}

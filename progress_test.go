@@ -2,8 +2,6 @@ package tui
 
 import (
 	"testing"
-
-	"github.com/kr/pretty"
 )
 
 func TestProgress_Draw(t *testing.T) {
@@ -20,7 +18,7 @@ func TestProgress_Draw(t *testing.T) {
 ...........
 `
 
-	if surface.String() != want {
-		t.Error(pretty.Diff(surface.String(), want))
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 }
