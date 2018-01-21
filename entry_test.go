@@ -80,8 +80,8 @@ func TestEntry_Draw(t *testing.T) {
 			painter := NewPainter(surface, NewTheme())
 			painter.Repaint(tt.setup())
 
-			if surface.String() != tt.want {
-				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			if diff := surfaceEquals(surface, tt.want); diff != "" {
+				t.Error(diff)
 			}
 		})
 	}
@@ -314,8 +314,8 @@ func TestEntry_Layout(t *testing.T) {
 			painter := NewPainter(surface, NewTheme())
 			painter.Repaint(tt.setup())
 
-			if surface.String() != tt.want {
-				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			if diff := surfaceEquals(surface, tt.want); diff != "" {
+				t.Error(diff)
 			}
 		})
 	}
@@ -336,8 +336,8 @@ Lore
 	if e.offset != 0 {
 		t.Errorf("offset = %d; want = %d", e.offset, 0)
 	}
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 
 	e.OnKeyEvent(KeyEvent{Key: KeyRight})
@@ -349,8 +349,8 @@ orem
 	if e.offset != 1 {
 		t.Errorf("offset = %d; want = %d", e.offset, 1)
 	}
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 
 	e.OnKeyEvent(KeyEvent{Key: KeyLeft})
@@ -363,8 +363,8 @@ Lore
 	if e.offset != 0 {
 		t.Errorf("offset = %d; want = %d", e.offset, 0)
 	}
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 
 	repeatKeyEvent(e, KeyEvent{Key: KeyRight}, 20)
@@ -376,8 +376,8 @@ sum
 	if e.offset != 8 {
 		t.Errorf("offset = %d; want = %d", e.offset, 8)
 	}
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 }
 
@@ -620,8 +620,8 @@ func TestEchoMode(t *testing.T) {
 			painter := NewPainter(surface, NewTheme())
 			painter.Repaint(tt.setup())
 
-			if surface.String() != tt.want {
-				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			if diff := surfaceEquals(surface, tt.want); diff != "" {
+				t.Error(diff)
 			}
 		})
 	}

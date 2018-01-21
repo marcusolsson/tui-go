@@ -304,8 +304,8 @@ func TestBox_Draw(t *testing.T) {
 			painter := NewPainter(surface, NewTheme())
 			painter.Repaint(tt.setup())
 
-			if surface.String() != tt.want {
-				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			if diff := surfaceEquals(surface, tt.want); diff != "" {
+				t.Error(diff)
 			}
 		})
 	}
@@ -601,8 +601,8 @@ func TestBox_Insert(t *testing.T) {
 
 			painter.Repaint(b)
 
-			if surface.String() != tt.want {
-				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			if diff := surfaceEquals(surface, tt.want); diff != "" {
+				t.Error(diff)
 			}
 		})
 	}
@@ -637,8 +637,8 @@ func TestBox_Prepend(t *testing.T) {
 
 	painter.Repaint(b)
 
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 }
 
@@ -667,8 +667,8 @@ func TestBox_Remove(t *testing.T) {
 
 	painter.Repaint(b)
 
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 }
 
@@ -715,7 +715,6 @@ var wideTests = []struct {
 !hello                                                                                                                                 world
 `,
 	},
-
 }
 
 func TestBox_Wide(t *testing.T) {

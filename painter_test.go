@@ -32,8 +32,8 @@ func TestMask_Full(t *testing.T) {
 ██████████
 ██████████
 `
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 }
 
@@ -64,8 +64,8 @@ func TestMask_Inset(t *testing.T) {
 .████████.
 ..........
 `
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 }
 
@@ -96,8 +96,8 @@ func TestMask_FirstCell(t *testing.T) {
 ..........
 ..........
 `
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 }
 
@@ -128,8 +128,8 @@ func TestMask_LastCell(t *testing.T) {
 ..........
 .........█
 `
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 }
 
@@ -160,8 +160,8 @@ func TestMask_MaskWithinEmptyMaskIsHidden(t *testing.T) {
 ..........
 ..........
 `
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 }
 
@@ -317,7 +317,7 @@ var styleInheritTests = []struct {
 	},
 	{
 		test: "empty second style, inherits from first",
-		theme: func() *Theme{
+		theme: func() *Theme {
 			r := NewTheme()
 			r.SetStyle("first", Style{Fg: Color(3), Bold: DecorationOn})
 			r.SetStyle("second", Style{})
@@ -333,10 +333,10 @@ var styleInheritTests = []struct {
 222..222..
 222..222..
 `,
-},
+	},
 	{
 		test: "second style overrides only explicit properties",
-		theme: func() *Theme{
+		theme: func() *Theme {
 			r := NewTheme()
 			r.SetStyle("first", Style{Fg: Color(3), Bold: DecorationOn})
 			r.SetStyle("second", Style{Underline: DecorationOn})
@@ -351,10 +351,10 @@ var styleInheritTests = []struct {
 222..666..
 222..666..
 222..666..
-`	},
+`},
 	{
 		test: "second style resets a previously set property",
-		theme: func() *Theme{
+		theme: func() *Theme {
 			r := NewTheme()
 			r.SetStyle("first", Style{Bold: DecorationOn})
 			r.SetStyle("second", Style{Bold: DecorationOff})
@@ -364,7 +364,7 @@ var styleInheritTests = []struct {
 222..000..
 222..000..
 222..000..
-`	},
+`},
 }
 
 func TestWithStyle_Inherit(t *testing.T) {

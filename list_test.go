@@ -2,8 +2,6 @@ package tui
 
 import (
 	"testing"
-
-	"github.com/kr/pretty"
 )
 
 func TestList_Draw(t *testing.T) {
@@ -22,8 +20,8 @@ bar
 ..........
 `
 
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 }
 
@@ -59,9 +57,8 @@ two
 four 
 `
 
-	if surface.String() != want {
-		t.Error(pretty.Diff(surface.String(), want))
-		return
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Fatal(diff)
 	}
 
 	// Remove an item not visible.
@@ -69,12 +66,12 @@ four
 
 	painter.Repaint(l)
 
-	if surface.String() != want {
-		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 
 	// Selected item should not have changed.
 	if l.Selected() != 1 {
-		t.Error(pretty.Diff(l.Selected, 1))
+		t.Error("got = %d; want = %d", l.Selected, 1)
 	}
 }

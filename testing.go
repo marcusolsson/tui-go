@@ -2,6 +2,7 @@ package tui
 
 import (
 	"bytes"
+	"fmt"
 	"image"
 	"strconv"
 )
@@ -148,6 +149,11 @@ func (s *TestSurface) Decorations() string {
 		buf.WriteRune('\n')
 	}
 	return buf.String()
-
 }
 
+func surfaceEquals(surface *TestSurface, want string) string {
+	if surface.String() != want {
+		return fmt.Sprintf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	}
+	return ""
+}
