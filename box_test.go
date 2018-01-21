@@ -1,8 +1,12 @@
 package tui
 
 import (
+	"bufio"
+	"bytes"
 	"image"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 var drawBoxTests = []struct {
@@ -665,5 +669,81 @@ func TestBox_Remove(t *testing.T) {
 
 	if surface.String() != want {
 		t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), want)
+	}
+}
+
+var wideTests = []struct {
+	name  string
+	setup func() Widget
+	want  string
+}{
+	{
+		name: "Maximum on right",
+		setup: func() Widget {
+			bang := NewLabel("!")
+			bang.SetSizePolicy(Maximum, Maximum)
+
+			w := NewHBox(
+				bang,
+				NewHBox(
+					NewLabel("hello"),
+					NewSpacer(),
+					NewLabel("world"),
+				),
+			)
+			return w
+		},
+		want: `
+!hello                                                                                                                                 world
+`,
+	},
+	{
+		name: "Unnested",
+		setup: func() Widget {
+			bang := NewLabel("!")
+			bang.SetSizePolicy(Preferred, Preferred)
+
+			w := NewHBox(
+				bang,
+				NewLabel("hello"),
+				NewSpacer(),
+				NewLabel("world"),
+			)
+			return w
+		},
+		want: `
+!hello                                                                                                                                 world
+`,
+	},
+
+}
+
+func TestBox_Wide(t *testing.T) {
+	for _, tt := range wideTests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			// Reproduce https://github.com/cceckman/discoirc/issues/18
+			surface := NewTestSurface(140, 1)
+			p := NewPainter(surface, NewTheme())
+
+			p.Repaint(tt.setup())
+
+			if got := surface.String(); !cmp.Equal(got, tt.want) {
+				t.Error("unexpected contents:")
+				t.Error("got:")
+
+				g := bufio.NewScanner(bytes.NewBufferString(got))
+				for g.Scan() {
+					t.Errorf("%q", g.Text())
+				}
+
+				t.Error("want:")
+				w := bufio.NewScanner(bytes.NewBufferString(tt.want))
+				for w.Scan() {
+					t.Errorf("%q", w.Text())
+				}
+			}
+
+		})
 	}
 }
