@@ -548,6 +548,85 @@ func TestIsTextRemaining(t *testing.T) {
 	}
 }
 
+var echoModeTests = []struct {
+	test  string
+	size  image.Point
+	setup func() *Entry
+	want  string
+}{
+	{
+		test: "Echo",
+		size: image.Point{15, 5},
+		setup: func() *Entry {
+			e := NewEntry()
+			e.SetText("Lorem ipsum")
+			return e
+		},
+		want: `
+Lorem ipsum    
+...............
+...............
+...............
+...............
+`,
+	},
+	{
+		test: "NoEcho",
+		size: image.Point{15, 5},
+		setup: func() *Entry {
+			e := NewEntry()
+			e.SetEchoMode(EchoModeNoEcho)
+			e.SetText("Lorem ipsum")
+			return e
+		},
+		want: `
+               
+...............
+...............
+...............
+...............
+`,
+	},
+	{
+		test: "Password",
+		size: image.Point{15, 5},
+		setup: func() *Entry {
+			e := NewEntry()
+			e.SetEchoMode(EchoModePassword)
+			e.SetText("Lorem ipsum")
+			return e
+		},
+		want: `
+***********    
+...............
+...............
+...............
+...............
+`,
+	},
+}
+
+func TestEchoMode(t *testing.T) {
+	for _, tt := range echoModeTests {
+		tt := tt
+		t.Run(tt.test, func(t *testing.T) {
+			var surface *TestSurface
+			if tt.size.X == 0 && tt.size.Y == 0 {
+				surface = NewTestSurface(10, 5)
+			} else {
+				surface = NewTestSurface(tt.size.X, tt.size.Y)
+			}
+
+			painter := NewPainter(surface, NewTheme())
+			painter.Repaint(tt.setup())
+
+			if surface.String() != tt.want {
+				t.Errorf("got = \n%s\n\nwant = \n%s", surface.String(), tt.want)
+			}
+		})
+	}
+}
+
 func repeatKeyEvent(e *Entry, ev KeyEvent, n int) {
 	for i := 0; i < n; i++ {
 		e.OnKeyEvent(ev)

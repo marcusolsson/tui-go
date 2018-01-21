@@ -17,6 +17,7 @@ func main() {
 	user.SetFocused(true)
 
 	password := tui.NewEntry()
+	password.SetEchoMode(tui.EchoModeNoEcho)
 
 	form := tui.NewGrid(0, 0)
 	form.AppendRow(tui.NewLabel("User"), tui.NewLabel("Password"))
