@@ -72,6 +72,6 @@ four
 
 	// Selected item should not have changed.
 	if l.Selected() != 1 {
-		t.Error("got = %d; want = %d", l.Selected, 1)
+		t.Errorf("got = %d; want = %d", l.Selected(), 1)
 	}
 }
