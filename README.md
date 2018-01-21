@@ -51,6 +51,8 @@ Documentation is available at [godoc.org](https://godoc.org/github.com/marcusols
 
 Make sure you check out some of the [projects using tui-go](https://godoc.org/github.com/marcusolsson/tui-go?importers).
 
+Once you've gotten started developing your first application with tui-go, you might be interested in learning about common [patterns](https://github.com/marcusolsson/tui-go/wiki/Patterns) or how you can [debug](https://github.com/marcusolsson/tui-go/wiki/Debugging) your applications.
+
 ## Related projects
 
 tui-go is mainly influenced by [Qt](https://www.qt.io/) and offers a similar programming model that has been adapted to Go and the terminal.
