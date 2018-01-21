@@ -329,7 +329,7 @@ func doLayout(ws []Widget, space int, a Alignment) []int {
 
 	// Distribute remaining space
 	for {
-		min := math.MaxInt8
+		min := math.MaxInt64
 		for i, s := range sizes {
 			p := alignedSizePolicy(a, ws[i])
 			if (p == Preferred || p == Minimum) && s <= min {
