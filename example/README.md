@@ -32,8 +32,12 @@ A basic interface for a mail client. An inbox shows the mails you've received an
 
 ### multiview
 
-Demonstrates switching between views to support multiple tabs/pages.
+Demonstrates switching between views to support multiple tabs/pages (see [tabs](#tabs) for a more complex version).
 
 ### scroll
 
 Demonstrates the use of a scroll area to provide a scrolling view of an underlying widget.
+
+### tabs
+
+Demonstrates the use of switching between views with a visual tab bar (more complex version of [multiview](#multiview)).
