@@ -32,11 +32,6 @@ func (s *ScrollArea) SizeHint() image.Point {
 	return image.Pt(15, 8)
 }
 
-// SizePolicy returns the default layout behavior.
-func (s *ScrollArea) SizePolicy() (SizePolicy, SizePolicy) {
-	return Preferred, Preferred
-}
-
 // Scroll shifts the views over the content.
 func (s *ScrollArea) Scroll(dx, dy int) {
 	s.topLeft.X += dx
