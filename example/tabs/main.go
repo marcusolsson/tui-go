@@ -85,38 +85,6 @@ func clamp(n, min, max int) int {
 	return n
 }
 
-// styledWidget allows painting of a custom style (primarily background color)
-// of a given widget that doesn't natively support styling.
-type styledWidget struct {
-	name string
-	*tui.Box
-}
-
-func (w *styledWidget) Draw(p *tui.Painter) {
-	p.WithStyle(w.name, w.Box.Draw)
-}
-
-// keybind is a keybind with a given name, used to render a keybind-bar.
-type keybind struct {
-	key  string
-	name string
-}
-
-// newKeybar returns a widget which renders a bar with a list of keybinds.
-func newKeybar(keys ...keybind) *styledWidget {
-	out := make([]tui.Widget, 0, len(keys)+1)
-	for _, s := range keys {
-		start := tui.NewLabel("[")
-		key := tui.NewLabel(s.key)
-		key.SetStyleName("keybar-key")
-		end := tui.NewLabel("] " + s.name + "  ")
-		out = append(out, start, key, end)
-	}
-
-	out = append(out, tui.NewSpacer())
-	return &styledWidget{"keybar", tui.NewHBox(out...)}
-}
-
 func main() {
 	extendedView := tui.NewList()
 	for i := 0; i < 20; i++ {
@@ -129,11 +97,8 @@ func main() {
 		&uiTab{label: tui.NewLabel(" tab 3 "), view: tui.NewLabel("some other view here x3")},
 		&uiTab{label: tui.NewLabel(" tab 4 "), view: tui.NewLabel("some other view here x4")},
 	)
-	tabLayout.SetSizePolicy(tui.Maximum, tui.Expanding)
 
-	keybar := newKeybar(keybind{"left", "prev view"}, keybind{"right", "next view"}, keybind{"esc", "quit"})
-
-	ui, err := tui.New(tui.NewVBox(tabLayout, keybar))
+	ui, err := tui.New(tabLayout)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -141,8 +106,6 @@ func main() {
 	ui.SetKeybinding("Esc", func() { ui.Quit() })
 
 	theme := tui.NewTheme()
-	theme.SetStyle("keybar", tui.Style{Bg: tui.ColorWhite, Fg: tui.ColorBlack})
-	theme.SetStyle("label.keybar-key", tui.Style{Bg: tui.ColorWhite, Fg: tui.ColorBlue, Bold: tui.DecorationOn})
 	theme.SetStyle("label.tab", tui.Style{Reverse: tui.DecorationOff})
 	theme.SetStyle("label.tab-selected", tui.Style{Reverse: tui.DecorationOn, Fg: tui.ColorMagenta, Bg: tui.ColorWhite})
 	ui.SetTheme(theme)
