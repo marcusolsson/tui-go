@@ -19,9 +19,6 @@ type UI interface {
 	Update(fn func())
 	// Quit shuts down the UI goroutine.
 	Quit()
-
-	ShowDialog(d *Dialog)
-	HideDialog()
 }
 
 // New returns a new UI with a root widget.

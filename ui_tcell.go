@@ -12,8 +12,6 @@ type tcellUI struct {
 	painter *Painter
 	root    Widget
 
-	dialog *Dialog
-
 	keybindings []*keybinding
 
 	quit chan struct{}
@@ -47,14 +45,6 @@ func newTcellUI(root Widget) (*tcellUI, error) {
 	}, nil
 }
 
-func (ui *tcellUI) ShowDialog(d *Dialog) {
-	ui.dialog = d
-}
-
-func (ui *tcellUI) HideDialog() {
-	ui.dialog = nil
-}
-
 func (ui *tcellUI) SetWidget(w Widget) {
 	ui.root = w
 }
@@ -64,7 +54,6 @@ func (ui *tcellUI) SetTheme(t *Theme) {
 }
 
 func (ui *tcellUI) SetFocusChain(chain FocusChain) {
-<<<<<<< HEAD
 	if ui.kbFocus.focusedWidget != nil {
 		ui.kbFocus.focusedWidget.SetFocused(false)
 	}
@@ -75,9 +64,6 @@ func (ui *tcellUI) SetFocusChain(chain FocusChain) {
 	if ui.kbFocus.focusedWidget != nil {
 		ui.kbFocus.focusedWidget.SetFocused(true)
 	}
-=======
-	ui.kbFocus.setFocusChain(chain)
->>>>>>> Enable focus in dialog
 }
 
 func (ui *tcellUI) SetKeybinding(seq string, fn func()) {
@@ -127,33 +113,6 @@ func (ui *tcellUI) Run() error {
 	}
 }
 
-func (ui *tcellUI) repaint() {
-	p := ui.painter
-
-	p.buffer.cells = make(map[image.Point]surfaceCell)
-	p.surface.HideCursor()
-
-	p.mask = image.Rectangle{
-		Min: image.ZP,
-		Max: p.surface.Size(),
-	}
-
-	ui.root.Resize(p.surface.Size())
-	ui.root.Draw(p)
-
-	if ui.dialog != nil {
-		dialogSize := ui.dialog.SizeHint()
-		margin := p.surface.Size().Sub(dialogSize).Div(2)
-
-		p.Translate(margin.X, margin.Y)
-		ui.dialog.Resize(dialogSize)
-		ui.dialog.Draw(p)
-		p.Restore()
-	}
-
-	p.Flush()
-}
-
 func (ui *tcellUI) handleEvent(ev event) {
 	switch e := ev.(type) {
 	case KeyEvent:
@@ -165,20 +124,16 @@ func (ui *tcellUI) handleEvent(ev event) {
 			}
 		}
 
-		if ui.dialog != nil {
-			ui.dialog.OnKeyEvent(e)
-		}
-
 		ui.kbFocus.OnKeyEvent(e)
 		ui.root.OnKeyEvent(e)
-		ui.repaint()
+		ui.painter.Repaint(ui.root)
 	case callbackEvent:
 		logger.Printf("Received callback event")
 		e.cbFn()
-		ui.repaint()
+		ui.painter.Repaint(ui.root)
 	case paintEvent:
 		logger.Printf("Received paint event")
-		ui.repaint()
+		ui.painter.Repaint(ui.root)
 	}
 }
 

@@ -83,6 +83,22 @@ func (p *Painter) Flush() {
 	p.surface.End()
 }
 
+// Repaint recalculates the layout and paints the widgets to a buffer surface before flushing them.
+func (p *Painter) Repaint(w Widget) {
+	p.buffer.cells = make(map[image.Point]surfaceCell)
+	p.surface.HideCursor()
+
+	p.mask = image.Rectangle{
+		Min: image.ZP,
+		Max: p.surface.Size(),
+	}
+
+	w.Resize(p.surface.Size())
+	w.Draw(p)
+
+	p.Flush()
+}
+
 // DrawCursor draws the cursor at the given position.
 func (p *Painter) DrawCursor(x, y int) {
 	wp := p.mapLocalToWorld(image.Point{x, y})

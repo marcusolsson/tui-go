@@ -19,6 +19,7 @@ func TestMask_Full(t *testing.T) {
 			}
 		})
 	})
+	p.Flush()
 
 	want := `
 ██████████
@@ -51,6 +52,7 @@ func TestMask_Inset(t *testing.T) {
 			}
 		})
 	})
+	p.Flush()
 
 	want := `
 ..........
@@ -83,6 +85,7 @@ func TestMask_FirstCell(t *testing.T) {
 			}
 		})
 	})
+	p.Flush()
 
 	want := `
 █.........
@@ -115,6 +118,7 @@ func TestMask_LastCell(t *testing.T) {
 			}
 		})
 	})
+	p.Flush()
 
 	want := `
 ..........
@@ -194,6 +198,7 @@ func TestWithStyle_ApplyStyle(t *testing.T) {
 			})
 		})
 	})
+	p.Flush()
 
 	wantFg := `
 .....
@@ -272,6 +277,7 @@ func TestWithStyle_Stacks(t *testing.T) {
 			}
 		})
 	})
+	p.Flush()
 
 	wantFg := `
 ..........
@@ -394,6 +400,7 @@ func TestWithStyle_Inherit(t *testing.T) {
 					})
 				})
 			})
+			p.Flush()
 
 			gotColors := surface.FgColors()
 			gotDecorations := surface.Decorations()

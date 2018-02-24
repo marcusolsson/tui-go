@@ -106,11 +106,7 @@ func TestScrollArea_Draw(t *testing.T) {
 				surface = NewTestSurface(tt.size.X, tt.size.Y)
 			}
 			painter := NewPainter(surface, NewTheme())
-
-			a := tt.setup()
-
-			a.Resize(surface.size)
-			a.Draw(painter)
+			painter.Repaint(tt.setup())
 
 			if diff := surfaceEquals(surface, tt.want); diff != "" {
 				t.Error(diff)
