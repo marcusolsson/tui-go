@@ -2,7 +2,6 @@ package tui
 
 import (
 	"image"
-	"math"
 )
 
 var _ Widget = &Box{}
@@ -329,7 +328,7 @@ func doLayout(ws []Widget, space int, a Alignment) []int {
 
 	// Distribute remaining space
 	for {
-		min := math.MaxInt64
+		min := maxInt
 		for i, s := range sizes {
 			p := alignedSizePolicy(a, ws[i])
 			if (p == Preferred || p == Minimum) && s <= min {

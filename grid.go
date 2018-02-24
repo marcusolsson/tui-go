@@ -2,7 +2,6 @@ package tui
 
 import (
 	"image"
-	"math"
 )
 
 var _ Widget = &Grid{}
@@ -265,7 +264,7 @@ func (g *Grid) doLayout(space int, a Alignment) []int {
 	for {
 		var changed bool
 		if nonZeroStretchFactors == 0 {
-			min := math.MaxInt8
+			min := maxInt
 			for _, sz := range sizes {
 				if sz < min {
 					min = sz
