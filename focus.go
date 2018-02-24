@@ -13,6 +13,15 @@ type kbFocusController struct {
 	chain FocusChain
 }
 
+func (c *kbFocusController) setFocusChain(fc FocusChain) {
+	c.chain = fc
+
+	if w := c.chain.FocusDefault(); w != nil {
+		w.SetFocused(true)
+		c.focusedWidget = w
+	}
+}
+
 func (c *kbFocusController) OnKeyEvent(e KeyEvent) {
 	if c.chain == nil {
 		return

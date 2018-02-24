@@ -84,10 +84,7 @@ func (ui *tcellUI) Run() error {
 		return err
 	}
 
-	if w := ui.kbFocus.chain.FocusDefault(); w != nil {
-		w.SetFocused(true)
-		ui.kbFocus.focusedWidget = w
-	}
+	ui.kbFocus.setFocusChain(DefaultFocusChain)
 
 	ui.screen.SetStyle(tcell.StyleDefault)
 	ui.screen.EnableMouse()
@@ -126,12 +123,12 @@ func (ui *tcellUI) handleEvent(ev event) {
 				b.handler()
 			}
 		}
+
 		ui.kbFocus.OnKeyEvent(e)
 		ui.root.OnKeyEvent(e)
 		ui.painter.Repaint(ui.root)
 	case callbackEvent:
-		// Gets stuck in a print loop when the logger is a widget.
-		//logger.Printf("Received callback event")
+		logger.Printf("Received callback event")
 		e.cbFn()
 		ui.painter.Repaint(ui.root)
 	case paintEvent:
