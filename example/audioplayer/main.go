@@ -30,6 +30,7 @@ func main() {
 	library.SetColumnStretch(0, 1)
 	library.SetColumnStretch(1, 1)
 	library.SetColumnStretch(2, 4)
+	library.SetFocused(true)
 
 	library.AppendRow(
 		tui.NewLabel("ARTIST"),

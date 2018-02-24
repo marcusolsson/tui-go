@@ -42,6 +42,7 @@ func main() {
 	inbox.SetColumnStretch(0, 3)
 	inbox.SetColumnStretch(1, 2)
 	inbox.SetColumnStretch(2, 1)
+	inbox.SetFocused(true)
 
 	for _, m := range mails {
 		inbox.AppendRow(
