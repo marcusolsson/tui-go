@@ -5,6 +5,30 @@ import (
 	"testing"
 )
 
+func TestGridSizeHint(t *testing.T) {
+	g := NewGrid(0, 0)
+	g.AppendRow(
+		NewLabel("foo"),
+		NewLabel("this is a long column"),
+		NewLabel("bar"),
+	)
+	g.SetBorder(true)
+
+	surface := NewTestSurface(g.SizeHint().X, g.SizeHint().Y)
+	painter := NewPainter(surface, NewTheme())
+	painter.Repaint(g)
+
+	want := `
+┌─────────────────────┬─────────────────────┬─────────────────────┐
+│foo..................│this is a long column│bar..................│
+└─────────────────────┴─────────────────────┴─────────────────────┘
+`
+
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
+	}
+}
+
 var drawGridTests = []struct {
 	test  string
 	size  image.Point

@@ -129,15 +129,22 @@ func (g *Grid) SizeHint() image.Point {
 		return image.Point{}
 	}
 
-	var width int
+	var maxWidth int
 	for i := 0; i < g.cols; i++ {
-		width += g.columnWidth(i)
+		if w := g.columnWidth(i); w > maxWidth {
+			maxWidth = w
+		}
 	}
 
-	var height int
+	var maxHeight int
 	for j := 0; j < g.rows; j++ {
-		height += g.rowHeight(j)
+		if h := g.rowHeight(j); h > maxHeight {
+			maxHeight = h
+		}
 	}
+
+	width := maxWidth * g.cols
+	height := maxHeight * g.rows
 
 	if g.hasBorder {
 		width += g.cols + 1
