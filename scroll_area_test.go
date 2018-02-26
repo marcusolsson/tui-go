@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"fmt"
 	"image"
 	"testing"
 )
@@ -93,6 +94,24 @@ Lorem ipsu
 cing elit.
 `,
 	},
+	{
+		test: "Scroll horizontally and vertically",
+		size: image.Point{10, 3},
+		setup: func() *ScrollArea {
+			b := NewVBox()
+			for i := 0; i < 10; i++ {
+				b.Append(NewLabel(fmt.Sprintf("row %d", i)))
+			}
+			a := NewScrollArea(b)
+			a.Scroll(1, 2)
+			return a
+		},
+		want: `
+ow 2......
+ow 3......
+ow 4......
+`,
+	},
 }
 
 func TestScrollArea_Draw(t *testing.T) {
@@ -116,6 +135,117 @@ func TestScrollArea_Draw(t *testing.T) {
 				t.Error(diff)
 			}
 		})
+	}
+}
+
+func TestScrollArea_ScrollToBottom(t *testing.T) {
+	surface := NewTestSurface(10, 3)
+	painter := NewPainter(surface, NewTheme())
+
+	b := NewVBox()
+	for i := 0; i < 10; i++ {
+		b.Append(NewLabel(fmt.Sprintf("row %d", i)))
+	}
+	a := NewScrollArea(b)
+
+	a.Resize(surface.size)
+
+	a.ScrollToBottom()
+
+	a.Draw(painter)
+
+	want := `
+row 7.....
+row 8.....
+row 9.....
+`
+
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
+	}
+}
+
+func TestScrollArea_ScrollToBottom_MaintainHScroll(t *testing.T) {
+	surface := NewTestSurface(10, 3)
+	painter := NewPainter(surface, NewTheme())
+
+	b := NewVBox()
+	for i := 0; i < 10; i++ {
+		b.Append(NewLabel(fmt.Sprintf("row %d", i)))
+	}
+	a := NewScrollArea(b)
+
+	a.Resize(surface.size)
+
+	a.Scroll(2, 0)
+	a.ScrollToBottom()
+
+	a.Draw(painter)
+
+	want := `
+w 7.......
+w 8.......
+w 9.......
+`
+
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
+	}
+}
+
+func TestScrollArea_ScrollToTop(t *testing.T) {
+	surface := NewTestSurface(10, 3)
+	painter := NewPainter(surface, NewTheme())
+
+	b := NewVBox()
+	for i := 0; i < 10; i++ {
+		b.Append(NewLabel(fmt.Sprintf("row %d", i)))
+	}
+	a := NewScrollArea(b)
+
+	a.Resize(surface.size)
+
+	a.Scroll(0, 2)
+	a.ScrollToTop()
+
+	a.Draw(painter)
+
+	want := `
+row 0.....
+row 1.....
+row 2.....
+`
+
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
+	}
+}
+
+func TestScrollArea_ScrollToTop_MaintainHScroll(t *testing.T) {
+	surface := NewTestSurface(10, 3)
+	painter := NewPainter(surface, NewTheme())
+
+	b := NewVBox()
+	for i := 0; i < 10; i++ {
+		b.Append(NewLabel(fmt.Sprintf("row %d", i)))
+	}
+	a := NewScrollArea(b)
+
+	a.Resize(surface.size)
+
+	a.Scroll(2, 5)
+	a.ScrollToTop()
+
+	a.Draw(painter)
+
+	want := `
+w 0.......
+w 1.......
+w 2.......
+`
+
+	if diff := surfaceEquals(surface, want); diff != "" {
+		t.Error(diff)
 	}
 }
 

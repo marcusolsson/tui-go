@@ -32,6 +32,9 @@ func main() {
 	ui.SetKeybinding("Down", func() { s.Scroll(0, 1) })
 	ui.SetKeybinding("Left", func() { s.Scroll(-1, 0) })
 	ui.SetKeybinding("Right", func() { s.Scroll(1, 0) })
+	ui.SetKeybinding("a", func() { s.SetAutoscrollToBottom(true) })
+	ui.SetKeybinding("t", func() { s.ScrollToTop() })
+	ui.SetKeybinding("b", func() { s.ScrollToBottom() })
 
 	if err := ui.Run(); err != nil {
 		log.Fatal(err)
