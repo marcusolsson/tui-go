@@ -69,6 +69,8 @@ func (e *TextEdit) OnKeyEvent(ev KeyEvent) {
 		switch ev.Key {
 		case KeyEnter:
 			e.text.WriteRune('\n')
+		case KeyBackspace:
+			fallthrough
 		case KeyBackspace2:
 			e.text.Backspace()
 			if e.offset > 0 && !e.isTextRemaining() {

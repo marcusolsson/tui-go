@@ -92,6 +92,8 @@ func (e *Entry) OnKeyEvent(ev KeyEvent) {
 			if e.onSubmit != nil {
 				e.onSubmit(e)
 			}
+		case KeyBackspace:
+			fallthrough
 		case KeyBackspace2:
 			e.text.Backspace()
 			if e.offset > 0 && !e.isTextRemaining() {
