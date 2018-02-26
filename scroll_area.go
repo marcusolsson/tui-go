@@ -12,7 +12,8 @@ type ScrollArea struct {
 
 	Widget Widget
 
-	topLeft image.Point
+	topLeft    image.Point
+	autoscroll bool
 }
 
 // NewScrollArea returns a new ScrollArea.
@@ -38,6 +39,21 @@ func (s *ScrollArea) Scroll(dx, dy int) {
 	s.topLeft.Y += dy
 }
 
+// ScrollToBottom ensures the bottom-most part of the scroll area is visible.
+func (s *ScrollArea) ScrollToBottom() {
+	s.topLeft.Y = s.Widget.SizeHint().Y - s.Size().Y
+}
+
+// ScrollToTop resets the vertical scroll position.
+func (s *ScrollArea) ScrollToTop() {
+	s.topLeft.Y = 0
+}
+
+// SetAutoscrollToBottom makes sure the content is scrolled to bottom on resize.
+func (s *ScrollArea) SetAutoscrollToBottom(autoscroll bool) {
+	s.autoscroll = autoscroll
+}
+
 // Draw draws the scroll area.
 func (s *ScrollArea) Draw(p *Painter) {
 	p.Translate(-s.topLeft.X, -s.topLeft.Y)
@@ -51,6 +67,10 @@ func (s *ScrollArea) Draw(p *Painter) {
 
 // Resize resizes the scroll area and the underlying widget.
 func (s *ScrollArea) Resize(size image.Point) {
-	s.WidgetBase.Resize(size)
 	s.Widget.Resize(s.Widget.SizeHint())
+	s.WidgetBase.Resize(size)
+
+	if s.autoscroll {
+		s.ScrollToBottom()
+	}
 }

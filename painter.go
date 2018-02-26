@@ -74,8 +74,9 @@ func (p *Painter) Repaint(w Widget) {
 
 	p.surface.HideCursor()
 
-	p.Begin()
 	w.Resize(p.surface.Size())
+
+	p.Begin()
 	w.Draw(p)
 	p.End()
 }
