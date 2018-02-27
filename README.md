@@ -11,6 +11,12 @@ tui (pronounced _tooey_) provides a higher-level programming model for building 
 
 _IMPORTANT:_ tui-go is still in an experimental phase so please don't use it for anything other than experiments, yet.
 
+**Update**: I created tui-go as an experiment because I wanted a simpler way of creating terminal-based user interfaces. It has since then become a project, with all the work that comes with it. While it's been really fun, unfortunately I'm no longer able to maintain this project. 
+
+Since I started working on tui-go, a number of similar projects have popped up. One that I think shows great promise is [rivo/tview](https://github.com/rivo/tview), which embodies much of what I envisioned for tui-go. I highly recommend trying it out!
+
+Thanks all of you who have contributed and supported tui-go!
+
 ![Screenshot](example/chat/screenshot.png)
 
 ## Installation
