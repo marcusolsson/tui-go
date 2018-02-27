@@ -126,10 +126,7 @@ func main() {
 	theme := tui.NewTheme()
 	theme.SetStyle("box.focused.border", tui.Style{Fg: tui.ColorYellow, Bg: tui.ColorDefault})
 
-	ui, err := tui.New(root)
-	if err != nil {
-		log.Fatal(err)
-	}
+	ui := tui.New(root)
 
 	ui.SetTheme(theme)
 	ui.SetKeybinding("Esc", func() { ui.Quit() })
