@@ -32,8 +32,6 @@ func main() {
 	sidebar.SetBorder(true)
 
 	history := tui.NewVBox()
-	history.SetBorder(true)
-	history.Append(tui.NewSpacer())
 
 	for _, m := range posts {
 		history.Append(tui.NewHBox(
@@ -44,6 +42,12 @@ func main() {
 		))
 	}
 
+	historyScroll := tui.NewScrollArea(history)
+	historyScroll.SetAutoscrollToBottom(true)
+
+	historyBox := tui.NewVBox(historyScroll)
+	historyBox.SetBorder(true)
+
 	input := tui.NewEntry()
 	input.SetFocused(true)
 	input.SetSizePolicy(tui.Expanding, tui.Maximum)
@@ -52,7 +56,7 @@ func main() {
 	inputBox.SetBorder(true)
 	inputBox.SetSizePolicy(tui.Expanding, tui.Maximum)
 
-	chat := tui.NewVBox(history, inputBox)
+	chat := tui.NewVBox(historyBox, inputBox)
 	chat.SetSizePolicy(tui.Expanding, tui.Expanding)
 
 	input.OnSubmit(func(e *tui.Entry) {
