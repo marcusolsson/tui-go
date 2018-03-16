@@ -97,7 +97,6 @@ func (ui *tcellUI) Run() error {
 	}
 
 	ui.screen.SetStyle(tcell.StyleDefault)
-	ui.screen.EnableMouse()
 	ui.screen.Clear()
 
 	go func() {
