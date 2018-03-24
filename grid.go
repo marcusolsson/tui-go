@@ -409,14 +409,14 @@ func (g *Grid) SetBorder(enabled bool) {
 	g.hasBorder = enabled
 }
 
-// This is a global config.
 // SetSimpleBorder sets the border use [+ - |].
+// This is a global config.
 func (g *Grid) SetSimpleBorder() {
 	simpleBorder()
 }
 
-// This is a global config.
 // SetDefaultBorder sets the border use [┼ ─ │ ┬ ┤ ├ ┴ ┌ ┐ └ ┘].
+// This is a global config.
 func (g *Grid) SetDefaultBorder() {
 	defaultBorder()
 }
