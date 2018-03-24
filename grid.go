@@ -49,8 +49,8 @@ func (g *Grid) Draw(p *Painter) {
 		for i := 0; i < g.cols-1; i++ {
 			x := g.colWidths[i] + coloff + border
 			p.DrawVerticalLine(x, 0, s.Y-1)
-			p.DrawRune(x, 0, '┬')
-			p.DrawRune(x, s.Y-1, '┴')
+			p.DrawRune(x, 0, GetBorder('┬'))
+			p.DrawRune(x, s.Y-1, GetBorder('┴'))
 			coloff = x
 		}
 
@@ -59,8 +59,8 @@ func (g *Grid) Draw(p *Painter) {
 		for j := 0; j < g.rows-1; j++ {
 			y := g.rowHeights[j] + rowoff + border
 			p.DrawHorizontalLine(0, s.X-1, y)
-			p.DrawRune(0, y, '├')
-			p.DrawRune(s.X-1, y, '┤')
+			p.DrawRune(0, y, GetBorder('├'))
+			p.DrawRune(s.X-1, y, GetBorder('┤'))
 			rowoff = y
 		}
 
@@ -71,7 +71,7 @@ func (g *Grid) Draw(p *Painter) {
 			coloff = 0
 			for i := 0; i < g.cols-1; i++ {
 				x := g.colWidths[i] + coloff + border
-				p.DrawRune(x, y, '┼')
+				p.DrawRune(x, y, GetBorder('┼'))
 				coloff = x
 			}
 			rowoff = y
@@ -407,6 +407,18 @@ func (g *Grid) SetCell(pos image.Point, w Widget) {
 // SetBorder sets whether the border is visible or not.
 func (g *Grid) SetBorder(enabled bool) {
 	g.hasBorder = enabled
+}
+
+// This is a global config.
+// SetSmallBorder sets the border use [+ - |].
+func (g *Grid) SetSimpleBorder() {
+	SimpleBorder()
+}
+
+// This is a global config.
+// SetSmallBorder sets the border use [┼ ─ │ ┬ ┤ ├ ┴ ┌ ┐ └ ┘].
+func (g *Grid) SetDefaultBorder() {
+	DefaultBorder()
 }
 
 // AppendRow adds a new row at the end.
