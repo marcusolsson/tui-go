@@ -410,15 +410,15 @@ func (g *Grid) SetBorder(enabled bool) {
 }
 
 // This is a global config.
-// SetSmallBorder sets the border use [+ - |].
+// SetSimpleBorder sets the border use [+ - |].
 func (g *Grid) SetSimpleBorder() {
-	SimpleBorder()
+	simpleBorder()
 }
 
 // This is a global config.
-// SetSmallBorder sets the border use [┼ ─ │ ┬ ┤ ├ ┴ ┌ ┐ └ ┘].
+// SetDefaultBorder sets the border use [┼ ─ │ ┬ ┤ ├ ┴ ┌ ┐ └ ┘].
 func (g *Grid) SetDefaultBorder() {
-	DefaultBorder()
+	defaultBorder()
 }
 
 // AppendRow adds a new row at the end.

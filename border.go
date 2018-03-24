@@ -1,27 +1,27 @@
 package tui
 
 const (
-	RuneMinus      = '-'
-	RunePlusSmall  = '+'
-	RuneVLineSmall = '|'
+	runeMinus      = '-'
+	runePlusSmall  = '+'
+	runeVLineSmall = '|'
 
-	RunePlus     = '┼'
-	RuneHLine    = '─'
-	RuneVLine    = '│'
-	RuneTTee     = '┬'
-	RuneRTee     = '┤'
-	RuneLTee     = '├'
-	RuneBTee     = '┴'
-	RuneULCorner = '┌'
-	RuneURCorner = '┐'
-	RuneLLCorner = '└'
-	RuneLRCorner = '┘'
+	runePlus     = '┼'
+	runeHLine    = '─'
+	runeVLine    = '│'
+	runeTTee     = '┬'
+	runeRTee     = '┤'
+	runeLTee     = '├'
+	runeBTee     = '┴'
+	runeULCorner = '┌'
+	runeURCorner = '┐'
+	runeLLCorner = '└'
+	runeLRCorner = '┘'
 )
 
 var runeFallbacks = map[rune]rune{}
 
 func init() {
-	DefaultBorder()
+	defaultBorder()
 }
 
 // default
@@ -30,19 +30,19 @@ func init() {
 //	││A       │apple  ││
 //	│└────────┴───────┘│
 //	└──────────────────┘
-func DefaultBorder() {
+func defaultBorder() {
 	runeFallbacks = map[rune]rune{
-		RunePlus:     RunePlus,
-		RuneHLine:    RuneHLine,
-		RuneVLine:    RuneVLine,
-		RuneTTee:     RuneTTee,
-		RuneRTee:     RuneRTee,
-		RuneLTee:     RuneLTee,
-		RuneBTee:     RuneBTee,
-		RuneULCorner: RuneULCorner,
-		RuneURCorner: RuneURCorner,
-		RuneLLCorner: RuneLLCorner,
-		RuneLRCorner: RuneLRCorner,
+		runePlus:     runePlus,
+		runeHLine:    runeHLine,
+		runeVLine:    runeVLine,
+		runeTTee:     runeTTee,
+		runeRTee:     runeRTee,
+		runeLTee:     runeLTee,
+		runeBTee:     runeBTee,
+		runeULCorner: runeULCorner,
+		runeURCorner: runeURCorner,
+		runeLLCorner: runeLLCorner,
+		runeLRCorner: runeLRCorner,
 	}
 }
 
@@ -52,23 +52,24 @@ func DefaultBorder() {
 //	||A       |apple  ||
 //	|+--------+-------+|
 //	+------------------+
-func SimpleBorder() {
+func simpleBorder() {
 	runeFallbacks = map[rune]rune{
-		RuneHLine: RuneMinus,
-		RuneVLine: RuneVLineSmall,
+		runeHLine: runeMinus,
+		runeVLine: runeVLineSmall,
 
-		RunePlus:     RunePlusSmall,
-		RuneLLCorner: RunePlusSmall,
-		RuneLRCorner: RunePlusSmall,
-		RuneTTee:     RunePlusSmall,
-		RuneRTee:     RunePlusSmall,
-		RuneLTee:     RunePlusSmall,
-		RuneBTee:     RunePlusSmall,
-		RuneULCorner: RunePlusSmall,
-		RuneURCorner: RunePlusSmall,
+		runePlus:     runePlusSmall,
+		runeLLCorner: runePlusSmall,
+		runeLRCorner: runePlusSmall,
+		runeTTee:     runePlusSmall,
+		runeRTee:     runePlusSmall,
+		runeLTee:     runePlusSmall,
+		runeBTee:     runePlusSmall,
+		runeULCorner: runePlusSmall,
+		runeURCorner: runePlusSmall,
 	}
 }
 
+// GetBorder get a simple or default border in a compatible way
 func GetBorder(k rune) rune {
 	return runeFallbacks[k]
 }
