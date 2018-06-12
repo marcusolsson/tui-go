@@ -19,6 +19,8 @@ type UI interface {
 	Update(fn func())
 	// Quit shuts down the UI goroutine.
 	Quit()
+	// Repaint the UI
+	Repaint()
 }
 
 // New returns a new UI with a root widget.

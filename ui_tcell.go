@@ -45,6 +45,10 @@ func newTcellUI(root Widget) (*tcellUI, error) {
 	}, nil
 }
 
+func (ui *tcellUI) Repaint() {
+	ui.painter.Repaint(ui.root)
+}
+
 func (ui *tcellUI) SetWidget(w Widget) {
 	ui.root = w
 }
