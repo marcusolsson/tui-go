@@ -88,10 +88,10 @@ func (ui *tcellUI) Run() error {
 		return err
 	}
 
+	failed := true
 	defer func() {
-		if r := recover(); r != nil {
+		if failed {
 			ui.screen.Fini()
-			logger.Printf("Panic: %s", r)
 		}
 	}()
 
@@ -119,6 +119,7 @@ func (ui *tcellUI) Run() error {
 	for {
 		select {
 		case <-ui.quit:
+			failed = false
 			return nil
 		case ev := <-ui.eventQueue:
 			ui.handleEvent(ev)
