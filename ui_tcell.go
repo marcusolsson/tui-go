@@ -83,15 +83,19 @@ func (ui *tcellUI) ClearKeybindings() {
 	ui.keybindings = make([]*keybinding, 0)
 }
 
-func (ui *tcellUI) Run() error {
-	if err := ui.screen.Init(); err != nil {
-		return err
+func (ui *tcellUI) Run() (err error) {
+	if err = ui.screen.Init(); err != nil {
+		return
 	}
 
 	defer func() {
 		if r := recover(); r != nil {
 			ui.screen.Fini()
-			logger.Printf("Panic: %s", r)
+			if e, ok := r.(error); ok {
+				err = e
+			} else {
+				logger.Printf("Panic: %v", r)
+			}
 		}
 	}()
 
@@ -119,7 +123,7 @@ func (ui *tcellUI) Run() error {
 	for {
 		select {
 		case <-ui.quit:
-			return nil
+			return
 		case ev := <-ui.eventQueue:
 			ui.handleEvent(ev)
 		}
