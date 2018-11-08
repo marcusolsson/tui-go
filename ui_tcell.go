@@ -84,14 +84,19 @@ func (ui *tcellUI) ClearKeybindings() {
 }
 
 func (ui *tcellUI) Run() error {
-	if err := ui.screen.Init(); err != nil {
+	var err error
+	
+	if err = ui.screen.Init(); err != nil {
 		return err
 	}
 
 	defer func() {
 		if r := recover(); r != nil {
 			ui.screen.Fini()
-			logger.Printf("Panic: %s", r)
+			if e, ok := r.(error); ok {
+				err = e
+			}
+			logger.Printf("Panic: %v", r)
 		}
 	}()
 
