@@ -69,6 +69,8 @@ var DefaultTheme = &Theme{
 		"list.item.selected":  {Reverse: DecorationOn},
 		"table.cell.selected": {Reverse: DecorationOn},
 		"button.focused":      {Reverse: DecorationOn},
+		//"box.focused.border.title":      {Reverse: DecorationOn},
+		//"box.border":      {Fg: ColorGreen},
 	},
 }
 

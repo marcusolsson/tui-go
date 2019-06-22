@@ -118,26 +118,44 @@ func (p *Painter) DrawVerticalLine(x, y1, y2 int) {
 }
 
 // DrawRect paints a rectangle using box characters.
-func (p *Painter) DrawRect(x, y, w, h int) {
+func (p *Painter) DrawRect(x, y, w, h int, foc bool) {
+
 	for j := 0; j < h; j++ {
 		for i := 0; i < w; i++ {
 			m := i + x
 			n := j + y
-
-			switch {
-			case i == 0 && j == 0:
-				p.DrawRune(m, n, '┌')
-			case i == w-1 && j == 0:
-				p.DrawRune(m, n, '┐')
-			case i == 0 && j == h-1:
-				p.DrawRune(m, n, '└')
-			case i == w-1 && j == h-1:
-				p.DrawRune(m, n, '┘')
-			case i == 0 || i == w-1:
-				p.DrawRune(m, n, '│')
-			case j == 0 || j == h-1:
-				p.DrawRune(m, n, '─')
+			if foc {
+				switch {
+				case i == 0 && j == 0:
+					p.DrawRune(m, n, '╔')
+				case i == w-1 && j == 0:
+					p.DrawRune(m, n, '╗')
+				case i == 0 && j == h-1:
+					p.DrawRune(m, n, '╚')
+				case i == w-1 && j == h-1:
+					p.DrawRune(m, n, '╝')
+				case i == 0 || i == w-1:
+					p.DrawRune(m, n, '║')
+				case j == 0 || j == h-1:
+					p.DrawRune(m, n, '═')
+				}
+			} else {
+				switch {
+				case i == 0 && j == 0:
+					p.DrawRune(m, n, '╭')
+				case i == w-1 && j == 0:
+					p.DrawRune(m, n, '╮')
+				case i == 0 && j == h-1:
+					p.DrawRune(m, n, '╰')
+				case i == w-1 && j == h-1:
+					p.DrawRune(m, n, '╯')
+				case i == 0 || i == w-1:
+					p.DrawRune(m, n, '│')
+				case j == 0 || j == h-1:
+					p.DrawRune(m, n, '─')
+				}
 			}
+
 		}
 	}
 }
