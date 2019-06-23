@@ -1,6 +1,9 @@
 package tui
 
-import "image"
+import (
+	"github.com/williamsharkey/ui"
+	"image"
+)
 
 var _ Widget = &List{}
 
@@ -25,16 +28,37 @@ func NewList() *List {
 
 // Draw draws the list.
 func (l *List) Draw(p *Painter) {
+
+	if l.selected >= l.pos+l.Size().Y {
+		// scroll up
+		l.pos = ui.MaxInt(l.selected-l.Size().Y+1, 0)
+	} else if l.selected < l.pos && l.selected > -1 {
+		// scroll down
+		l.pos = l.selected
+	} else if (l.pos + l.Size().Y) > l.Length() {
+		// on resizing window, scroll up if there is unused space at bottom
+		l.pos = l.Length() - l.Size().Y
+	}
+
+	j := 0
 	for i, item := range l.items {
+		if i < l.pos {
+			// skip until we come to position
+			continue
+		}
 		style := "list.item"
-		if i == l.selected-l.pos {
+		if i == l.selected {
 			style += ".selected"
 		}
 		p.WithStyle(style, func(p *Painter) {
-			p.FillRect(0, i, l.Size().X, 1)
-			p.DrawText(0, i, item)
+			p.FillRect(0, j, l.Size().X, 1)
+			p.DrawText(0, j, item)
 		})
+		j = j + 1
 	}
+
+	// uncomment to debug position / selection
+	// p.DrawText(10, 0, strconv.Itoa(l.pos)+" "+strconv.Itoa(l.selected))
 }
 
 // SizeHint returns the recommended size for the list.
@@ -74,12 +98,11 @@ func (l *List) OnKeyEvent(ev KeyEvent) {
 }
 
 func (l *List) moveUp() {
+	if l.selected == -1 {
+		l.selected = l.Length() - 1
+	}
 	if l.selected > 0 {
 		l.selected--
-
-		if l.selected < l.pos {
-			l.pos--
-		}
 	}
 	if l.onSelectionChanged != nil {
 		l.onSelectionChanged(l)
@@ -89,9 +112,6 @@ func (l *List) moveUp() {
 func (l *List) moveDown() {
 	if l.selected < len(l.items)-1 {
 		l.selected++
-		if l.selected >= l.pos+len(l.items) {
-			l.pos++
-		}
 	}
 	if l.onSelectionChanged != nil {
 		l.onSelectionChanged(l)
@@ -106,7 +126,6 @@ func (l *List) AddItems(items ...string) {
 // RemoveItems clears all the items from the list.
 func (l *List) RemoveItems() {
 	l.items = []string{}
-	l.pos = 0
 	l.selected = -1
 	if l.onSelectionChanged != nil {
 		l.onSelectionChanged(l)
@@ -115,10 +134,7 @@ func (l *List) RemoveItems() {
 
 // RemoveItem removes the item at the given position.
 func (l *List) RemoveItem(i int) {
-	// Adjust pos and selected before removing.
-	if l.pos >= len(l.items) {
-		l.pos--
-	}
+
 	if l.selected == i {
 		l.selected = -1
 	} else if l.selected > i {

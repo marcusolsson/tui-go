@@ -87,6 +87,10 @@ func (l *Flexlist) OnKeyEvent(ev KeyEvent) {
 		l.moveUp()
 	case 'j':
 		l.moveDown()
+	case 'h':
+		l.moveLeft()
+	case 'l':
+		l.moveRight()
 	}
 }
 
@@ -119,10 +123,14 @@ func (l *Flexlist) moveLeft() {
 func (l *Flexlist) moveRight() {
 	if l.selected < len(l.items)-l.Size().Y {
 		l.selected = l.selected + l.Size().Y
-		if l.selected >= l.pos+len(l.items) {
-			l.pos = l.pos + l.Size().Y
-		}
+
+	} else {
+
 	}
+	if l.selected >= l.pos+len(l.items) {
+		l.pos = l.pos + l.Size().Y
+	}
+
 	if l.onSelectionChanged != nil {
 		l.onSelectionChanged(l)
 	}
