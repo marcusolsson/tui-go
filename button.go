@@ -62,7 +62,8 @@ func (b *Button) OnKeyEvent(ev KeyEvent) {
 	if !b.IsFocused() {
 		return
 	}
-	if ev.Key == KeyEnter && b.onActivated != nil {
+	const spaceRune = ' '
+	if (ev.Key == KeyEnter || ev.Rune == spaceRune) && b.onActivated != nil {
 		b.onActivated(b)
 	}
 }
@@ -70,4 +71,9 @@ func (b *Button) OnKeyEvent(ev KeyEvent) {
 // OnActivated allows a custom function to be run whenever the button is activated.
 func (b *Button) OnActivated(fn func(b *Button)) {
 	b.onActivated = fn
+}
+
+func (b *Button) SetText(s string) *Button {
+	b.text = s
+	return b
 }

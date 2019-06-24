@@ -118,11 +118,21 @@ func (b *Box) Draw(p *Painter) {
 
 		if b.border {
 			p.WithStyle(style+".border", func(p *Painter) {
-				p.DrawRect(0, 0, sz.X, sz.Y)
+				p.DrawRect(0, 0, sz.X, sz.Y, b.IsFocused())
 			})
-			p.WithStyle(style, func(p *Painter) {
+			p.WithStyle(style+".border", func(p *Painter) {
 				p.WithMask(image.Rect(0, 0, sz.X-1, 1), func(p *Painter) {
-					p.DrawText(1, 0, b.title)
+					if b.title != "" {
+						if b.IsFocused() {
+							p.DrawText(1, 0, "╗ "+b.title+" ╔")
+						} else {
+							p.DrawText(1, 0, "╮ "+b.title+" ╭")
+						}
+
+					}
+					//p.WithStyle(style+".border.title", func(p *Painter) {
+
+					//})
 				})
 			})
 			p.FillRect(1, 1, sz.X-2, sz.Y-2)

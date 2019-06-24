@@ -42,7 +42,7 @@ func (g *Grid) Draw(p *Painter) {
 		border := 1
 
 		// Draw outmost border.
-		p.DrawRect(0, 0, s.X, s.Y)
+		p.DrawRect(0, 0, s.X, s.Y, g.IsFocused())
 
 		// Draw column dividers.
 		var coloff int
