@@ -10,5 +10,5 @@ type keybinding struct {
 }
 
 func (b *keybinding) match(ev KeyEvent) bool {
-	return strings.ToLower(b.sequence) == strings.ToLower(ev.Name())
+	return strings.EqualFold(b.sequence, ev.Name())
 }
