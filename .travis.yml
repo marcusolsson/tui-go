@@ -1,14 +1,17 @@
 language: go
-sudo: false
+
 go:
-    - 1.9.x
-    - tip
+  - 1.11.x
+  - tip
+
+env:
+  - GO111MODULE=on
+
 install:
-    - go get -t -v ./...
-    - go get github.com/golang/lint/golint
-    - go get honnef.co/go/tools/cmd/staticcheck
+  - go get golang.org/x/lint/golint
+  - go get honnef.co/go/tools/cmd/staticcheck
+
 script:
-    - go test -v -race ./...
-    - go vet ./...
-    - golint -set_exit_status
-    - staticcheck ./...
+  - go test -v -race ./...
+  - golint -set_exit_status
+  - staticcheck ./...
