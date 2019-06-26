@@ -16,12 +16,12 @@ func NewSpacer() *Spacer {
 
 // MinSizeHint returns the minimum size the widget is allowed to be.
 func (s *Spacer) MinSizeHint() image.Point {
-	return image.ZP
+	return image.Point{}
 }
 
 // SizeHint returns the recommended size for the spacer.
 func (s *Spacer) SizeHint() image.Point {
-	return image.ZP
+	return image.Point{}
 }
 
 // SizePolicy returns the default layout behavior.

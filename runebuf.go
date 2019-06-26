@@ -80,7 +80,7 @@ func (r *RuneBuffer) getSplitByLine(w int) []string {
 // CursorPos returns the coordinate for the cursor for a given width.
 func (r *RuneBuffer) CursorPos() image.Point {
 	if r.width == 0 {
-		return image.ZP
+		return image.Point{}
 	}
 
 	sp := r.SplitByLine()
