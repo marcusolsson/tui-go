@@ -37,7 +37,7 @@ func NewPainter(s Surface, p *Theme) *Painter {
 		surface: s,
 		style:   p.Style("normal"),
 		mask: image.Rectangle{
-			Min: image.ZP,
+			Min: image.Point{},
 			Max: s.Size(),
 		},
 	}
@@ -68,7 +68,7 @@ func (p *Painter) End() {
 // Repaint clears the surface, draws the scene and flushes it.
 func (p *Painter) Repaint(w Widget) {
 	p.mask = image.Rectangle{
-		Min: image.ZP,
+		Min: image.Point{},
 		Max: p.surface.Size(),
 	}
 

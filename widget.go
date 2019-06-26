@@ -65,7 +65,7 @@ func (w *WidgetBase) Size() image.Point {
 
 // SizeHint returns the size hint of the widget.
 func (w *WidgetBase) SizeHint() image.Point {
-	return image.ZP
+	return image.Point{}
 }
 
 // SetSizePolicy sets the size policy for horizontal and vertical directions.

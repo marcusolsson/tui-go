@@ -142,7 +142,7 @@ func (b *Box) Draw(p *Painter) {
 			}
 
 			p.WithMask(image.Rectangle{
-				Min: image.ZP,
+				Min: image.Point{},
 				Max: child.Size(),
 			}, func(p *Painter) {
 				child.Draw(p)

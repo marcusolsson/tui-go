@@ -86,7 +86,7 @@ func (t *Table) Draw(p *Painter) {
 					p.FillRect(0, 0, size.X, size.Y)
 
 					p.WithMask(image.Rectangle{
-						Min: image.ZP,
+						Min: image.Point{},
 						Max: size,
 					}, func(p *Painter) {
 						w.Draw(p)

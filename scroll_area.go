@@ -25,7 +25,7 @@ func NewScrollArea(w Widget) *ScrollArea {
 
 // MinSizeHint returns the minimum size the widget is allowed to be.
 func (s *ScrollArea) MinSizeHint() image.Point {
-	return image.ZP
+	return image.Point{}
 }
 
 // SizeHint returns the size hint of the underlying widget.
