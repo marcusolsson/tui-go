@@ -223,6 +223,23 @@ var drawGridTests = []struct {
 └─┴─────────┴──────────────────┴─┘
 `,
 	},
+	{
+		test: "Empty grid with simple border",
+		size: image.Point{15, 5},
+		setup: func() *Grid {
+			g := NewGrid(0, 0)
+			g.SetBorder(true)
+			g.SetSimpleBorder()
+			return g
+		},
+		want: `
++-------------+
+|.............|
+|.............|
+|.............|
++-------------+
+`,
+	},
 }
 
 func TestGrid_Draw(t *testing.T) {
@@ -232,6 +249,8 @@ func TestGrid_Draw(t *testing.T) {
 			painter := NewPainter(surface, NewTheme())
 			painter.Repaint(tt.setup())
 
+			// Reset
+			tt.setup().SetDefaultBorder()
 			if diff := surfaceEquals(surface, tt.want); diff != "" {
 				t.Error(diff)
 			}

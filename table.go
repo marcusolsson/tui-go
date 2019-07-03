@@ -35,8 +35,8 @@ func (t *Table) Draw(p *Painter) {
 		for i := 0; i < t.cols-1; i++ {
 			x := t.colWidths[i] + coloff + border
 			p.DrawVerticalLine(x, 0, s.Y-1)
-			p.DrawRune(x, 0, '┬')
-			p.DrawRune(x, s.Y-1, '┴')
+			p.DrawRune(x, 0, GetBorder('┬'))
+			p.DrawRune(x, s.Y-1, GetBorder('┴'))
 			coloff = x
 		}
 
@@ -45,8 +45,8 @@ func (t *Table) Draw(p *Painter) {
 		for j := 0; j < t.rows-1; j++ {
 			y := t.rowHeights[j] + rowoff + border
 			p.DrawHorizontalLine(0, s.X-1, y)
-			p.DrawRune(0, y, '├')
-			p.DrawRune(s.X-1, y, '┤')
+			p.DrawRune(0, y, GetBorder('├'))
+			p.DrawRune(s.X-1, y, GetBorder('┤'))
 			rowoff = y
 		}
 
@@ -57,7 +57,7 @@ func (t *Table) Draw(p *Painter) {
 			coloff = 0
 			for i := 0; i < t.cols-1; i++ {
 				x := t.colWidths[i] + coloff + border
-				p.DrawRune(x, y, '┼')
+				p.DrawRune(x, y, GetBorder('┼'))
 				coloff = x
 			}
 			rowoff = y

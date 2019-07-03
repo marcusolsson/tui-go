@@ -106,14 +106,14 @@ func (p *Painter) DrawText(x, y int, text string) {
 // DrawHorizontalLine paints a horizontal line using box characters.
 func (p *Painter) DrawHorizontalLine(x1, x2, y int) {
 	for x := x1; x < x2; x++ {
-		p.DrawRune(x, y, '─')
+		p.DrawRune(x, y, GetBorder('─'))
 	}
 }
 
 // DrawVerticalLine paints a vertical line using box characters.
 func (p *Painter) DrawVerticalLine(x, y1, y2 int) {
 	for y := y1; y < y2; y++ {
-		p.DrawRune(x, y, '│')
+		p.DrawRune(x, y, GetBorder('│'))
 	}
 }
 
@@ -126,17 +126,17 @@ func (p *Painter) DrawRect(x, y, w, h int) {
 
 			switch {
 			case i == 0 && j == 0:
-				p.DrawRune(m, n, '┌')
+				p.DrawRune(m, n, GetBorder('┌'))
 			case i == w-1 && j == 0:
-				p.DrawRune(m, n, '┐')
+				p.DrawRune(m, n, GetBorder('┐'))
 			case i == 0 && j == h-1:
-				p.DrawRune(m, n, '└')
+				p.DrawRune(m, n, GetBorder('└'))
 			case i == w-1 && j == h-1:
-				p.DrawRune(m, n, '┘')
+				p.DrawRune(m, n, GetBorder('┘'))
 			case i == 0 || i == w-1:
-				p.DrawRune(m, n, '│')
+				p.DrawRune(m, n, GetBorder('│'))
 			case j == 0 || j == h-1:
-				p.DrawRune(m, n, '─')
+				p.DrawRune(m, n, GetBorder('─'))
 			}
 		}
 	}
