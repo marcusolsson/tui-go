@@ -103,6 +103,7 @@ func (ui *tcellUI) Run() error {
 	ui.screen.SetStyle(tcell.StyleDefault)
 	ui.screen.Clear()
 
+	stopGoroutine := false
 	go func() {
 		for {
 			switch ev := ui.screen.PollEvent().(type) {
@@ -113,7 +114,14 @@ func (ui *tcellUI) Run() error {
 			case *tcell.EventResize:
 				ui.handleResizeEvent(ev)
 			}
+
+			if stopGoroutine {
+				break
+			}
 		}
+	}()
+	defer func() {
+		stopGoroutine = true
 	}()
 
 	for {
