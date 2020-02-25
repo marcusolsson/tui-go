@@ -28,7 +28,7 @@ func NewList() *List {
 // Draw draws the list.
 func (l *List) Draw(p *Painter) {
 	for i, item := range l.items {
-		style := "list.item"
+		style := l.style
 		if i == l.selected-l.pos {
 			style += ".selected"
 		}
