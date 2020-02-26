@@ -11,6 +11,7 @@ type List struct {
 	items    []string
 	selected int
 	pos      int
+	style    string
 
 	onItemActivated    func(*List)
 	onSelectionChanged func(*List)
@@ -20,13 +21,14 @@ type List struct {
 func NewList() *List {
 	return &List{
 		selected: -1,
+		style:    "list.item",
 	}
 }
 
 // Draw draws the list.
 func (l *List) Draw(p *Painter) {
 	for i, item := range l.items {
-		style := "list.item"
+		style := l.style
 		if i == l.selected-l.pos {
 			style += ".selected"
 		}
@@ -35,6 +37,10 @@ func (l *List) Draw(p *Painter) {
 			p.DrawText(0, i, item)
 		})
 	}
+}
+
+func (l *List) SetStyle(style string) {
+	l.style = style
 }
 
 // SizeHint returns the recommended size for the list.
