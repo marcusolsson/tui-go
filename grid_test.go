@@ -238,3 +238,37 @@ func TestGrid_Draw(t *testing.T) {
 		})
 	}
 }
+
+func TestGrid_GetCells(t *testing.T) {
+	grid := NewGrid(0, 0)
+	foo := NewLabel("foo")
+	bar := NewLabel("bar")
+	grid.AppendRow(
+		foo,
+		bar,
+	)
+
+	cells := grid.GetCells()
+	if cells[image.Point{0, 0}] != foo {
+		t.Error("Foo not at expected position")
+	}
+	if cells[image.Point{1, 0}] != bar {
+		t.Error("Bar not at expected position")
+	}
+}
+
+func TestGrid_GetCell(t *testing.T) {
+	grid := NewGrid(0, 0)
+	foo := NewLabel("foo")
+	grid.AppendRow(foo)
+
+	fooCell, err := grid.GetCell(image.Point{0, 0})
+	if err != nil || fooCell != foo {
+		t.Error("Could not retreive Foo cell")
+	}
+
+	nonExistentCell, err := grid.GetCell(image.Point{1, 0})
+	if err == nil || nonExistentCell != nil {
+		t.Error("Nonexistent cell exists")
+	}
+}

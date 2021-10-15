@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"errors"
 	"image"
 )
 
@@ -96,6 +97,20 @@ func (g *Grid) Draw(p *Painter) {
 			}
 		}
 	}
+}
+
+// GetCells returns all cells in the grid.
+func (g *Grid) GetCells() map[image.Point]Widget {
+	return g.cells
+}
+
+// GetCell returns the cell at the specified location in the grid.s
+func (g *Grid) GetCell(location image.Point) (Widget, error) {
+	value, ok := g.cells[location]
+	if !ok {
+		return nil, errors.New("Location does not exist")
+	}
+	return value, nil
 }
 
 // MinSizeHint returns the minimum size hint for the grid.
