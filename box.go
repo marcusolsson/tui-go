@@ -24,6 +24,7 @@ type Box struct {
 	children []Widget
 
 	border bool
+	fill bool
 	title  string
 
 	alignment Alignment
@@ -85,6 +86,11 @@ func (b *Box) SetBorder(enabled bool) {
 	b.border = enabled
 }
 
+// SetFill sets whether or not the box should be filled cells of its style.
+func (b *Box) SetFill(enabled bool) {
+	b.fill = enabled
+}
+
 // SetTitle sets the title of the box.
 func (b *Box) SetTitle(title string) {
 	b.title = title
@@ -120,15 +126,15 @@ func (b *Box) Draw(p *Painter) {
 			p.WithStyle(style+".border", func(p *Painter) {
 				p.DrawRect(0, 0, sz.X, sz.Y)
 			})
-			p.WithStyle(style, func(p *Painter) {
-				p.WithMask(image.Rect(0, 0, sz.X-1, 1), func(p *Painter) {
-					p.DrawText(1, 0, b.title)
-				})
+			p.WithMask(image.Rect(0, 0, sz.X-1, 1), func(p *Painter) {
+				p.DrawText(1, 0, b.title)
 			})
-			p.FillRect(1, 1, sz.X-2, sz.Y-2)
+			if b.fill {
+				p.FillRect(1, 1, sz.X-2, sz.Y-2)
+			}
 			p.Translate(1, 1)
 			defer p.Restore()
-		} else {
+		} else if b.fill {
 			p.FillRect(0, 0, sz.X, sz.Y)
 		}
 
